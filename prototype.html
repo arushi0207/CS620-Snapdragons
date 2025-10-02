@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SpeakUp AI Coach</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        'primary-500': '#3b82f6',
+                        'primary-600': '#2563eb',
+                        'primary-700': '#1d4ed8',
+                        'gray-100': '#f3f4f6',
+                        'gray-200': '#e5e7eb',
+                        'gray-300': '#d1d5db',
+                        'gray-700': '#374151',
+                        'gray-800': '#1f2937',
+                        'gray-900': '#111827',
+                        'green-500': '#10b981',
+                        'yellow-500': '#f59e0b', /* Added for Posture/Needs Improvement */
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .text-gradient {
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-image: linear-gradient(to right, #2563eb, #3b82f6);
+        }
+        .card {
+            background-color: white;
+            border-radius: 1rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .dropzone {
+            border: 2px dashed #d1d5db;
+            transition: border-color 0.2s;
+        }
+        .dropzone:hover {
+            border-color: #3b82f6;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center p-4">
+
+    <!-- Prototype Container -->
+    <div id="prototype-container" class="w-full max-w-2xl bg-white rounded-3xl shadow-2xl p-6 md:p-10">
+
+        <!-- Screen 1: Welcome/Landing -->
+        <div id="screen-welcome" class="screen flex flex-col items-center justify-center text-center">
+            <div class="mb-8">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-24 h-24 text-primary-500 mx-auto" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+                </svg>
+            </div>
+            <h1 class="text-4xl md:text-5xl font-extrabold text-gray-900 leading-tight mb-4">
+                SpeakEasy.
+            </h1>
+            <p class="text-lg text-gray-700 mb-8">
+                Your personal AI coach for public speaking. Get ready to ace that interview, nail your presentation, and build real confidence.
+            </p>
+            <button onclick="changeScreen('screen-goals')" class="px-8 py-3 bg-primary-500 text-white font-semibold rounded-full shadow-lg hover:bg-primary-600 transition-all transform hover:scale-105">
+                Start Coaching
+            </button>
+        </div>
+
+        <!-- Screen 2: Goal Setting -->
+        <div id="screen-goals" class="screen hidden">
+            <div class="mb-8 text-center">
+                <h2 class="text-3xl font-bold text-gray-900 mb-2">What are you working on?</h2>
+                <p class="text-gray-700">Choose a focus to get personalized feedback metrics.</p>
+            </div>
+            <div class="space-y-4">
+                <!-- Buttons updated with selectGoal function -->
+                <button onclick="selectGoal('job-interview', this)" class="w-full p-6 text-left rounded-2xl border-2 border-gray-200 hover:border-primary-500 transition-colors duration-200 flex items-center justify-between card-item" data-goal="job-interview">
+                    <span class="font-medium text-lg text-gray-800">💼 Job Interview Prep</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400 check-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                </button>
+                <button onclick="selectGoal('class-presentation', this)" class="w-full p-6 text-left rounded-2xl border-2 border-gray-200 hover:border-primary-500 transition-colors duration-200 flex items-center justify-between card-item" data-goal="class-presentation">
+                    <span class="font-medium text-lg text-gray-800">👨‍🎓 Class Presentation</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400 check-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                </button>
+                <button onclick="selectGoal('networking-pitch', this)" class="w-full p-6 text-left rounded-2xl border-2 border-gray-200 hover:border-primary-500 transition-colors duration-200 flex items-center justify-between card-item" data-goal="networking-pitch">
+                    <span class="font-medium text-lg text-gray-800">🗣️ Networking & Social Skills</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400 check-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                </button>
+                <button onclick="selectGoal('general-confidence', this)" class="w-full p-6 text-left rounded-2xl border-2 border-gray-200 hover:border-primary-500 transition-colors duration-200 flex items-center justify-between card-item" data-goal="general-confidence">
+                    <span class="font-medium text-lg text-gray-800">💪 General Confidence</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400 check-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                </button>
+            </div>
+            <div class="mt-8 flex justify-end">
+                <button id="btn-goals-next" disabled class="px-6 py-2 bg-gray-400 text-white font-semibold rounded-full shadow-lg transition-all" onclick="changeScreen('screen-upload')">
+                    Next
+                </button>
+            </div>
+        </div>
+
+        <!-- Screen 3: Upload & Analysis Center (Updated) -->
+        <div id="screen-upload" class="screen hidden text-center">
+            <h2 class="text-3xl font-bold text-gray-900 mb-2">Upload Your Practice Video</h2>
+            <p id="upload-prompt" class="text-gray-700 mb-6">Scenario: <span id="current-scenario" class="font-medium text-primary-600">Please select a goal first.</span></p>
+            
+            <!-- Upload Area -->
+            <div id="upload-area" class="w-full p-10 bg-gray-50 rounded-2xl dropzone flex flex-col items-center justify-center cursor-pointer mb-6" onclick="document.getElementById('file-input').click()">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 text-gray-400 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                </svg>
+                <p class="font-semibold text-gray-700">Click to upload or drag video file here</p>
+                <p class="text-sm text-gray-500">Max size 200MB, MP4 or MOV format.</p>
+                <input type="file" id="file-input" accept="video/*" class="hidden" onchange="handleFileUpload(event)">
+            </div>
+            
+            <!-- Analysis Status and Button -->
+            <div id="analysis-status" class="mb-8 p-4 rounded-xl bg-gray-100 hidden">
+                <p id="status-message" class="text-gray-700 font-medium"></p>
+                <div id="progress-bar" class="mt-2 w-full bg-gray-200 rounded-full h-2.5">
+                    <div id="progress-indicator" class="bg-green-500 h-2.5 rounded-full transition-all duration-500" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <div class="flex justify-center">
+                <button onclick="analyzeVideo()" id="btn-analyze" class="px-8 py-3 bg-primary-500 text-white font-semibold rounded-full shadow-lg hover:bg-primary-600 transition-all transform hover:scale-105 hidden">
+                    Analyze Video & Get Feedback
+                </button>
+            </div>
+        </div>
+
+        <!-- Screen 4: Session Review (Updated) -->
+        <div id="screen-review" class="screen hidden">
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-bold text-gray-900 mb-2">Session Review</h2>
+                <p class="text-gray-700">Here's a breakdown of your <span id="review-scenario" class="font-medium text-primary-600">practice session</span>.</p>
+            </div>
+            <div class="card p-6 mb-6">
+                <h3 class="text-xl font-bold text-gray-900 mb-4">Overall Score: <span class="text-gradient">85%</span></h3>
+                <div class="w-full bg-gray-200 rounded-full h-2.5 mb-2">
+                    <div class="bg-primary-500 h-2.5 rounded-full" style="width: 85%"></div>
+                </div>
+                <p class="text-sm text-gray-500">You're making great progress! Let's focus on the details.</p>
+            </div>
+
+            <!-- Top 4 Metrics Grid (2x2) -->
+            <div class="grid md:grid-cols-2 gap-6 mb-6">
+                
+                <!-- Card 1: Pace (Audio) -->
+                <div class="card p-6">
+                    <h4 class="text-xl font-medium text-gray-900 mb-2">Pace</h4>
+                    <p class="text-2xl font-bold text-primary-500">150 WPM</p>
+                    <p class="text-sm text-gray-500">The ideal range is 140-160 WPM.</p>
+                    <p class="text-sm mt-2 font-medium text-gray-700">💡 **Tip:** Try pausing for 2 seconds after each main point.</p>
+                </div>
+                
+                <!-- Card 2: Filler Words (Audio/Text) -->
+                <div class="card p-6">
+                    <h4 class="text-xl font-medium text-gray-900 mb-2">Filler Words</h4>
+                    <p class="text-2xl font-bold text-red-500">6</p>
+                    <p class="text-sm text-gray-500">You used "um" 4 times and "like" 2 times.</p>
+                    <p class="text-sm mt-2 font-medium text-gray-700">💡 **Tip:** Practice with a silent pause instead of "um."</p>
+                </div>
+                
+                <!-- Card 3: Eye Gaze (Replacing Vocal Variety) -->
+                <div class="card p-6">
+                    <h4 class="text-xl font-medium text-gray-900 mb-2">Eye Gaze</h4>
+                    <p class="text-2xl font-bold text-green-500">92% Audience Connection</p>
+                    <p class="text-sm text-gray-500">You maintained excellent eye contact throughout the session.</p>
+                    <p class="text-sm mt-2 font-medium text-gray-700">💡 **Tip:** Avoid looking down at your notes too frequently.</p>
+                </div>
+
+                <!-- Card 4: Posture (Replacing old AI Summary card slot) -->
+                <div class="card p-6">
+                    <h4 class="text-xl font-medium text-gray-900 mb-2">Posture</h4>
+                    <p class="text-2xl font-bold text-yellow-500">Needs Improvement</p>
+                    <p class="text-sm text-gray-500">Shoulders slightly slumped for 25% of the time.</p>
+                    <p class="text-sm mt-2 font-medium text-gray-700">💡 **Tip:** Practice keeping your back straight and shoulders relaxed.</p>
+                </div>
+            </div>
+
+            <!-- Full-width Card 5: Facial Expression (New) -->
+            <div class="card p-6 mb-6">
+                <h4 class="text-xl font-medium text-gray-900 mb-2">Facial Expression</h4>
+                <p class="text-gray-700 text-sm">Your tone was warm, but you maintained a neutral expression during the conflict resolution part. <span class="font-bold text-yellow-500">Try to align your facial expressions with the emotion of the topic.</span></p>
+            </div>
+            
+            <!-- Full-width Card 6: AI Coach Summary -->
+            <div class="card p-6 mb-6">
+                <h4 class="text-xl font-medium text-gray-900 mb-2">AI Coach Summary</h4>
+                <p class="text-gray-700 text-sm">You did a great job on your **introduction**, but the conclusion felt a little rushed. Focus on slowing your pace at the end of the session to ensure a strong final impression.</p>
+            </div>
+
+            <div class="mt-8 text-center">
+                <button onclick="changeScreen('screen-analytics')" class="px-8 py-3 bg-primary-500 text-white font-semibold rounded-full shadow-lg hover:bg-primary-600 transition-all transform hover:scale-105">
+                    View My Progress
+                </button>
+            </div>
+        </div>
+
+        <!-- Screen 5: Analytics Dashboard -->
+        <div id="screen-analytics" class="screen hidden">
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-bold text-gray-900 mb-2">Your Progress</h2>
+                <p class="text-gray-700">See how far you've come!</p>
+            </div>
+            <div class="card p-6 mb-6">
+                <h3 class="text-xl font-bold text-gray-900 mb-4">Confidence Score Over Time</h3>
+                <div class="w-full h-48 bg-gray-200 rounded-lg flex items-center justify-center text-gray-400">
+                    <p>📊 (Graph Placeholder)</p>
+                </div>
+            </div>
+            <div class="card p-6 mb-6">
+                <h3 class="text-xl font-bold text-gray-900 mb-4">Filler Words Trend</h3>
+                <div class="w-full h-48 bg-gray-200 rounded-lg flex items-center justify-center text-gray-400">
+                    <p>📊 (Graph Placeholder)</p>
+                </div>
+            </div>
+            <div class="text-center mt-8">
+                <button onclick="changeScreen('screen-upload')" class="px-8 py-3 bg-primary-500 text-white font-semibold rounded-full shadow-lg hover:bg-primary-600 transition-all transform hover:scale-105">
+                    Start Another Session
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const screens = document.querySelectorAll('.screen');
+        let currentGoal = '';
+        let goalNames = {
+            'job-interview': 'Job Interview Prep',
+            'class-presentation': 'Class Presentation',
+            'networking-pitch': 'Networking & Social Skills',
+            'general-confidence': 'General Confidence'
+        };
+
+        function changeScreen(screenId) {
+            screens.forEach(screen => {
+                screen.classList.add('hidden');
+            });
+            document.getElementById(screenId).classList.remove('hidden');
+        }
+
+        function selectGoal(goalId, element) {
+            currentGoal = goalId;
+            const items = document.querySelectorAll('.card-item');
+            items.forEach(item => {
+                item.classList.remove('border-primary-500', 'border-4');
+                item.classList.add('border-2');
+                item.querySelector('.check-icon').classList.remove('text-primary-500');
+                item.querySelector('.check-icon').classList.add('text-gray-400');
+            });
+
+            element.classList.add('border-primary-500', 'border-4');
+            element.classList.remove('border-2');
+            element.querySelector('.check-icon').classList.remove('text-gray-400');
+            element.querySelector('.check-icon').classList.add('text-primary-500');
+            
+            // Enable the Next button and update scenario text
+            document.getElementById('btn-goals-next').disabled = false;
+            document.getElementById('btn-goals-next').classList.remove('bg-gray-400');
+            document.getElementById('btn-goals-next').classList.add('bg-primary-500', 'hover:bg-primary-600');
+            
+            // Update the scenario text on the Upload screen
+            document.getElementById('current-scenario').textContent = goalNames[currentGoal];
+        }
+
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                // Simulation: Show upload status
+                document.getElementById('upload-area').classList.add('hidden');
+                document.getElementById('analysis-status').classList.remove('hidden');
+                document.getElementById('btn-analyze').classList.add('hidden');
+                
+                // Show file name
+                document.getElementById('status-message').textContent = `Uploading "${file.name}"...`;
+                
+                // Simulate progress
+                const progressBar = document.getElementById('progress-indicator');
+                progressBar.style.width = '20%';
+
+                setTimeout(() => {
+                    document.getElementById('status-message').textContent = `Video uploaded. Analyzing speech...`;
+                    progressBar.style.width = '60%';
+                }, 1500);
+
+                setTimeout(() => {
+                    document.getElementById('status-message').textContent = `Analysis complete!`;
+                    progressBar.style.width = '100%';
+                    document.getElementById('btn-analyze').classList.remove('hidden');
+                }, 4000);
+            }
+        }
+
+        function analyzeVideo() {
+            // Update review screen scenario title
+            document.getElementById('review-scenario').textContent = goalNames[currentGoal];
+            
+            // Reset upload screen for next use
+            document.getElementById('upload-area').classList.remove('hidden');
+            document.getElementById('analysis-status').classList.add('hidden');
+            document.getElementById('progress-indicator').style.width = '0%';
+            document.getElementById('btn-analyze').classList.add('hidden');
+
+            changeScreen('screen-review');
+        }
+
+        // Initialize by selecting the first screen
+        changeScreen('screen-welcome');
+    </script>
+</body>
+</html>
