@@ -12,7 +12,7 @@ class FeatureWriters:
         self.write_jsonl = write_jsonl
         self.write_npz = write_npz
         self.jsonl_fp = open(os.path.join(out_dir, "features.jsonl"), "w", encoding="utf-8") if write_jsonl else None
-        # 聚合到内存，最后一次性存 .npz
+        # Accumulate in memory and flush to .npz at the end.
         self._frames: List[int] = []
         self._timestamps: List[float] = []
         self._hrnet_all: List[Any] = []

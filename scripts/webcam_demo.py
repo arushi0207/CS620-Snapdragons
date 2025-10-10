@@ -32,7 +32,7 @@ def main():
         elif k == ord('s'):
             saving = not saving
             if not saving:
-                # 暂停写出：通过替换 writers 为丢弃模式
+                # Pause writing by toggling the writers into a drop mode.
                 pipe.writers.write_jsonl = False
                 pipe.writers.write_npz = False
             else:

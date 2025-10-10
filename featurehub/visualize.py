@@ -2,7 +2,7 @@ from __future__ import annotations
 import cv2
 import numpy as np
 
-# COCO 17 点连接（示意，可按需调整）
+# Example COCO 17-keypoint connections (adjust as needed).
 COCO_PAIRS = [
     (5, 7), (7, 9), (6, 8), (8, 10), (5, 6), (11, 12), (5, 11), (6, 12),
     (11, 13), (13, 15), (12, 14), (14, 16), (0, 1), (1, 2), (2, 3), (3, 4)

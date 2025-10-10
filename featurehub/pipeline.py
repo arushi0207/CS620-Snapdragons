@@ -25,13 +25,13 @@ class Pipeline:
             out = ext.extract(frame_bgr, timestamp=ts)
             rec.update(out)
 
-        # 叠加可视化
+        # Overlay visualizations.
         if self.visualize and vis is not None:
             if "hrnet_pose" in rec and rec["hrnet_pose"].get("keypoints"):
                 draw_pose(vis, rec["hrnet_pose"]["keypoints"])
             fm = rec.get("facemap_3dmm", {})
             if fm.get("landmarks3d"):
-                # 仅画投影（x,y）
+                # Draw only the projected (x, y) coordinates.
                 draw_landmarks(vis, [[x, y] for x, y, _ in fm["landmarks3d"]])
             elif fm.get("landmarks"):
                 draw_landmarks(vis, fm["landmarks"])

@@ -5,9 +5,10 @@ from typing import Iterator, Tuple
 
 
 def frames_from_video(src: str | int, target_fps: float | None = None) -> Iterator[Tuple[int, float, "np.ndarray"]]:
-    """逐帧读取视频或摄像头（src=0）。
+    """Read frames from a video file or camera (src=0).
 
-    返回 (frame_idx, timestamp_sec, frame_bgr)。如果 target_fps 指定，则按近似倍数抽帧。
+    Returns (frame_idx, timestamp_sec, frame_bgr). If target_fps is provided,
+    drop frames to approximate that rate.
     """
     cap = cv2.VideoCapture(src)
     if not cap.isOpened():

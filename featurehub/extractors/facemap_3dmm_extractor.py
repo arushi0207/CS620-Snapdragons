@@ -23,10 +23,10 @@ from qai_hub_models.models.facemap_3dmm.model import (
 
 @register_extractor("facemap_3dmm")
 class FaceMap3DMMExtractor(BaseFeatureExtractor):
-    """封装 FaceMap 3DMM（qai_hub_models）。
+    """Wrapper for FaceMap 3DMM (qai_hub_models).
 
-    返回：{"facemap_3dmm": {"landmarks3d": Nx3, "pose_rpy": [r,p,y], "coeffs": {...}}}
-    若模型不包含某字段则省略。
+    Returns {"facemap_3dmm": {"landmarks3d": Nx3, "pose_rpy": [r,p,y], "coeffs": {...}}}
+    Omit keys that are not provided by the model.
     """ 
 
     def setup(self, is_test: bool = False):
@@ -56,7 +56,7 @@ class FaceMap3DMMExtractor(BaseFeatureExtractor):
     def extract(self, frame_bgr: np.ndarray, *, timestamp: float | None = None) -> Dict[str, Any]:
         img_rgb = frame_bgr[..., ::-1]
 
-        # 兼容不同 App API
+        # Support different app entry points.
         for fn_name in ("predict", "run_image", "__call__"):
             if hasattr(self.app, fn_name):
                 out = getattr(self.app, fn_name)(img_rgb)
@@ -66,11 +66,11 @@ class FaceMap3DMMExtractor(BaseFeatureExtractor):
 
         payload: Dict[str, Any] = {}
         if isinstance(out, dict):
-            # 常见键位：landmarks3d / landmarks / coeffs / pose
+            # Common keys: landmarks3d / landmarks / coeffs / pose.
             if "landmarks3d" in out:
                 payload["landmarks3d"] = np.asarray(out["landmarks3d"]).tolist()
             elif "landmarks" in out:
-                # 2D 也收下
+                # Accept 2D landmarks as well.
                 payload["landmarks"] = np.asarray(out["landmarks"]).tolist()
             if "coeffs" in out:
                 payload["coeffs"] = out["coeffs"]
@@ -79,7 +79,7 @@ class FaceMap3DMMExtractor(BaseFeatureExtractor):
             elif all(k in out for k in ("roll", "pitch", "yaw")):
                 payload["pose_rpy"] = [out["roll"], out["pitch"], out["yaw"]]
         else:
-            # 若直接返回 ndarray，假设为 Nx3 landmarks
+            # If we receive an ndarray, assume it represents Nx2 or Nx3 landmarks.
             arr = np.asarray(out)
             if arr.ndim == 2 and arr.shape[1] in (2, 3):
                 key = "landmarks3d" if arr.shape[1] == 3 else "landmarks"
