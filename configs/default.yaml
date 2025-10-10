@@ -1,0 +1,7 @@
+extractors:
+  - hrnet_pose
+  - facemap_3dmm
+output:
+  jsonl: true
+  npz: true
+visualize: true

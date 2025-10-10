@@ -6,8 +6,8 @@
 
 Set up a Python environment and install the required packages using pip:
 ```shell
-conda create -n quic_ai_hub python=3.12
-conda activate quic_ai_hub
+conda create -n quic_speechmodel python=3.12
+conda activate quic_speechmodel
 ```
 
 
@@ -17,11 +17,9 @@ Install quantumaihub:
 pip install qai_hub_models
 ```
 
-For running YOLO7 demo, do the following:
+For running Facemap 3DMM demo, do the following:
 ```shell
-pip install "qai-hub-models[yolov7]"
-pip install seaborn
-python -m qai_hub_models.models.yolov7.demo
+pip install "qai-hub-models[facemap-3dmm]"
 ```
 
 ### 2. Configure AI Hub Access
