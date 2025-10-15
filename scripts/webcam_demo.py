@@ -11,7 +11,7 @@ def main():
     ap.add_argument("--cam", type=int, default=0)
     ap.add_argument("--fps", type=float, default=15.0)
     ap.add_argument("--out", default="outputs/live")
-    ap.add_argument("--extractors", default="facemap_3dmm") # "hrnet_pose,facemap_3dmm"
+    ap.add_argument("--extractors", default="facemap_3dmm")
     args = ap.parse_args()
 
     os.makedirs(args.out, exist_ok=True)

@@ -15,7 +15,6 @@ class FeatureWriters:
         # Accumulate in memory and flush to .npz at the end.
         self._frames: List[int] = []
         self._timestamps: List[float] = []
-        self._hrnet_all: List[Any] = []
         self._facemap_all: List[Any] = []
 
     def write_frame(self, rec: Dict[str, Any]):
@@ -23,7 +22,6 @@ class FeatureWriters:
             self.jsonl_fp.write(json.dumps(rec, ensure_ascii=False) + "\n")
         self._frames.append(rec.get("frame_idx", -1))
         self._timestamps.append(rec.get("timestamp", 0.0))
-        self._hrnet_all.append(rec.get("hrnet_pose", {}).get("keypoints"))
         fm = rec.get("facemap_3dmm", {})
         self._facemap_all.append({k: v for k, v in fm.items()})
 
@@ -35,6 +33,5 @@ class FeatureWriters:
                 os.path.join(self.out_dir, "features.npz"),
                 frames=np.array(self._frames),
                 timestamps=np.array(self._timestamps, dtype=np.float32),
-                hrnet_keypoints=np.array(self._hrnet_all, dtype=object),
                 facemap=np.array(self._facemap_all, dtype=object),
             )

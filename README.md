@@ -1,8 +1,8 @@
 # CS620-Snapdragons
 
 ## TODOs
-- setup integrated environment that supports the hrnet_pose_extractor
-- fix errors and complete the pipeline
+- integrate an actual scoring model to replace the dummy scorer
+- validate the FaceMap-only pipeline on representative speech videos
 
 ## Setup from Scratch
 
@@ -36,7 +36,9 @@ Many features of AI Hub Models _(such as model compilation, on-device profiling,
 -  Configure your [API token](https://app.aihub.qualcomm.com/account/): `qai-hub configure --api_token API_TOKEN`
 
 ## Running Commands
-### Run webcam demo
+### Extract FaceMap features from a video
 ```shell
-python -m scripts.webcam_demo
+python -m scripts.extract_from_video --video /path/to/input.mp4 --out outputs/run1 --output-video outputs/run1/annotated.mp4
 ```
+
+The script writes per-frame FaceMap features to `features.jsonl`/`features.npz`, emits an annotated video when `--output-video` is provided, and prints the placeholder speech score (1–10) to the terminal.
