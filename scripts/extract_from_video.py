@@ -20,17 +20,23 @@ def _infer_writer_fps(video_path: str, fallback: float = 30.0) -> float:
 
 
 def main():
-    ap = argparse.ArgumentParser(description="Run FaceMap 3DMM feature extraction on a video.")
+    ap = argparse.ArgumentParser(description="Run configured feature extractors on a video.")
     ap.add_argument("--video", required=True, help="Path to the input video.")
     ap.add_argument("--out", required=True, help="Directory to store extracted features.")
     ap.add_argument("--output-video", default=None, help="Optional path to write an annotated MP4.")
     ap.add_argument("--fps", type=float, default=None, help="Target FPS for sampling frames.")
+    ap.add_argument(
+        "--extractors",
+        nargs="+",
+        default=["facemap_3dmm", "mediapipe_face"],
+        help="Feature extractors to run (e.g., facemap_3dmm mediapipe_face).",
+    )
     args = ap.parse_args()
 
     os.makedirs(args.out, exist_ok=True)
 
     should_visualize = args.output_video is not None
-    pipeline = Pipeline(["facemap_3dmm"], out_dir=args.out, visualize=should_visualize)
+    pipeline = Pipeline(args.extractors, out_dir=args.out, visualize=should_visualize)
 
     video_writer: Optional[cv2.VideoWriter] = None
     writer_fps = args.fps or _infer_writer_fps(args.video)

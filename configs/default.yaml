@@ -1,5 +1,6 @@
 extractors:
   - facemap_3dmm
+  - mediapipe_face
 output:
   jsonl: true
   npz: true

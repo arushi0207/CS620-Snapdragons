@@ -36,9 +36,14 @@ Many features of AI Hub Models _(such as model compilation, on-device profiling,
 -  Configure your [API token](https://app.aihub.qualcomm.com/account/): `qai-hub configure --api_token API_TOKEN`
 
 ## Running Commands
-### Extract FaceMap features from a video
+### Extract features from a video
 ```shell
 python -m scripts.extract_from_video --video /path/to/input.mp4 --out outputs/run1 --output-video outputs/run1/annotated.mp4
 ```
 
-The script writes per-frame FaceMap features to `features.jsonl`/`features.npz`, emits an annotated video when `--output-video` is provided, and prints the placeholder speech score (1–10) to the terminal.
+The script runs both the FaceMap 3DMM and MediaPipe Face extractors by default. Per-frame outputs are written to `features.jsonl`/`features.npz`, an annotated video is emitted when `--output-video` is provided, and the placeholder speech score (1–10) prints to the terminal.
+
+To pick a subset of extractors, pass `--extractors`:
+```shell
+python -m scripts.extract_from_video --video input.mp4 --out outputs/run2 --extractors mediapipe_face
+```

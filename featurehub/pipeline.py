@@ -12,7 +12,12 @@ class Pipeline:
         self.extractors = [get_extractor(n)() for n in extractor_names]
         self.out_dir = out_dir
         self.visualize = visualize
-        self.writers = FeatureWriters(out_dir, write_jsonl=True, write_npz=True)
+        self.writers = FeatureWriters(
+            out_dir,
+            feature_keys=extractor_names,
+            write_jsonl=True,
+            write_npz=True,
+        )
         self._records: List[Dict[str, Any]] = []
 
     def process_frame(self, frame_idx: int, ts: float, frame_bgr: np.ndarray) -> np.ndarray:
@@ -32,6 +37,11 @@ class Pipeline:
                 draw_landmarks(vis, [[x, y] for x, y, _ in fm["landmarks3d"]])
             elif fm.get("landmarks"):
                 draw_landmarks(vis, fm["landmarks"])
+
+            mp = rec.get("mediapipe_face", {})
+            mp_landmarks = mp.get("landmarks")
+            if mp_landmarks:
+                draw_landmarks(vis, [[x, y] for x, y, *_ in mp_landmarks])
 
         self.writers.write_frame(rec)
         self._records.append(rec)
