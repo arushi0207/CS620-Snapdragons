@@ -209,3 +209,4 @@ __marimo__/
 # more to add
 **/*.mp4
 outputs/
+assets/models/

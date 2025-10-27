@@ -1,10 +1,18 @@
 from __future__ import annotations
 
-from typing import Any, Dict, Iterable, Tuple
+from typing import Any, Dict, Iterable, Optional, Tuple
+
+import os
+from pathlib import Path
 
 import cv2
 import numpy as np
 import torch
+
+try:
+    import onnxruntime as ort
+except ImportError:  # pragma: no cover - optional dependency at runtime
+    ort = None
 
 from .base import BaseFeatureExtractor
 from ..registry import register_extractor
@@ -30,6 +38,14 @@ class FaceMap3DMMExtractor(BaseFeatureExtractor):
     """
 
     def setup(self, is_test: bool = False):
+        self._onnx_session: Any = None
+        self._onnx_input_name: Optional[str] = None
+        self._onnx_output_names: Optional[list[str]] = None
+        onnx_path = self._locate_onnx_model()
+        if onnx_path is not None:
+            self._setup_onnx_session(onnx_path)
+            return
+
         parser = get_on_device_demo_parser(
             get_model_cli_parser(FaceMap_3DMM), add_output_dir=True
         )
@@ -50,20 +66,101 @@ class FaceMap3DMMExtractor(BaseFeatureExtractor):
         resized = cv2.resize(
             crop, (self.input_width, self.input_height), interpolation=cv2.INTER_LINEAR
         )
-        tensor = (
-            torch.from_numpy(resized)
-            .permute(2, 0, 1)
-            .unsqueeze(0)
-            .to(self.device)
-            .float()
-            / 255.0
-        )
+        if self._onnx_session is not None:
+            input_tensor = resized.transpose(2, 0, 1)[None].astype(np.float32) / 255.0
+            outputs = self._onnx_session.run(
+                self._onnx_output_names,
+                {self._onnx_input_name: input_tensor},
+            )
+            output_array = outputs[0]
+            if output_array.ndim > 1:
+                output_array = np.squeeze(output_array, axis=0)
+            output = torch.from_numpy(output_array).detach().cpu()
+        else:
+            tensor = (
+                torch.from_numpy(resized)
+                .permute(2, 0, 1)
+                .unsqueeze(0)
+                .to(self.device)
+                .float()
+                / 255.0
+            )
 
-        with torch.no_grad():
-            output = self.model(tensor).squeeze(0).detach().cpu()
+            with torch.no_grad():
+                output = self.model(tensor).squeeze(0).detach().cpu()
 
         payload = self._decode_output(output, (x0, y0, x1, y1))
         return {"facemap_3dmm": payload}
+
+    def _setup_onnx_session(self, onnx_path: Path) -> None:
+        if ort is None:
+            raise ImportError(
+                "onnxruntime is required to run FaceMap 3DMM from ONNX. Install it with `pip install onnxruntime`."
+            )
+
+        available = ort.get_available_providers()
+        providers = [p for p in ("CUDAExecutionProvider", "CPUExecutionProvider") if p in available]
+        session = ort.InferenceSession(
+            str(onnx_path), providers=providers if providers else None
+        )
+        inputs = session.get_inputs()
+        if not inputs:
+            raise RuntimeError(f"ONNX model at {onnx_path} has no inputs")
+        self._onnx_session = session
+        self._onnx_input_name = inputs[0].name
+        outputs = session.get_outputs()
+        if not outputs:
+            raise RuntimeError(f"ONNX model at {onnx_path} has no outputs")
+        self._onnx_output_names = [out.name for out in outputs]
+        print(f"Loaded FaceMap 3DMM ONNX model from {onnx_path}")
+
+        shape = inputs[0].shape
+        if len(shape) >= 4:
+            height, width = shape[-2], shape[-1]
+            if isinstance(height, int) and isinstance(width, int):
+                self.input_height, self.input_width = height, width
+            else:
+                self.input_height, self.input_width = FaceMap_3DMM.get_input_spec()["image"][0][2:]
+        else:
+            self.input_height, self.input_width = FaceMap_3DMM.get_input_spec()["image"][0][2:]
+
+    def _locate_onnx_model(self) -> Optional[Path]:
+        # Allow explicit path via kwargs or environment variables.
+        hints = [
+            self.kwargs.get("onnx_model_path"),
+            self.kwargs.get("onnx_model_dir"),
+            os.environ.get("FACEMAP_ONNX_PATH"),
+            os.environ.get("FACEMAP_ONNX_DIR"),
+        ]
+
+        repo_root = Path(__file__).resolve().parents[2]
+        default_dirs = [
+            repo_root / "assets",
+            repo_root / "assets" / "models",
+            repo_root / "assets" / "models" / "facemap_3dmm",
+        ]
+
+        for hint in hints:
+            if not hint:
+                continue
+            path = Path(hint).expanduser()
+            if path.is_file() and path.suffix == ".onnx":
+                if (path.parent / "model.data").exists():
+                    return path
+                return path
+            if path.is_dir():
+                onnx_files = sorted(path.glob("*.onnx"))
+                if onnx_files:
+                    return onnx_files[0]
+
+        for directory in default_dirs:
+            if not directory.exists():
+                continue
+            onnx_files = sorted(directory.glob("**/*.onnx"))
+            if onnx_files:
+                return onnx_files[0]
+
+        return None
 
     def _resolve_face_box(self, width: int, height: int) -> Tuple[int, int, int, int]:
         norm_box: Iterable[float] | None = self.kwargs.get("face_box")
