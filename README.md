@@ -49,6 +49,6 @@ python -m scripts.extract_from_video --video input.mp4 --out outputs/run3 --extr
 ```
 
 ### Using an ONNX FaceMap model
-1. Download the optimized package from Qualcomm® AI Hub (e.g., `job_jgnm2o7vp_optimized_onnx`) and copy it under `assets/models/facemap_3dmm/` so that `model.onnx` and its companion `model.data` sit side-by-side. The project automatically picks up the first `.onnx` file it finds there.
+1. Download the optimized package from [Qualcomm® AI Hub](https://aihub.qualcomm.com/models/facemap_3dmm?domain=Computer+Vision&useCase=Pose+Estimation) (e.g., `job_jgnm2o7vp_optimized_onnx`) and copy it under `assets/models/facemap_3dmm/` so that `model.onnx` and its companion `model.data` sit side-by-side. The project automatically picks up the first `.onnx` file it finds there.
 2. (Optional) Override the location by setting `FACEMAP_ONNX_DIR=/path/to/model/folder` or passing `onnx_model_path`/`onnx_model_dir` when instantiating `FaceMap3DMMExtractor` in code.
 3. When an ONNX model is found, `FaceMap3DMMExtractor` uses `onnxruntime` instead of the PyTorch/QAI Hub helper; if no ONNX model is present it falls back to the original workflow.

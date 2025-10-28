@@ -45,7 +45,7 @@ class FaceMap3DMMExtractor(BaseFeatureExtractor):
         if onnx_path is not None:
             self._setup_onnx_session(onnx_path)
             return
-
+        print("No ONNX model found for FaceMap 3DMM, loading FaceMap 3DMM PyTorch model")
         parser = get_on_device_demo_parser(
             get_model_cli_parser(FaceMap_3DMM), add_output_dir=True
         )
