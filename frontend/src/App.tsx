@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from "react";
 import axios from "axios";
+import BottomNav from "./components/bottomnavbar";
 import type { LucideIcon } from "lucide-react";
 import {
   Target,
@@ -16,17 +17,11 @@ import {
 } from "lucide-react";
 
 // -------- Types --------
-
 type Step = 1 | 2 | 3 | 4 | 5;
-
 type TailwindBrand = "indigo" | "yellow" | "red" | "green";
 
 // -------- Reusable Components --------
-
-type HeaderProps = {
-  onNavigate: (step: Step) => void;
-  currentStep: Step;
-};
+type HeaderProps = { onNavigate: (step: Step) => void; currentStep: Step };
 
 const Header: React.FC<HeaderProps> = ({ onNavigate, currentStep }) => (
   <header className="flex justify-between items-center p-4 bg-white border-b border-gray-100 shadow-sm sticky top-0 z-10">
@@ -40,17 +35,11 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, currentStep }) => (
       <NavItem title="Review" step={4} currentStep={currentStep} onClick={() => onNavigate(4)} />
       <NavItem title="Analytics" step={5} currentStep={currentStep} onClick={() => onNavigate(5)} />
     </nav>
-    {/* The Menu icon for mobile is visible on small screens */}
     <Menu className="sm:hidden text-indigo-600 cursor-pointer" size={24} />
   </header>
 );
 
-type NavItemProps = {
-  title: string;
-  step: Step;
-  currentStep: Step;
-  onClick: () => void;
-};
+type NavItemProps = { title: string; step: Step; currentStep: Step; onClick: () => void };
 
 const NavItem: React.FC<NavItemProps> = ({ title, step, currentStep, onClick }) => (
   <button
@@ -74,20 +63,27 @@ type MetricCardProps = {
   highlight: boolean;
 };
 
-const MetricCard: React.FC<MetricCardProps> = ({ title, value, icon: Icon, color, description, highlight }) => (
+const MetricCard: React.FC<MetricCardProps> = ({
+  title,
+  value,
+  icon: Icon,
+  color,
+  description,
+  highlight,
+}) => (
   <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-50 hover:shadow-xl transition duration-300 transform hover:scale-[1.02]">
-    {/* NOTE: dynamic Tailwind classes need safelisting in your Tailwind config if you purge */}
     <div className={`flex items-center space-x-4 mb-3 text-${color}-600`}>
       <Icon size={32} className={`bg-${color}-100 p-2 rounded-lg`} />
       <h3 className="text-lg font-semibold text-gray-800">{title}</h3>
     </div>
-    <p className={`text-4xl font-extrabold mb-2 ${highlight ? `text-${color}-600` : "text-gray-900"}`}>{value}</p>
+    <p className={`text-4xl font-extrabold mb-2 ${highlight ? `text-${color}-600` : "text-gray-900"}`}>
+      {value}
+    </p>
     <p className="text-sm text-gray-500">{description}</p>
   </div>
 );
 
 // -------- Screen Components --------
-
 type WelcomeScreenProps = { onStart: () => void };
 const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onStart }) => (
   <div className="text-center p-8">
@@ -96,7 +92,10 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onStart }) => (
     <p className="text-lg text-gray-600 mb-8 max-w-lg mx-auto">
       Your AI-powered coach for mastering interviews, presentations, and building career-ready confidence. Get clear, actionable feedback on what you say and <strong>how you present yourself</strong>.
     </p>
-    <button onClick={onStart} className="px-8 py-3 bg-indigo-600 text-white font-semibold rounded-full shadow-lg hover:bg-indigo-700 transition duration-300 transform hover:scale-105">
+    <button
+      onClick={onStart}
+      className="px-8 py-3 bg-indigo-600 text-white font-semibold rounded-full shadow-lg hover:bg-indigo-700 transition duration-300 transform hover:scale-105"
+    >
       Start My First Session
     </button>
   </div>
@@ -135,7 +134,10 @@ const GoalSettingScreen: React.FC<GoalSettingScreenProps> = ({ onNext }) => {
         ))}
       </div>
 
-      <button onClick={onNext} className="w-full flex items-center justify-center space-x-2 px-8 py-3 bg-indigo-600 text-white font-semibold rounded-xl shadow-md hover:bg-indigo-700 transition duration-300">
+      <button
+        onClick={onNext}
+        className="w-full flex items-center justify-center space-x-2 px-8 py-3 bg-indigo-600 text-white font-semibold rounded-xl shadow-md hover:bg-indigo-700 transition duration-300"
+      >
         <span>Continue to Upload ({selectedGoal})</span>
         <ArrowRight size={20} />
       </button>
@@ -193,7 +195,11 @@ const UploadScreen: React.FC<UploadScreenProps> = ({ onAnalysisComplete }) => {
         Record your speech or mock interview on your phone, then upload the file here for AI analysis.
       </p>
 
-      <div className={`border-4 border-dashed rounded-2xl p-12 mb-8 transition duration-300 ${isUploading ? "border-indigo-400 bg-indigo-50" : "border-gray-300 hover:border-indigo-500 hover:bg-gray-50"}`}>
+      <div
+        className={`border-4 border-dashed rounded-2xl p-12 mb-8 transition duration-300 ${
+          isUploading ? "border-indigo-400 bg-indigo-50" : "border-gray-300 hover:border-indigo-500 hover:bg-gray-50"
+        }`}
+      >
         <Upload className="w-12 h-12 mx-auto text-indigo-500 mb-3" />
         <p className="text-gray-600 font-medium">Drag & drop your video here, or click to select file.</p>
         <p className="text-sm text-gray-400 mt-1">MP4 or MOV files under 500MB recommended.</p>
@@ -202,7 +208,10 @@ const UploadScreen: React.FC<UploadScreenProps> = ({ onAnalysisComplete }) => {
       <input type="file" id="video-upload" accept="video/*" className="hidden" onChange={onFileSelected} />
 
       {!isUploading && (
-        <label htmlFor="video-upload" className="inline-flex items-center space-x-2 px-8 py-3 bg-indigo-600 text-white font-semibold rounded-xl shadow-md cursor-pointer hover:bg-indigo-700 transition duration-300">
+        <label
+          htmlFor="video-upload"
+          className="inline-flex items-center space-x-2 px-8 py-3 bg-indigo-600 text-white font-semibold rounded-xl shadow-md cursor-pointer hover:bg-indigo-700 transition duration-300"
+        >
           <Upload size={20} />
           <span>Select Video File</span>
         </label>
@@ -221,16 +230,10 @@ const UploadScreen: React.FC<UploadScreenProps> = ({ onAnalysisComplete }) => {
 
       {annotatedUrl && (
         <div className="mt-8 space-y-4">
-          <p className="text-green-700 font-semibold">
-            Analysis complete! Your annotated video is ready.
-          </p>
+          <p className="text-green-700 font-semibold">Analysis complete! Your annotated video is ready.</p>
 
           <div className="flex items-center justify-center gap-3">
-            <a
-              href={annotatedUrl}
-              download="annotated.mp4"
-              className="px-5 py-3 bg-gray-900 text-white rounded-xl shadow hover:bg-gray-700"
-            >
+            <a href={annotatedUrl} download="annotated.mp4" className="px-5 py-3 bg-gray-900 text-white rounded-xl shadow hover:bg-gray-700">
               Download MP4
             </a>
             <button
@@ -292,7 +295,6 @@ const ReviewScreen: React.FC<ReviewScreenProps> = ({ onNext }) => {
       <h2 className="text-3xl font-bold text-gray-900 mb-2">3. Session Review: Job Interview Prep</h2>
       <p className="text-indigo-600 font-semibold mb-8">AI Analysis Complete! Score: 78/100</p>
 
-      {/* Main Metric Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
         <MetricCard title="Hand Movements" value={analysisData.handMovements.value} icon={analysisData.handMovements.icon} color={analysisData.handMovements.color} description={analysisData.handMovements.desc} highlight={analysisData.handMovements.highlight} />
         <MetricCard title="Leg Movements" value={analysisData.legMovements.value} icon={analysisData.legMovements.icon} color={analysisData.legMovements.color} description={analysisData.legMovements.desc} highlight={analysisData.legMovements.highlight} />
@@ -300,7 +302,6 @@ const ReviewScreen: React.FC<ReviewScreenProps> = ({ onNext }) => {
         <MetricCard title="Posture" value={analysisData.posture.value} icon={analysisData.posture.icon} color={analysisData.posture.color} description={analysisData.posture.desc} highlight={analysisData.posture.highlight} />
       </div>
 
-      {/* Non-Verbal & AI Summary */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-1 bg-white p-6 rounded-xl shadow-lg border border-gray-50">
           <div className="flex items-center space-x-3 text-indigo-600 mb-4">
@@ -321,14 +322,16 @@ const ReviewScreen: React.FC<ReviewScreenProps> = ({ onNext }) => {
           </div>
           <p className="text-gray-800 leading-relaxed">
             Strong confidence markers in <strong>Eye Gaze</strong> and <strong>Posture</strong>. Focus next on
-            <strong> Hand Movements</strong> and <strong>Leg Movements</strong>: keep gestures purposeful and plant your stance to reduce
-            lower-body fidgeting.
+            <strong> Hand Movements</strong> and <strong>Leg Movements</strong>: keep gestures purposeful and plant your stance to reduce lower-body fidgeting.
           </p>
         </div>
       </div>
 
       <div className="mt-10 flex justify-center">
-        <button onClick={onNext} className="px-8 py-3 bg-gray-900 text-white font-semibold rounded-full shadow-lg hover:bg-gray-700 transition duration-300 transform hover:scale-105">
+        <button
+          onClick={onNext}
+          className="px-8 py-3 bg-gray-900 text-white font-semibold rounded-full shadow-lg hover:bg-gray-700 transition duration-300 transform hover:scale-105"
+        >
           View Full Progress Dashboard
         </button>
       </div>
@@ -346,7 +349,6 @@ const AnalyticsScreen: React.FC<AnalyticsScreenProps> = ({ onNext }) => (
           <Hand size={20} className="text-indigo-600" /> <span>Hand Movement Control</span>
         </h3>
         <div className="h-40 bg-gray-100 rounded-lg flex items-end p-2 text-sm text-gray-500 relative">
-          {/* Mock Chart Area */}
           <div className="w-1/5 h-4/5 bg-indigo-200 rounded-t-sm mx-1" title="Week 1: Frequent" />
           <div className="w-1/5 h-3/5 bg-indigo-300 rounded-t-sm mx-1" title="Week 2: Moderate" />
           <div className="w-1/5 h-2/5 bg-indigo-400 rounded-t-sm mx-1" title="Week 3: Controlled" />
@@ -361,7 +363,6 @@ const AnalyticsScreen: React.FC<AnalyticsScreenProps> = ({ onNext }) => (
           <Move size={20} className="text-indigo-600" /> <span>Leg Movement Stillness</span>
         </h3>
         <div className="h-40 bg-gray-100 rounded-lg flex items-start p-2 text-sm text-gray-500 relative">
-          {/* Mock Chart Area */}
           <div className="w-1/5 h-full bg-red-400 rounded-b-sm mx-1" style={{ height: "90%" }} title="Week 1: High fidgeting" />
           <div className="w-1/5 h-full bg-red-300 rounded-b-sm mx-1" style={{ height: "60%" }} title="Week 2: Moderate" />
           <div className="w-1/5 h-full bg-red-200 rounded-b-sm mx-1" style={{ height: "35%" }} title="Week 3: Low" />
@@ -373,7 +374,10 @@ const AnalyticsScreen: React.FC<AnalyticsScreenProps> = ({ onNext }) => (
     </div>
     <div className="mt-10 text-center">
       <p className="text-lg text-gray-700 font-medium">Ready for your next session?</p>
-      <button onClick={() => onNext(2)} className="mt-4 px-8 py-3 bg-indigo-600 text-white font-semibold rounded-full shadow-lg hover:bg-indigo-700 transition duration-300 transform hover:scale-105">
+      <button
+        onClick={() => onNext(2)}
+        className="mt-4 px-8 py-3 bg-indigo-600 text-white font-semibold rounded-full shadow-lg hover:bg-indigo-700 transition duration-300 transform hover:scale-105"
+      >
         Start New Practice
       </button>
     </div>
@@ -381,15 +385,13 @@ const AnalyticsScreen: React.FC<AnalyticsScreenProps> = ({ onNext }) => (
 );
 
 // -------- Main App Component --------
-
 const App: React.FC = () => {
-  const [step, setStep] = useState<Step>(1); // 1: Welcome, 2: Goals, 3: Upload, 4: Review, 5: Analytics
+  const [step, setStep] = useState<Step>(1);
 
   const navigateTo = (newStep: Step) => {
-    // Only allow navigation to steps that make sense in a flow
     if (newStep === 4 && step < 3) return;
     setStep(newStep);
-    window.scrollTo(0, 0); // Scroll to top on navigation
+    window.scrollTo(0, 0);
   };
 
   const renderContent = () => {
@@ -412,15 +414,18 @@ const App: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50 font-sans antialiased">
       <Header onNavigate={navigateTo} currentStep={step} />
-      <main className="py-10">
+
+      {/* Add extra bottom padding so the fixed bottom nav doesn't overlap content */}
+      <main className="py-10 pb-24">
         <div className="mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-white p-8 sm:p-12 rounded-2xl shadow-2xl">{renderContent()}</div>
         </div>
       </main>
+
+      {/* Mobile bottom nav */}
+      <BottomNav currentStep={step} onNavigate={navigateTo} />
     </div>
   );
 };
 
 export default App;
-
-// uvicorn server:app --host 0.0.0.0 --port 8000
