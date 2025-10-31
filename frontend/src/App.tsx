@@ -412,17 +412,18 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 font-sans antialiased">
+    <div className="min-h-dvh bg-gray-50 font-sans antialiased flex flex-col">
       <Header onNavigate={navigateTo} currentStep={step} />
-
-      {/* Add extra bottom padding so the fixed bottom nav doesn't overlap content */}
-      <main className="py-10 pb-24">
-        <div className="mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-white p-8 sm:p-12 rounded-2xl shadow-2xl">{renderContent()}</div>
+      <main className="flex-1 py-10 pb-24">
+        <div className="mx-auto px-4 sm:px-6 lg:px-8 h-full">
+          
+          <div className="bg-white p-8 sm:p-12 rounded-2xl shadow-2xl
+                          min-h-[calc(100dvh-128px)] flex items-center justify-center">
+            {renderContent()}
+          </div>
         </div>
       </main>
-
-      {/* Mobile bottom nav */}
+  
       <BottomNav currentStep={step} onNavigate={navigateTo} />
     </div>
   );
