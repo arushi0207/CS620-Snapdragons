@@ -2,6 +2,7 @@ import React, { useMemo, useState } from "react";
 import axios from "axios";
 import BottomNav from "./components/bottomnavbar";
 import type { LucideIcon } from "lucide-react";
+import { toast } from "sonner";
 import {
   Target,
   Upload,
@@ -16,11 +17,11 @@ import {
   Move,
 } from "lucide-react";
 
-// -------- Types --------
+/* ---------- Types ---------- */
 type Step = 1 | 2 | 3 | 4 | 5;
 type TailwindBrand = "indigo" | "yellow" | "red" | "green";
 
-// -------- Reusable Components --------
+/* ---------- Reusable Components ---------- */
 type HeaderProps = { onNavigate: (step: Step) => void; currentStep: Step };
 
 const Header: React.FC<HeaderProps> = ({ onNavigate, currentStep }) => (
@@ -72,6 +73,7 @@ const MetricCard: React.FC<MetricCardProps> = ({
   highlight,
 }) => (
   <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-50 hover:shadow-xl transition duration-300 transform hover:scale-[1.02]">
+    {/* NOTE: if you purge Tailwind, safelist these dynamic classes */}
     <div className={`flex items-center space-x-4 mb-3 text-${color}-600`}>
       <Icon size={32} className={`bg-${color}-100 p-2 rounded-lg`} />
       <h3 className="text-lg font-semibold text-gray-800">{title}</h3>
@@ -83,14 +85,15 @@ const MetricCard: React.FC<MetricCardProps> = ({
   </div>
 );
 
-// -------- Screen Components --------
+/* ---------- Screens ---------- */
 type WelcomeScreenProps = { onStart: () => void };
 const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onStart }) => (
   <div className="text-center p-8">
     <Target className="w-16 h-16 mx-auto text-indigo-600 mb-4" />
     <h2 className="text-4xl font-extrabold text-gray-900 mb-4">SpeakEasy</h2>
     <p className="text-lg text-gray-600 mb-8 max-w-lg mx-auto">
-      Your AI-powered coach for mastering interviews, presentations, and building career-ready confidence. Get clear, actionable feedback on what you say and <strong>how you present yourself</strong>.
+      Your AI-powered coach for mastering interviews, presentations, and building career-ready confidence.
+      Get clear, actionable feedback on what you say and <strong>how you present yourself</strong>.
     </p>
     <button
       onClick={onStart}
@@ -122,7 +125,9 @@ const GoalSettingScreen: React.FC<GoalSettingScreenProps> = ({ onNext }) => {
             key={goal.id}
             onClick={() => setSelectedGoal(goal.name)}
             className={`p-5 rounded-xl border-2 cursor-pointer transition duration-200 ${
-              selectedGoal === goal.name ? "border-indigo-600 bg-indigo-50 shadow-md" : "border-gray-200 hover:border-indigo-300 bg-white"
+              selectedGoal === goal.name
+                ? "border-indigo-600 bg-indigo-50 shadow-md"
+                : "border-gray-200 hover:border-indigo-300 bg-white"
             }`}
           >
             <div className="flex justify-between items-center">
@@ -181,8 +186,11 @@ const UploadScreen: React.FC<UploadScreenProps> = ({ onAnalysisComplete }) => {
       const url = URL.createObjectURL(blob);
       setAnnotatedUrl(url);
       setProgress(100);
+      toast.success("Video processed!"); // ✅ toast on success
     } catch (err: any) {
-      setError(err?.message || "Upload failed");
+      const msg = err?.message || "Upload failed";
+      setError(msg);
+      toast.error(msg); // ✅ toast on error
     } finally {
       setIsUploading(false);
     }
@@ -221,7 +229,10 @@ const UploadScreen: React.FC<UploadScreenProps> = ({ onAnalysisComplete }) => {
         <div className="mt-8">
           <p className="text-lg font-medium text-gray-700 mb-2">Uploading... ({progress}%)</p>
           <div className="w-full bg-gray-200 rounded-full h-3">
-            <div className="bg-indigo-600 h-3 rounded-full transition-all duration-500 ease-out" style={{ width: `${progress}%` }} />
+            <div
+              className="bg-indigo-600 h-3 rounded-full transition-all duration-500 ease-out"
+              style={{ width: `${progress}%` }}
+            />
           </div>
         </div>
       )}
@@ -233,7 +244,11 @@ const UploadScreen: React.FC<UploadScreenProps> = ({ onAnalysisComplete }) => {
           <p className="text-green-700 font-semibold">Analysis complete! Your annotated video is ready.</p>
 
           <div className="flex items-center justify-center gap-3">
-            <a href={annotatedUrl} download="annotated.mp4" className="px-5 py-3 bg-gray-900 text-white rounded-xl shadow hover:bg-gray-700">
+            <a
+              href={annotatedUrl}
+              download="annotated.mp4"
+              className="px-5 py-3 bg-gray-900 text-white rounded-xl shadow hover:bg-gray-700"
+            >
               Download MP4
             </a>
             <button
@@ -384,7 +399,7 @@ const AnalyticsScreen: React.FC<AnalyticsScreenProps> = ({ onNext }) => (
   </div>
 );
 
-// -------- Main App Component --------
+/* ---------- Main App ---------- */
 const App: React.FC = () => {
   const [step, setStep] = useState<Step>(1);
 
@@ -414,16 +429,19 @@ const App: React.FC = () => {
   return (
     <div className="min-h-dvh bg-gray-50 font-sans antialiased flex flex-col">
       <Header onNavigate={navigateTo} currentStep={step} />
+
+      {/* Fill space between sticky header and bottom nav */}
       <main className="flex-1 py-10 pb-24">
         <div className="mx-auto px-4 sm:px-6 lg:px-8 h-full">
-          
-          <div className="bg-white p-8 sm:p-12 rounded-2xl shadow-2xl
-                          min-h-[calc(100dvh-128px)] flex items-center justify-center">
+          <div
+            className="bg-white p-8 sm:p-12 rounded-2xl shadow-2xl
+                       min-h-[calc(100dvh-128px)] flex items-center justify-center"
+          >
             {renderContent()}
           </div>
         </div>
       </main>
-  
+
       <BottomNav currentStep={step} onNavigate={navigateTo} />
     </div>
   );
