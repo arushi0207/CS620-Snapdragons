@@ -26,13 +26,7 @@ export default function BottomNav({
   onNavigate: (s: Step) => void;
 }) {
   return (
-    <nav
-      className="
-        fixed bottom-0 left-0 right-0 z-20 sm:hidden
-        bg-white/90 backdrop-blur border-t border-gray-200 shadow-lg
-        pb-[env(safe-area-inset-bottom)]  /* safe area on iOS */
-      "
-    >
+    <nav className="fixed bottom-0 left-0 right-0 z-20 bg-white/90 backdrop-blur border-t border-gray-200 shadow-lg pb-[env(safe-area-inset-bottom)]">
       <ul className="grid grid-cols-5 max-w-md mx-auto">
         {items.map(({ step, label, icon: Icon }) => {
           const active = currentStep === step;
