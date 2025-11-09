@@ -210,3 +210,5 @@ __marimo__/
 **/*.mp4
 outputs/
 assets/models/
+
+/frontend/node_modules

@@ -4,6 +4,7 @@ import argparse
 import json
 import os
 from typing import Optional
+import torch
 
 from featurehub.llm.llava_onevision import (
     generate_evaluation,
@@ -25,6 +26,12 @@ def main():
     ap.add_argument("--max-frames", type=int, default=64, help="Cap on frames after sampling (default: 64 for safety).")
     ap.add_argument("--use-video-mode", action="store_true", help="Use video input pathway (may overflow context).")
     ap.add_argument("--output-json", default="evaluation_llava.json", help="Output JSON filename inside --out.")
+    ap.add_argument("--quant", choices=["none", "4bit", "8bit"], default="none",
+                    help="Quantization mode: 4bit or 8bit (requires bitsandbytes).")
+    ap.add_argument("--compute-dtype", choices=["float16", "bfloat16"], default="float16",
+                    help="Compute dtype used by quantized layers.")
+    ap.add_argument("--device-map", default="auto",
+                    help='Device map for loading (e.g., "auto", "cuda:0").')
     args = ap.parse_args()
 
     os.makedirs(args.out, exist_ok=True)
@@ -38,6 +45,8 @@ def main():
     else:
         prompt = default_prompt()
 
+    compute_dtype = torch.float16 if args.compute_dtype == "float16" else torch.bfloat16
+
     result = generate_evaluation(
         video_path=args.video,
         prompt=prompt,
@@ -47,6 +56,9 @@ def main():
         max_new_tokens=args.max_new_tokens,
         temperature=args.temperature,
         use_video_mode=args.use_video_mode,
+        quant=args.quant,
+        compute_dtype=compute_dtype,
+        device_map=args.device_map,
     )
 
     out_path = os.path.join(args.out, args.output_json)

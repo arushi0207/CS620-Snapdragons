@@ -7,7 +7,7 @@ import inspect
 import cv2
 import torch
 from PIL import Image
-from transformers import AutoProcessor, AutoModelForCausalLM
+from transformers import AutoProcessor, AutoModelForCausalLM, BitsAndBytesConfig
 
 
 DEFAULT_MODEL_ID = "lmms-lab/LLaVA-OneVision-1.5-4B-stage0"
@@ -28,10 +28,56 @@ def default_prompt() -> str:
     )
 
 
-def load_llava(model_id: str = DEFAULT_MODEL_ID):
-    """Load LLaVA-OneVision model and processor."""
+# def load_llava(model_id: str = DEFAULT_MODEL_ID):
+#     """Load LLaVA-OneVision model and processor."""
+#     model = AutoModelForCausalLM.from_pretrained(
+#         model_id, torch_dtype="auto", device_map="auto", trust_remote_code=True
+#     )
+#     processor = AutoProcessor.from_pretrained(model_id, trust_remote_code=True)
+#     return model, processor
+
+def load_llava(
+    model_id: str = DEFAULT_MODEL_ID,
+    *,
+    quant: str = "none",                   # "none" | "4bit" | "8bit"
+    compute_dtype: Optional[torch.dtype] = None,  # used for 4-bit compute (default fp16)
+    device_map: Optional[str] = "auto",
+):
+    """Load LLaVA-OneVision model and processor with optional bitsandbytes quantization."""
+    quant_config = None
+    if quant and quant.lower() != "none":
+        # Ensure bitsandbytes is available
+        try:
+            import bitsandbytes as bnb  # noqa: F401
+        except Exception as e:
+            raise RuntimeError(
+                "Quantization requested but bitsandbytes is not installed/available. "
+                "Install with `pip install bitsandbytes` (and ensure compatible PyTorch + CUDA)."
+            ) from e
+
+        if quant.lower() == "4bit":
+            quant_config = BitsAndBytesConfig(
+                load_in_4bit=True,
+                bnb_4bit_quant_type="nf4",
+                bnb_4bit_compute_dtype=compute_dtype or torch.float16,
+            )
+        elif quant.lower() == "8bit":
+            quant_config = BitsAndBytesConfig(load_in_8bit=True)
+        else:
+            raise ValueError(f"Unknown quant option: {quant}")
+
+    # For full-precision path, choose a reasonable dtype
+    torch_dtype = None if quant_config is not None else (
+        torch.float16 if torch.cuda.is_available() else torch.bfloat16
+    )
+
     model = AutoModelForCausalLM.from_pretrained(
-        model_id, torch_dtype="auto", device_map="auto", trust_remote_code=True
+        model_id,
+        torch_dtype=torch_dtype,
+        device_map=device_map,
+        trust_remote_code=True,
+        low_cpu_mem_usage=True,
+        quantization_config=quant_config,
     )
     processor = AutoProcessor.from_pretrained(model_id, trust_remote_code=True)
     return model, processor
@@ -130,13 +176,21 @@ def generate_evaluation(
     temperature: float = 0.2,
     use_video_mode: bool = False,
     safety_frames_cap: int = 64,
+    quant: str = "none",
+    compute_dtype: Optional[torch.dtype] = None,
+    device_map: Optional[str] = "auto",
 ) -> Dict[str, Any]:
     """Run LLaVA-OV on a video with a prompt and return a JSON-able dict."""
     if prompt is None:
         prompt = default_prompt()
 
     # Load model & processor
-    model, processor = load_llava(model_id)
+    model, processor = load_llava(
+        model_id=model_id,
+        quant=quant,
+        compute_dtype=compute_dtype,
+        device_map=device_map,
+    )
 
     # Frames (full video by default) — with safety caps to avoid token overflow
     frames: List[Image.Image]
