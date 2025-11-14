@@ -35,10 +35,15 @@ pip install transformers
 
 For LLaVA-OneVision (text evaluation):
 ```shell
+pip install qwen-vl-utils
 pip install torch accelerate pillow
 # transformers already installed above; trust_remote_code=True is used.
 ```
 
+For Qwen-3 VL Text Evaluation, also install Decord:
+```shell
+pip install qwen-vl-utils[decord]
+```
 ### 3. Configure AI Hub Access
 
 Many features of AI Hub Models _(such as model compilation, on-device profiling, etc.)_ require access to Qualcomm® AI Hub:
@@ -71,6 +76,10 @@ python -m scripts.llm_eval \
   --max-new-tokens 512 \
   --temperature 0.2 \
   --max-frames 1
+```
+### Qwen-3 VL Text Evaluation (Visual-only)
+```
+python -m scripts.llm_eval --video input.mp4 --out outputs/run_qwen --model Qwen/Qwen3-VL-2B-Instruct --num-frames 16 --output-json evaluation_qwen.json
 ```
 
 Optional arguments:
