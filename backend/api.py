@@ -3,19 +3,16 @@ SpeakEasy API - Public Speaking Coaching Backend
 A comprehensive FastAPI backend for video analysis and speech feedback.
 """
 
-from fastapi import FastAPI, File, UploadFile, HTTPException, Depends, Query
+from fastapi import FastAPI, File, UploadFile, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, Field
 from typing import Optional, List, Dict, Any
 from enum import Enum
-from datetime import datetime, timedelta
-import shutil
+from datetime import datetime
 import os
 import uvicorn
 import logging
 import uuid
-import json
 from pathlib import Path
 
 # ---------------------------
@@ -60,10 +57,6 @@ class AnalysisRequest(BaseModel):
     """Request model for video analysis"""
     goal: GoalType = Field(..., description="The coaching goal type")
     session_name: Optional[str] = Field(None, description="Optional session name")
-    
-    @validator('goal')
-    def validate_goal(cls, v):
-        return v
 
 
 class TextFeedbackRequest(BaseModel):
@@ -120,6 +113,16 @@ class HealthResponse(BaseModel):
 sessions_db: Dict[str, Dict[str, Any]] = {}
 results_db: Dict[str, AnalysisResult] = {}
 
+# Constants for efficiency
+FILLER_WORDS = frozenset(["um", "uh", "like", "you know", "so", "well", "actually", "basically"])
+FILLER_WORDS_LIST = list(FILLER_WORDS)
+GOAL_RECOMMENDATIONS = {
+    GoalType.JOB_INTERVIEW: "For interviews, maintain a confident but approachable demeanor.",
+    GoalType.CLASS_PRESENTATION: "For presentations, use more gestures to emphasize key points.",
+    GoalType.NETWORKING_PITCH: "For networking, focus on warm facial expressions and open body language.",
+    GoalType.GENERAL_CONFIDENCE: "Continue practicing to build your confidence and speaking skills."
+}
+
 
 # ---------------------------
 # Model Functions (Replace with actual implementations)
@@ -134,19 +137,22 @@ def run_face_tracking(video_path: str, goal: GoalType) -> Dict[str, Any]:
     
     # Mock implementation - replace with actual model
     import random
+    import time
     
     # Simulate processing time
-    import time
     time.sleep(0.5)
+    
+    # Pre-generate tracking points more efficiently
+    tracking_points = [
+        {"frame": i, "points": [[100 + i, 120 + i], [110 + i, 130 + i], [115 + i, 125 + i]]}
+        for i in range(1, 11)
+    ]
     
     return {
         "eye_gaze_percentage": random.uniform(75, 95),
         "posture_score": random.uniform(60, 90),
         "facial_expression_score": random.uniform(70, 95),
-        "face_tracking_points": [
-            {"frame": i, "points": [[100 + i, 120 + i], [110 + i, 130 + i], [115 + i, 125 + i]]}
-            for i in range(1, 11)
-        ]
+        "face_tracking_points": tracking_points
     }
 
 
@@ -160,8 +166,8 @@ def analyze_audio(video_path: str, goal: GoalType) -> Dict[str, Any]:
     # Mock implementation
     import random
     
-    filler_words = ["um", "uh", "like", "you know", "so", "well"]
-    filler_counts = {word: random.randint(0, 5) for word in filler_words}
+    # Use cached filler words list
+    filler_counts = {word: random.randint(0, 5) for word in FILLER_WORDS_LIST[:6]}
     total_fillers = sum(filler_counts.values())
     
     return {
@@ -221,13 +227,10 @@ def generate_feedback(metrics: Dict[str, Any], goal: GoalType) -> Dict[str, Any]
     else:
         summary_parts.append("Your posture was generally good.")
     
-    # Goal-specific recommendations
-    if goal == GoalType.JOB_INTERVIEW:
-        recommendations.append("For interviews, maintain a confident but approachable demeanor.")
-    elif goal == GoalType.CLASS_PRESENTATION:
-        recommendations.append("For presentations, use more gestures to emphasize key points.")
-    elif goal == GoalType.NETWORKING_PITCH:
-        recommendations.append("For networking, focus on warm facial expressions and open body language.")
+    # Goal-specific recommendations (using cached dictionary)
+    goal_recommendation = GOAL_RECOMMENDATIONS.get(goal)
+    if goal_recommendation:
+        recommendations.append(goal_recommendation)
     
     # Calculate overall score
     score = (
@@ -248,73 +251,79 @@ def generate_feedback(metrics: Dict[str, Any], goal: GoalType) -> Dict[str, Any]
     }
 
 
-def process_video_analysis(video_path: str, goal: GoalType) -> AnalysisResult:
+def _create_metric_result(metric_name: str, value: Any, unit: str, status: str, 
+                          message: str, tip: str) -> MetricResult:
+    """Helper function to create metric results efficiently"""
+    return MetricResult(
+        metric_name=metric_name,
+        value=value,
+        unit=unit,
+        status=status,
+        message=message,
+        tip=tip
+    )
+
+
+def process_video_analysis(video_path: str, goal: GoalType, session_id: str) -> AnalysisResult:
     """
     Main function to process video and generate complete analysis.
     """
     start_time = datetime.now()
-    session_id = str(uuid.uuid4())
     
     try:
-        # Run face tracking analysis
+        # Run face tracking and audio analysis (could be parallelized in production)
         face_data = run_face_tracking(video_path, goal)
-        
-        # Run audio analysis
         audio_data = analyze_audio(video_path, goal)
         
-        # Combine metrics
+        # Combine metrics efficiently
         combined_metrics = {**face_data, **audio_data}
         
         # Generate feedback
         feedback = generate_feedback(combined_metrics, goal)
         
-        # Build metric results
+        # Build metric results using helper function
+        pace_wpm = combined_metrics["pace_wpm"]
+        filler_total = combined_metrics["filler_words"]["total"]
+        eye_gaze = combined_metrics["eye_gaze_percentage"]
+        posture = combined_metrics["posture_score"]
+        facial_expr = combined_metrics["facial_expression_score"]
+        
         metrics = [
-            MetricResult(
-                metric_name="Pace",
-                value=combined_metrics["pace_wpm"],
-                unit="WPM",
-                status="good" if 140 <= combined_metrics["pace_wpm"] <= 160 else "warning",
-                message=f"Your speaking pace is {combined_metrics['pace_wpm']} WPM. Ideal range is 140-160 WPM.",
-                tip="Try pausing for 2 seconds after each main point."
+            _create_metric_result(
+                "Pace", pace_wpm, "WPM",
+                "good" if 140 <= pace_wpm <= 160 else "warning",
+                f"Your speaking pace is {pace_wpm} WPM. Ideal range is 140-160 WPM.",
+                "Try pausing for 2 seconds after each main point."
             ),
-            MetricResult(
-                metric_name="Filler Words",
-                value=combined_metrics["filler_words"]["total"],
-                unit="count",
-                status="good" if combined_metrics["filler_words"]["total"] <= 3 else "needs_improvement",
-                message=f"You used {combined_metrics['filler_words']['total']} filler words.",
-                tip="Practice with a silent pause instead of 'um'."
+            _create_metric_result(
+                "Filler Words", filler_total, "count",
+                "good" if filler_total <= 3 else "needs_improvement",
+                f"You used {filler_total} filler words.",
+                "Practice with a silent pause instead of 'um'."
             ),
-            MetricResult(
-                metric_name="Eye Gaze",
-                value=f"{combined_metrics['eye_gaze_percentage']:.0f}%",
-                unit="percentage",
-                status="good" if combined_metrics["eye_gaze_percentage"] >= 85 else "warning",
-                message=f"You maintained {combined_metrics['eye_gaze_percentage']:.0f}% eye contact with the audience.",
-                tip="Avoid looking down at your notes too frequently."
+            _create_metric_result(
+                "Eye Gaze", f"{eye_gaze:.0f}%", "percentage",
+                "good" if eye_gaze >= 85 else "warning",
+                f"You maintained {eye_gaze:.0f}% eye contact with the audience.",
+                "Avoid looking down at your notes too frequently."
             ),
-            MetricResult(
-                metric_name="Posture",
-                value=f"{combined_metrics['posture_score']:.0f}/100",
-                unit="score",
-                status="good" if combined_metrics["posture_score"] >= 80 else "needs_improvement",
-                message=f"Your posture score is {combined_metrics['posture_score']:.0f}/100.",
-                tip="Practice keeping your back straight and shoulders relaxed."
+            _create_metric_result(
+                "Posture", f"{posture:.0f}/100", "score",
+                "good" if posture >= 80 else "needs_improvement",
+                f"Your posture score is {posture:.0f}/100.",
+                "Practice keeping your back straight and shoulders relaxed."
             ),
-            MetricResult(
-                metric_name="Facial Expression",
-                value=f"{combined_metrics['facial_expression_score']:.0f}/100",
-                unit="score",
-                status="good" if combined_metrics["facial_expression_score"] >= 80 else "warning",
-                message=f"Your facial expression score is {combined_metrics['facial_expression_score']:.0f}/100.",
-                tip="Align your facial expressions with the emotion of the topic."
+            _create_metric_result(
+                "Facial Expression", f"{facial_expr:.0f}/100", "score",
+                "good" if facial_expr >= 80 else "warning",
+                f"Your facial expression score is {facial_expr:.0f}/100.",
+                "Align your facial expressions with the emotion of the topic."
             )
         ]
         
         processing_time = (datetime.now() - start_time).total_seconds()
         
-        result = AnalysisResult(
+        return AnalysisResult(
             session_id=session_id,
             goal=goal,
             timestamp=datetime.now(),
@@ -325,10 +334,8 @@ def process_video_analysis(video_path: str, goal: GoalType) -> AnalysisResult:
             processing_time=processing_time
         )
         
-        return result
-        
     except Exception as e:
-        logger.error(f"Error processing video: {str(e)}")
+        logger.error(f"Error processing video: {str(e)}", exc_info=True)
         raise
 
 
@@ -377,16 +384,18 @@ def validate_video_file(file: UploadFile) -> None:
         )
 
 
-def save_uploaded_file(file: UploadFile) -> str:
-    """Save uploaded file and return path"""
+async def save_uploaded_file(file: UploadFile) -> str:
+    """Save uploaded file and return path (async for better performance)"""
     validate_video_file(file)
     
     file_ext = Path(file.filename).suffix.lower()
     unique_filename = f"{uuid.uuid4()}{file_ext}"
     file_path = os.path.join(UPLOAD_DIR, unique_filename)
     
+    # Read file content once
+    content = await file.read()
     with open(file_path, "wb") as buffer:
-        shutil.copyfileobj(file.file, buffer)
+        buffer.write(content)
     
     logger.info(f"Saved uploaded file: {file_path}")
     return file_path
@@ -427,14 +436,12 @@ async def analyze_video(
     Main endpoint: Upload video, analyze it, and return comprehensive feedback.
     """
     file_path = None
+    session_id = str(uuid.uuid4())
+    
     try:
         logger.info(f"Received video upload request: {file.filename}, goal: {goal}")
         
-        # Save uploaded file
-        file_path = save_uploaded_file(file)
-        
-        # Create session
-        session_id = str(uuid.uuid4())
+        # Create session first
         sessions_db[session_id] = {
             "session_id": session_id,
             "goal": goal,
@@ -443,25 +450,31 @@ async def analyze_video(
             "status": "processing"
         }
         
+        # Save uploaded file (async)
+        file_path = await save_uploaded_file(file)
+        
         # Process video
-        result = process_video_analysis(file_path, goal)
+        result = process_video_analysis(file_path, goal, session_id)
         result.session_name = session_name
         
-        # Store result
+        # Store result atomically
         results_db[session_id] = result
-        sessions_db[session_id]["status"] = "completed"
-        sessions_db[session_id]["has_results"] = True
+        sessions_db[session_id].update({
+            "status": "completed",
+            "has_results": True
+        })
         
         logger.info(f"Analysis completed for session: {session_id}")
-        
         return result
         
     except HTTPException:
+        if session_id in sessions_db:
+            sessions_db[session_id]["status"] = "failed"
         raise
     except Exception as e:
         logger.error(f"Error in analyze_video: {str(e)}", exc_info=True)
-        if file_path:
-            cleanup_file(file_path)
+        if session_id in sessions_db:
+            sessions_db[session_id]["status"] = "failed"
         raise HTTPException(
             status_code=500,
             detail=f"Error processing video: {str(e)}"
@@ -480,16 +493,16 @@ async def get_text_feedback(request: TextFeedbackRequest):
     try:
         logger.info(f"Received text feedback request for goal: {request.goal}")
         
-        # Simple text analysis (can be enhanced with NLP models)
+        # Optimize text analysis - use lower() once and split once
+        transcript_lower = request.transcript.lower()
         words = request.transcript.split()
         word_count = len(words)
         
         # Estimate pace (assuming average reading speed)
         estimated_wpm = word_count * 2  # Rough estimate
         
-        # Count filler words
-        filler_words_list = ["um", "uh", "like", "you know", "so", "well", "actually", "basically"]
-        filler_counts = {word: request.transcript.lower().count(word) for word in filler_words_list}
+        # Count filler words more efficiently using cached set
+        filler_counts = {word: transcript_lower.count(word) for word in FILLER_WORDS_LIST}
         total_fillers = sum(filler_counts.values())
         
         # Generate feedback
@@ -498,7 +511,7 @@ async def get_text_feedback(request: TextFeedbackRequest):
             "filler_words": {"total": total_fillers, "breakdown": filler_counts}
         }, request.goal)
         
-        result = {
+        return {
             "status": "success",
             "goal": request.goal,
             "session_name": request.session_name,
@@ -511,9 +524,7 @@ async def get_text_feedback(request: TextFeedbackRequest):
             "feedback": feedback,
             "timestamp": datetime.now().isoformat()
         }
-        
-        return result
-        
+
     except Exception as e:
         logger.error(f"Error in get_text_feedback: {str(e)}", exc_info=True)
         raise HTTPException(
@@ -531,21 +542,22 @@ async def get_sessions(
     Get list of all analysis sessions.
     """
     try:
-        sessions = []
-        for session_id, session_data in sessions_db.items():
-            if goal is None or session_data.get("goal") == goal:
-                sessions.append(SessionInfo(
-                    session_id=session_data["session_id"],
-                    goal=session_data["goal"],
-                    session_name=session_data.get("session_name"),
-                    created_at=datetime.fromisoformat(session_data["created_at"]),
-                    status=session_data["status"],
-                    has_results=session_data.get("has_results", False)
-                ))
+        # Use list comprehension for better performance
+        sessions = [
+            SessionInfo(
+                session_id=session_data["session_id"],
+                goal=session_data["goal"],
+                session_name=session_data.get("session_name"),
+                created_at=datetime.fromisoformat(session_data["created_at"]),
+                status=session_data["status"],
+                has_results=session_data.get("has_results", False)
+            )
+            for session_data in sessions_db.values()
+            if goal is None or session_data.get("goal") == goal
+        ]
         
-        # Sort by creation date (newest first)
+        # Sort by creation date (newest first) and limit
         sessions.sort(key=lambda x: x.created_at, reverse=True)
-        
         return sessions[:limit]
 
     except Exception as e:
@@ -588,7 +600,7 @@ async def delete_session(session_id: str):
         
         logger.info(f"Deleted session: {session_id}")
         return {"status": "success", "message": f"Session {session_id} deleted"}
-        
+
     except Exception as e:
         logger.error(f"Error deleting session: {str(e)}", exc_info=True)
         raise HTTPException(
@@ -603,27 +615,35 @@ async def get_stats():
     Get overall statistics about all sessions.
     """
     try:
+        # Optimize stats calculation with single pass
         total_sessions = len(sessions_db)
-        completed_sessions = sum(1 for s in sessions_db.values() if s.get("status") == "completed")
-        processing_sessions = sum(1 for s in sessions_db.values() if s.get("status") == "processing")
-        
+        completed_count = 0
+        processing_count = 0
         goal_distribution = {}
+        
         for session in sessions_db.values():
+            status = session.get("status")
+            if status == "completed":
+                completed_count += 1
+            elif status == "processing":
+                processing_count += 1
+            
             goal = session.get("goal", "unknown")
             goal_distribution[goal] = goal_distribution.get(goal, 0) + 1
         
-        avg_score = 0
+        # Calculate average score more efficiently
+        avg_score = None
         if results_db:
-            scores = [r.overall_score for r in results_db.values()]
-            avg_score = sum(scores) / len(scores)
+            total_score = sum(r.overall_score for r in results_db.values())
+            avg_score = round(total_score / len(results_db), 2)
         
         return {
             "total_sessions": total_sessions,
-            "completed_sessions": completed_sessions,
-            "processing_sessions": processing_sessions,
-            "failed_sessions": total_sessions - completed_sessions - processing_sessions,
+            "completed_sessions": completed_count,
+            "processing_sessions": processing_count,
+            "failed_sessions": total_sessions - completed_count - processing_count,
             "goal_distribution": goal_distribution,
-            "average_score": round(avg_score, 2) if avg_score > 0 else None,
+            "average_score": avg_score,
             "timestamp": datetime.now().isoformat()
         }
         
