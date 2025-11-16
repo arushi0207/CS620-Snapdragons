@@ -87,68 +87,137 @@ const MetricCard: React.FC<MetricCardProps> = ({
 
 /* ---------- Screens ---------- */
 type WelcomeScreenProps = { onStart: () => void };
+
 const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onStart }) => (
-  <div className="text-center p-8">
-    <Target className="w-16 h-16 mx-auto text-indigo-600 mb-4" />
-    <h2 className="text-4xl font-extrabold text-gray-900 mb-4">SpeakEasy</h2>
-    <p className="text-lg text-gray-600 mb-8 max-w-lg mx-auto">
-      Your AI-powered coach for mastering interviews, presentations, and building career-ready confidence.
-      Get clear, actionable feedback on what you say and <strong>how you present yourself</strong>.
-    </p>
-    <button
-      onClick={onStart}
-      className="px-8 py-3 bg-indigo-600 text-white font-semibold rounded-full shadow-lg hover:bg-indigo-700 transition duration-300 transform hover:scale-105"
-    >
-      Start My First Session
-    </button>
-  </div>
-);
+  <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-[1.4fr,1fr] gap-10 items-center py-10">
+    {/* Left side: hero text + benefits */}
+    <section className="space-y-6">
+      <p className="text-xs font-semibold text-indigo-500 uppercase tracking-[0.2em]">
+        SpeakEasy AI Coach
+      </p>
 
-type GoalSettingScreenProps = { onNext: () => void };
-const GoalSettingScreen: React.FC<GoalSettingScreenProps> = ({ onNext }) => {
-  const [selectedGoal, setSelectedGoal] = useState<string>("Job Interview Prep");
-  const goals = [
-    { id: "interview", name: "Job Interview Prep", description: "Practice the STAR method and common Q&A." },
-    { id: "presentation", name: "Class Presentation", description: "Improve structure, pace, and engagement." },
-    { id: "pitch", name: "Networking Pitch", description: "Refine your elevator pitch for quick impact." },
-    { id: "confidence", name: "General Confidence", description: "Reduce anxiety and improve overall delivery." },
-  ] as const;
+      <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 leading-tight">
+        Become the{" "}
+        <span className="text-indigo-600">most confident speaker</span>{" "}
+        in the room.
+      </h2>
 
-  return (
-    <div className="max-w-3xl mx-auto p-6">
-      <h2 className="text-3xl font-bold text-gray-900 mb-2">1. Set Your Practice Goal</h2>
-      <p className="text-gray-500 mb-8">Tell us what you're working on today to get targeted feedback.</p>
+      <p className="text-base md:text-lg text-gray-600 max-w-xl">
+        Practice interviews, class presentations, or elevator pitches with
+        AI-powered feedback on your clarity, pacing, and body language.
+      </p>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-        {goals.map((goal) => (
-          <div
-            key={goal.id}
-            onClick={() => setSelectedGoal(goal.name)}
-            className={`p-5 rounded-xl border-2 cursor-pointer transition duration-200 ${
-              selectedGoal === goal.name
-                ? "border-indigo-600 bg-indigo-50 shadow-md"
-                : "border-gray-200 hover:border-indigo-300 bg-white"
-            }`}
-          >
-            <div className="flex justify-between items-center">
-              <p className="text-lg font-semibold text-gray-800">{goal.name}</p>
-              {selectedGoal === goal.name && <CheckCircle size={20} className="text-indigo-600" />}
-            </div>
-            <p className="text-sm text-gray-500 mt-1">{goal.description}</p>
+      {/* Benefits */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 flex flex-col gap-2">
+          <div className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-indigo-50">
+            <Target className="h-4 w-4 text-indigo-600" />
           </div>
-        ))}
+          <p className="text-sm font-semibold text-gray-900">
+            Goal-based practice
+          </p>
+          <p className="text-xs text-gray-500">
+            Choose interview, presentation, or networking—and get targeted prompts.
+          </p>
+        </div>
+
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 flex flex-col gap-2">
+          <div className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-emerald-50">
+            <TrendingUp className="h-4 w-4 text-emerald-600" />
+          </div>
+          <p className="text-sm font-semibold text-gray-900">
+            Instant analytics
+          </p>
+          <p className="text-xs text-gray-500">
+            See filler words, pacing, and confidence scores after every session.
+          </p>
+        </div>
+
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 flex flex-col gap-2">
+          <div className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-violet-50">
+            <Smile className="h-4 w-4 text-violet-600" />
+          </div>
+          <p className="text-sm font-semibold text-gray-900">
+            Safe practice space
+          </p>
+          <p className="text-xs text-gray-500">
+            Rehearse as many times as you want before the real thing.
+          </p>
+        </div>
       </div>
 
-      <button
-        onClick={onNext}
-        className="w-full flex items-center justify-center space-x-2 px-8 py-3 bg-indigo-600 text-white font-semibold rounded-xl shadow-md hover:bg-indigo-700 transition duration-300"
-      >
-        <span>Continue to Upload ({selectedGoal})</span>
-        <ArrowRight size={20} />
-      </button>
-    </div>
-  );
-};
+      {/* CTA buttons */}
+      <div className="flex flex-wrap items-center gap-3 pt-2">
+        <button
+          onClick={onStart}
+          className="inline-flex items-center gap-2 rounded-full bg-indigo-600 px-6 py-3 text-sm md:text-base font-semibold text-white shadow-lg shadow-indigo-300/40 hover:bg-indigo-700 transition"
+        >
+          Start my first session
+          <ArrowRight className="h-4 w-4" />
+        </button>
+        <button className="text-sm text-gray-600 hover:text-gray-900 underline-offset-2 hover:underline">
+          View sample feedback
+        </button>
+      </div>
+    </section>
+
+    {/* Right side: "Next session" card */}
+    <aside className="bg-white rounded-3xl shadow-xl border border-gray-100 p-6 space-y-6">
+      <div className="flex items-center justify-between gap-2">
+        <div>
+          <p className="text-xs font-medium text-indigo-500 uppercase tracking-[0.18em]">
+            Next session
+          </p>
+          <p className="text-base md:text-lg font-semibold text-gray-900">
+            Behavioral interview practice
+          </p>
+        </div>
+        <span className="inline-flex items-center gap-1 rounded-full bg-indigo-50 px-3 py-1 text-xs font-medium text-indigo-700">
+          <PersonStanding className="h-3 w-3" />
+          10 min
+        </span>
+      </div>
+
+      <div className="space-y-3 text-sm text-gray-600">
+        <p className="font-medium text-gray-900">Today’s focus:</p>
+        <ul className="space-y-1">
+          <li className="flex gap-2">
+            <CheckCircle className="h-4 w-4 mt-[2px] text-emerald-500" />
+            <span>Answer “Tell me about yourself” with a strong hook.</span>
+          </li>
+          <li className="flex gap-2">
+            <CheckCircle className="h-4 w-4 mt-[2px] text-emerald-500" />
+            <span>Keep answers between 60–90 seconds.</span>
+          </li>
+          <li className="flex gap-2">
+            <CheckCircle className="h-4 w-4 mt-[2px] text-emerald-500" />
+            <span>Reduce filler words like “um” and “like”.</span>
+          </li>
+        </ul>
+      </div>
+
+      <div className="space-y-3">
+        <p className="text-xs font-medium text-gray-500 uppercase tracking-[0.18em]">
+          Last session snapshot
+        </p>
+        <div className="grid grid-cols-3 gap-3 text-center">
+          <div className="rounded-2xl bg-gray-50 p-3">
+            <p className="text-xs text-gray-500">Clarity</p>
+            <p className="text-lg font-semibold text-gray-900">8.6</p>
+          </div>
+          <div className="rounded-2xl bg-gray-50 p-3">
+            <p className="text-xs text-gray-500">Confidence</p>
+            <p className="text-lg font-semibold text-gray-900">7.9</p>
+          </div>
+          <div className="rounded-2xl bg-gray-50 p-3">
+            <p className="text-xs text-gray-500">Filler words</p>
+            <p className="text-lg font-semibold text-emerald-600">-32%</p>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </div>
+);
 
 type UploadScreenProps = { onAnalysisComplete: () => void };
 const UploadScreen: React.FC<UploadScreenProps> = ({ onAnalysisComplete }) => {
@@ -429,22 +498,37 @@ const App: React.FC = () => {
   return (
     <div className="min-h-dvh bg-gray-50 font-sans antialiased flex flex-col">
       <Header onNavigate={navigateTo} currentStep={step} />
-
+  
       {/* Fill space between sticky header and bottom nav */}
-      <main className="flex-1 py-10 pb-24">
-        <div className="mx-auto px-4 sm:px-6 lg:px-8 h-full">
-          <div
-            className="bg-white p-8 sm:p-12 rounded-2xl shadow-2xl
-                       min-h-[calc(100dvh-128px)] flex items-center justify-center"
-          >
+      <main
+        className={
+          step === 1
+            ? "flex-1 pb-24 bg-gradient-to-b from-slate-50 via-white to-slate-100"
+            : "flex-1 py-10 pb-24 bg-gray-50"
+        }
+      >
+        {step === 1 ? (
+          // Home: hero layout, no giant card
+          <div className="px-4 sm:px-6 lg:px-8">
             {renderContent()}
           </div>
-        </div>
+        ) : (
+          // Other steps: existing card layout
+          <div className="mx-auto px-4 sm:px-6 lg:px-8 h-full">
+            <div
+              className="bg-white p-8 sm:p-12 rounded-2xl shadow-2xl
+                         min-h-[calc(100dvh-128px)] flex items-center justify-center"
+            >
+              {renderContent()}
+            </div>
+          </div>
+        )}
       </main>
-
+  
       <BottomNav currentStep={step} onNavigate={navigateTo} />
     </div>
   );
+  
 };
 
 export default App;
