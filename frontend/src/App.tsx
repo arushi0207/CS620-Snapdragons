@@ -86,6 +86,7 @@ const MetricCard: React.FC<MetricCardProps> = ({
 );
 
 /* ---------- Screens ---------- */
+
 type WelcomeScreenProps = { onStart: () => void };
 
 const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onStart }) => (
@@ -219,6 +220,52 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onStart }) => (
   </div>
 );
 
+type GoalSettingScreenProps = { onNext: () => void };
+const GoalSettingScreen: React.FC<GoalSettingScreenProps> = ({ onNext }) => {
+  const [selectedGoal, setSelectedGoal] = useState<string>("Job Interview Prep");
+  const goals = [
+    { id: "interview", name: "Job Interview Prep", description: "Practice the STAR method and common Q&A." },
+    { id: "presentation", name: "Class Presentation", description: "Improve structure, pace, and engagement." },
+    { id: "pitch", name: "Networking Pitch", description: "Refine your elevator pitch for quick impact." },
+    { id: "confidence", name: "General Confidence", description: "Reduce anxiety and improve overall delivery." },
+  ] as const;
+
+  return (
+    <div className="max-w-3xl mx-auto p-6">
+      <h2 className="text-3xl font-bold text-gray-900 mb-2">1. Set Your Practice Goal</h2>
+      <p className="text-gray-500 mb-8">Tell us what you're working on today to get targeted feedback.</p>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+        {goals.map((goal) => (
+          <div
+            key={goal.id}
+            onClick={() => setSelectedGoal(goal.name)}
+            className={`p-5 rounded-xl border-2 cursor-pointer transition duration-200 ${
+              selectedGoal === goal.name
+                ? "border-indigo-600 bg-indigo-50 shadow-md"
+                : "border-gray-200 hover:border-indigo-300 bg-white"
+            }`}
+          >
+            <div className="flex justify-between items-center">
+              <p className="text-lg font-semibold text-gray-800">{goal.name}</p>
+              {selectedGoal === goal.name && <CheckCircle size={20} className="text-indigo-600" />}
+            </div>
+            <p className="text-sm text-gray-500 mt-1">{goal.description}</p>
+          </div>
+        ))}
+      </div>
+
+      <button
+        onClick={onNext}
+        className="w-full flex items-center justify-center space-x-2 px-8 py-3 bg-indigo-600 text-white font-semibold rounded-xl shadow-md hover:bg-indigo-700 transition duration-300"
+      >
+        <span>Continue to Upload ({selectedGoal})</span>
+        <ArrowRight size={20} />
+      </button>
+    </div>
+  );
+};
+
 type UploadScreenProps = { onAnalysisComplete: () => void };
 const UploadScreen: React.FC<UploadScreenProps> = ({ onAnalysisComplete }) => {
   const [isUploading, setIsUploading] = useState<boolean>(false);
@@ -255,11 +302,11 @@ const UploadScreen: React.FC<UploadScreenProps> = ({ onAnalysisComplete }) => {
       const url = URL.createObjectURL(blob);
       setAnnotatedUrl(url);
       setProgress(100);
-      toast.success("Video processed!"); // ✅ toast on success
+      toast.success("Video processed!");
     } catch (err: any) {
       const msg = err?.message || "Upload failed";
       setError(msg);
-      toast.error(msg); // ✅ toast on error
+      toast.error(msg);
     } finally {
       setIsUploading(false);
     }
@@ -498,37 +545,22 @@ const App: React.FC = () => {
   return (
     <div className="min-h-dvh bg-gray-50 font-sans antialiased flex flex-col">
       <Header onNavigate={navigateTo} currentStep={step} />
-  
+
       {/* Fill space between sticky header and bottom nav */}
-      <main
-        className={
-          step === 1
-            ? "flex-1 pb-24 bg-gradient-to-b from-slate-50 via-white to-slate-100"
-            : "flex-1 py-10 pb-24 bg-gray-50"
-        }
-      >
-        {step === 1 ? (
-          // Home: hero layout, no giant card
-          <div className="px-4 sm:px-6 lg:px-8">
+      <main className="flex-1 py-10 pb-24">
+        <div className="mx-auto px-4 sm:px-6 lg:px-8 h-full">
+          <div
+            className="bg-white p-8 sm:p-12 rounded-2xl shadow-2xl
+                       min-h-[calc(100dvh-128px)] flex items-center justify-center"
+          >
             {renderContent()}
           </div>
-        ) : (
-          // Other steps: existing card layout
-          <div className="mx-auto px-4 sm:px-6 lg:px-8 h-full">
-            <div
-              className="bg-white p-8 sm:p-12 rounded-2xl shadow-2xl
-                         min-h-[calc(100dvh-128px)] flex items-center justify-center"
-            >
-              {renderContent()}
-            </div>
-          </div>
-        )}
+        </div>
       </main>
-  
+
       <BottomNav currentStep={step} onNavigate={navigateTo} />
     </div>
   );
-  
 };
 
 export default App;
