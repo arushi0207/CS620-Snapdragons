@@ -36,16 +36,18 @@ def main():
         prompt = llava_onevision.default_prompt()
 
     model_id = args.model
-    if "qwen" in model_id.lower():
-        try:
-            from featurehub.llm import qwen3_vl
-        except ImportError as exc:
-            raise RuntimeError(
-                "Qwen3-VL backend requested (model id contains 'qwen'), "
-                "but the Qwen3-VL dependencies are not installed."
-            ) from exc
 
-        result = qwen3_vl.generate_evaluation(
+    if "qwen" in model_id.lower():
+        # try:
+        #     from featurehub.llm import qwen3_vl_inference
+        # except ImportError as exc:
+        #     raise RuntimeError(
+        #         "Qwen3-VL backend requested (model id contains 'qwen'), "
+        #         "but the Qwen3-VL dependencies are not installed."
+        #     ) from exc
+        from featurehub.llm import qwen3_vl_inference
+
+        result = qwen3_vl_inference.generate_evaluation(
             video_path=args.video,
             prompt=prompt,
             model_id=model_id,

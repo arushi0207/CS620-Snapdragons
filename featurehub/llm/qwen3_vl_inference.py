@@ -149,7 +149,7 @@ def generate_messages(video_path, prompt = default_prompt):
 def generate_evaluation(
     video_path: str,
     prompt: str = default_prompt,
-    model_id: str = "Qwen/Qwen3-VL-2B-Instruct" ,
+    model_id: str = "AngelSlim/Qwen3-VL-2B-Instruct-FP8-Static" ,
     max_new_tokens: int = 2048,
     num_frames: int = 64
 ):
