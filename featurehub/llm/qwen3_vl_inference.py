@@ -12,7 +12,7 @@ import decord
 from decord import VideoReader, cpu
 # pip install qwen-vl-utils[decord]
 
-from transformers import AutoProcessor, AutoModelForVision2Seq
+from transformers import AutoProcessor, AutoModelForImageTextToText
 
 default_prompt =    """You are a public speaking coach. Watch the following presentation video and provide a concise, visual-only evaluation. 
                     Do not infer anything about voice quality, audio, or verbal content. Assess: posture and stance, facial expression, 
@@ -117,7 +117,7 @@ def inference(video, prompt, processor, model, max_new_tokens=2048, total_pixels
     else:
         video_metadatas = None
     inputs = processor(text=[text], images=image_inputs, videos=video_inputs, video_metadata=video_metadatas, **video_kwargs, do_resize=False, return_tensors="pt")
-    inputs = inputs.to('cuda:1')
+    inputs = inputs.to('cuda')
 
     output_ids = model.generate(**inputs, max_new_tokens=max_new_tokens)
     generated_ids = [output_ids[len(input_ids):] for input_ids, output_ids in zip(inputs.input_ids, output_ids)]
@@ -149,12 +149,12 @@ def generate_messages(video_path, prompt = default_prompt):
 def generate_evaluation(
     video_path: str,
     prompt: str = default_prompt,
-    model_id: str = "AngelSlim/Qwen3-VL-2B-Instruct-FP8-Static" ,
+    model_id: str = "Qwen3/Qwen3-VL-2B-Instruct" ,
     max_new_tokens: int = 2048,
     num_frames: int = 64
 ):
     processor = AutoProcessor.from_pretrained(model_id)
-    model, output_loading_info = AutoModelForVision2Seq.from_pretrained(model_id, torch_dtype="auto", device_map="cuda:1", output_loading_info=True)
+    model, output_loading_info = AutoModelForImageTextToText.from_pretrained(model_id, torch_dtype="auto", device_map="cuda", output_loading_info=True)
     print("output_loading_info", output_loading_info)
 
 
