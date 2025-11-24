@@ -1,11 +1,13 @@
-import cv2
 import numpy as np
-from featurehub.fastcv_bridge import fastcv_detect_faces
+from featurehub.extractors.mediapipe_face_extractor import MediaPipeFaceExtractor
 
-img_bgr = cv2.imread("C:\\Users\\Arushi Taneja\\Downloads\\b2ap3_large_ee72093c-3c01-433a-8d25-701cca06c975.jpg")
-h, w, _ = img_bgr.shape
+extractor = MediaPipeFaceExtractor()
+extractor.setup()
 
-img = np.random.randint(0, 255, (240, 320), dtype=np.uint8)
+# Fake frame (BGR)
+frame = np.random.randint(0, 255, (240, 320, 3), dtype=np.uint8)
+out = extractor.extract(frame)
 
-rects = fastcv_detect_faces(img)
-print("Detected faces:", rects)
+print(out.keys())
+print(out["mediapipe_face"]["bbox"])
+print(out["mediapipe_face"]["keypoints"])

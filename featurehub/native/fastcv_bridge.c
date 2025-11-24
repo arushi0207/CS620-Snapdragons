@@ -6,6 +6,7 @@
 extern "C" {
 #endif
 
+// This must match the Python FcvRect struct
 typedef struct
 {
     int32_t  x;
@@ -14,6 +15,7 @@ typedef struct
     uint32_t height;
 } FcvRect;
 
+// Fallback: center box heuristic
 static int make_center_box(int width, int height, FcvRect* out_rects)
 {
     if (!out_rects || width <= 0 || height <= 0) {
@@ -41,224 +43,177 @@ static int make_center_box(int width, int height, FcvRect* out_rects)
     return 1;
 }
 
+// -----------------------------
+// FAST + Hough-circle detector
+// -----------------------------
 __declspec(dllexport)
 int fastcv_detect_faces(
-    const uint8_t* gray,
+    const uint8_t* gray,  // grayscale image, HxW
     int width,
     int height,
-    FcvRect* out_rects,
+    FcvRect* out_rects,   // output array
     int max_faces
 ) {
     if (!gray || !out_rects || max_faces <= 0 || width <= 0 || height <= 0) {
         return 0;
     }
 
-    // FastCV requirement from docs: width > 50, height > 5
-    if (width <= 50 || height <= 5) {
+    const uint32_t uwidth  = (uint32_t)width;
+    const uint32_t uheight = (uint32_t)height;
+    const uint32_t srcStride = uwidth;  // 1 byte per pixel
+
+    // --------------------
+    // 1) Optional: FAST corners (exercise FASTCV FAST API)
+    // --------------------
+    {
+        const uint32_t nCornersMax = 4096;  // cap
+        uint32_t* corners_xy = (uint32_t*)malloc(sizeof(uint32_t) * 2 * nCornersMax);
+        uint32_t nCorners = 0;
+
+        if (corners_xy) {
+            // barrier ~20, border = 3 is typical
+            fcvCornerFast10u8(
+                gray,
+                uwidth,
+                uheight,
+                srcStride,
+                20,        // barrier
+                3,         // border
+                corners_xy,
+                nCornersMax,
+                &nCorners
+            );
+            free(corners_xy);
+        }
+    }
+
+    // --------------------
+    // 2) Build a binary image for HoughCircle
+    // --------------------
+    uint8_t* bin = (uint8_t*)malloc(width * height);
+    if (!bin) {
         return make_center_box(width, height, out_rects);
     }
 
-    const unsigned int uwidth  = (unsigned int)width;
-    const unsigned int uheight = (unsigned int)height;
-
-    // -------- 1. Init MSER ----------
-    void* mserHandle = NULL;
-
-    unsigned int delta       = 2;
-    unsigned int minArea     = 30;
-    unsigned int maxArea     = (unsigned int)(0.25f * (float)uwidth * (float)uheight);
-    if (maxArea < minArea) {
-        maxArea = minArea;
+    const int threshold = 90;  // simple global threshold
+    for (int y = 0; y < height; ++y) {
+        const uint8_t* row_in  = gray + y * width;
+        uint8_t*       row_out = bin  + y * width;
+        for (int x = 0; x < width; ++x) {
+            row_out[x] = (row_in[x] > threshold) ? 255 : 0;
+        }
     }
-    float maxVariation  = 0.15f;
-    float minDiversity  = 0.20f;
 
-    int ok = fcvMserInit(
+    // --------------------
+    // 3) Hough circle detection using FastCV
+    // --------------------
+
+    // Circles buffer
+    const uint32_t maxCircle = (max_faces > 0) ? (uint32_t)max_faces : 1u;
+    fcvCircle* circles = (fcvCircle*)malloc(sizeof(fcvCircle) * maxCircle);
+    if (!circles) {
+        free(bin);
+        return make_center_box(width, height, out_rects);
+    }
+
+    uint32_t numCircle = 0;
+
+    // Scratch buffer recommended size: 16 * srcStride * srcHeight bytes
+    uint64_t scratchBytes64 = 16ULL * (uint64_t)srcStride * (uint64_t)uheight;
+    if (scratchBytes64 > 0x7FFFFFFFULL) {
+        scratchBytes64 = 0x7FFFFFFFULL;   // clamp to avoid silly sizes
+    }
+    uint32_t scratchBytes = (uint32_t)scratchBytes64;
+    void* scratch = malloc(scratchBytes);
+    if (!scratch) {
+        free(circles);
+        free(bin);
+        return make_center_box(width, height, out_rects);
+    }
+
+    // Heuristic parameters
+    const uint32_t minSide = (uwidth < uheight) ? uwidth : uheight;
+    const uint32_t minRadius = (uint32_t)(0.10f * (float)minSide);
+    const uint32_t maxRadius = (uint32_t)(0.50f * (float)minSide);
+    const uint32_t minDist   = (uint32_t)(0.25f * (float)minSide);
+
+    const uint32_t cannyThreshold = 100;
+    const uint32_t accThreshold   = 30;
+
+    fcvHoughCircleu8(
+        bin,
         uwidth,
         uheight,
-        delta,
-        minArea,
-        maxArea,
-        maxVariation,
-        minDiversity,
-        &mserHandle
+        srcStride,
+        circles,
+        &numCircle,
+        maxCircle,
+        minDist,
+        cannyThreshold,
+        accThreshold,
+        minRadius,
+        maxRadius,
+        scratch
     );
 
-    if (!ok || !mserHandle) {
+    free(scratch);
+    free(bin);
+
+    if (numCircle == 0) {
+        free(circles);
         return make_center_box(width, height, out_rects);
     }
 
-    // -------- 2. Allocate output buffers correctly ----------
+    // --------------------
+    // 4) Pick the best circle and convert to bbox
+    // --------------------
+    int bestIdx = 0;
+    int bestArea = -1;
 
-    // Use a generous maxContours capacity, independent of max_faces.
-    unsigned int maxContours = 256;
+    for (uint32_t i = 0; i < numCircle && i < maxCircle; ++i) {
+        int r = circles[i].radius;
+        if (r <= 0) continue;
+        int area = r * r;
+        if (area > bestArea) {
+            bestArea = area;
+            bestIdx = (int)i;
+        }
+    }
 
-    unsigned int* numPointsInContour =
-        (unsigned int*)malloc(sizeof(unsigned int) * maxContours);
-    if (!numPointsInContour) {
-        fcvMserRelease(mserHandle);
+    if (bestArea <= 0) {
+        free(circles);
         return make_center_box(width, height, out_rects);
     }
 
-    // Docs say: typical size = (#pixels) * 30
-    unsigned long long totalPixels = (unsigned long long)uwidth * (unsigned long long)uheight;
-    unsigned long long allocCount  = totalPixels * 30ULL;
-    if (allocCount > 1000000000ULL) {  // clamp ~1e9 to avoid insane allocations
-        allocCount = 1000000000ULL;
-    }
-    unsigned int pointsArraySize = (unsigned int)allocCount;
+    fcvCircle best = circles[bestIdx];
+    free(circles);
 
-    unsigned int* pointsArray =
-        (unsigned int*)malloc(sizeof(unsigned int) * pointsArraySize);
-    if (!pointsArray) {
-        free(numPointsInContour);
-        fcvMserRelease(mserHandle);
+    int cx = best.x;
+    int cy = best.y;
+    int r  = best.radius;
+
+    int x0 = cx - r;
+    int y0 = cy - r;
+    int w  = 2 * r;
+    int h  = 2 * r;
+
+    // Clamp to image bounds
+    if (x0 < 0) x0 = 0;
+    if (y0 < 0) y0 = 0;
+    if (x0 + w > width)  w = width  - x0;
+    if (y0 + h > height) h = height - y0;
+
+    if (w <= 0 || h <= 0) {
         return make_center_box(width, height, out_rects);
     }
 
-    unsigned int numContours = 0;
+    out_rects[0].x      = x0;
+    out_rects[0].y      = y0;
+    out_rects[0].width  = (uint32_t)w;
+    out_rects[0].height = (uint32_t)h;
 
-    // -------- 3. Run MSER ----------
-    fcvMseru8(
-        mserHandle,
-        gray,
-        uwidth,
-        uheight,
-        uwidth,             // srcStride
-        maxContours,
-        &numContours,
-        numPointsInContour,
-        pointsArraySize,
-        pointsArray
-    );
-
-    fcvMserRelease(mserHandle);
-
-    if (numContours == 0) {
-        free(pointsArray);
-        free(numPointsInContour);
-        return make_center_box(width, height, out_rects);
-    }
-
-    // -------- 4. Pick "best" contour (area & closeness to center) ----------
-
-    float img_cx = 0.5f * (float)(width  - 1);
-    float img_cy = 0.5f * (float)(height - 1);
-
-    int   best_idx   = -1;
-    float best_score = -1.0f;
-
-    for (unsigned int c = 0; c < numContours && c < maxContours; ++c) {
-        unsigned int start = (c == 0) ? 0u : numPointsInContour[c - 1];
-        unsigned int end   = numPointsInContour[c];
-
-        if (end <= start || end > pointsArraySize) {
-            continue;
-        }
-
-        int minX = width - 1;
-        int maxX = 0;
-        int minY = height - 1;
-        int maxY = 0;
-
-        for (unsigned int i = start; i < end; ++i) {
-            unsigned int idx = pointsArray[i];
-            unsigned int py  = idx / uwidth;
-            unsigned int px  = idx % uwidth;
-
-            if (px >= (unsigned int)width || py >= (unsigned int)height) {
-                continue;
-            }
-
-            int x = (int)px;
-            int y = (int)py;
-
-            if (x < minX) minX = x;
-            if (x > maxX) maxX = x;
-            if (y < minY) minY = y;
-            if (y > maxY) maxY = y;
-        }
-
-        if (minX > maxX || minY > maxY) {
-            continue;
-        }
-
-        int box_w = maxX - minX + 1;
-        int box_h = maxY - minY + 1;
-        if (box_w <= 0 || box_h <= 0) {
-            continue;
-        }
-
-        // reject huge regions relative to maxArea
-        int area = box_w * box_h;
-        if (area > (int)maxArea) {
-            continue;
-        }
-
-        float cx = 0.5f * (float)(minX + maxX);
-        float cy = 0.5f * (float)(minY + maxY);
-
-        float dx = cx - img_cx;
-        float dy = cy - img_cy;
-        float dist2 = dx * dx + dy * dy;
-
-        // score: big + central
-        float score = (float)area / (1.0f + 0.001f * dist2);
-        if (score > best_score) {
-            best_score = score;
-            best_idx   = (int)c;
-        }
-    }
-
-    int num_out = 0;
-
-    if (best_idx >= 0) {
-        unsigned int start = (best_idx == 0) ? 0u : numPointsInContour[best_idx - 1];
-        unsigned int end   = numPointsInContour[best_idx];
-
-        if (end > start && end <= pointsArraySize) {
-            int minX = width - 1;
-            int maxX = 0;
-            int minY = height - 1;
-            int maxY = 0;
-
-            for (unsigned int i = start; i < end; ++i) {
-                unsigned int idx = pointsArray[i];
-                unsigned int py  = idx / uwidth;
-                unsigned int px  = idx % uwidth;
-
-                if (px >= (unsigned int)width || py >= (unsigned int)height) {
-                    continue;
-                }
-
-                int x = (int)px;
-                int y = (int)py;
-
-                if (x < minX) minX = x;
-                if (x > maxX) maxX = x;
-                if (y < minY) minY = y;
-                if (y > maxY) maxY = y;
-            }
-
-            if (minX <= maxX && minY <= maxY) {
-                out_rects[0].x      = minX;
-                out_rects[0].y      = minY;
-                out_rects[0].width  = (uint32_t)(maxX - minX + 1);
-                out_rects[0].height = (uint32_t)(maxY - minY + 1);
-                num_out = 1;
-            }
-        }
-    }
-
-    free(pointsArray);
-    free(numPointsInContour);
-
-    if (num_out == 0) {
-        return make_center_box(width, height, out_rects);
-    }
-
-    // We only ever output 1 face for now, regardless of max_faces.
-    return num_out;
+    // We only output one face for now
+    return 1;
 }
 
 #ifdef __cplusplus

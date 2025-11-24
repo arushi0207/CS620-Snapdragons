@@ -3,41 +3,43 @@ from __future__ import annotations
 from typing import Any, Dict, Iterable, Optional
 
 import numpy as np
-
 import torch
 
 from .base import BaseFeatureExtractor
 from ..registry import register_extractor
 
-# from qai_hub_models.models.mediapipe_face.app import MediaPipeFaceApp
-from qai_hub_models.models.mediapipe_face.model import MediaPipeFace
-from featurehub.native.fastcv_bridge import fastcv_detect_faces
+# 🔁 New: use FastCV bridge instead of MediaPipe
+from ..fastcv_bridge import fastcv_detect_faces
 
 
 @register_extractor("mediapipe_face")
 class MediaPipeFaceExtractor(BaseFeatureExtractor):
     """
-    Wrapper for the MediaPipe Face detector + landmark models.
+    FastCV-backed face detector mimicking the MediaPipeFaceExtractor interface.
 
-    Produces a dictionary with bounding box, keypoints, ROI corners, and 2D landmarks
-    (with per-point confidence) for the best-scoring face in the frame.
+    Produces a dictionary with bounding box, keypoints, ROI corners, and landmarks
+    for the best-scoring face in the frame. Landmarks are not provided by FastCV
+    and are currently left empty.
     """
 
     def setup(self):
-        model = MediaPipeFace.from_pretrained()
-        self.app = MediaPipeFaceApp.from_pretrained(model)
+        # No heavy model load needed for FastCV; DLL is loaded by fastcv_bridge.
+        pass
 
     def extract(
         self, frame_bgr: "np.ndarray", *, timestamp: float | None = None
     ) -> Dict[str, Any]:
+        # Convert BGR -> RGB (to stay consistent with the rest of your pipeline)
         frame_rgb = np.ascontiguousarray(self.bgr2rgb(frame_bgr))
 
-        (
-            batched_boxes,
-            batched_keypoints,
-            batched_roi_corners,
-            *landmark_batches,
-        ) = self.app.predict_landmarks_from_image(frame_rgb, raw_output=True)
+        # Grayscale for FastCV MSER-based detection
+        # Y' = 0.299 R + 0.587 G + 0.114 B
+        gray = np.dot(frame_rgb[..., :3], [0.299, 0.587, 0.114]).astype(
+            np.uint8, copy=False
+        )
+
+        # Call into your C FastCV bridge
+        rects = fastcv_detect_faces(gray, max_faces=1)
 
         payload: Dict[str, Any] = {
             "bbox": None,
@@ -45,31 +47,39 @@ class MediaPipeFaceExtractor(BaseFeatureExtractor):
             "roi_corners": [],
             "landmarks": [],
             "num_landmarks": 0,
+            # You can add confidence_* later if you derive a score
         }
 
-        box_tensor = self._first_non_empty_tensor(batched_boxes)
-        if box_tensor is not None:
-            bbox_vals = box_tensor.reshape(-1).detach().cpu().tolist()
-            payload["bbox"] = [float(v) for v in bbox_vals]
+        if not rects:
+            return {"mediapipe_face": payload}
 
-        keypoint_tensor = self._first_non_empty_tensor(batched_keypoints)
-        if keypoint_tensor is not None:
-            pts = self._squeeze_detection_tensor(keypoint_tensor)
-            payload["keypoints"] = [
-                [float(x), float(y)] for x, y in pts.detach().cpu().tolist()
-            ]
+        # Take the first detected region as the "face"
+        r = rects[0]
+        x = float(r.x)
+        y = float(r.y)
+        w = float(r.width)
+        h = float(r.height)
 
-        roi_tensor = self._first_non_empty_tensor(batched_roi_corners)
-        if roi_tensor is not None:
-            roi_pts = self._squeeze_detection_tensor(roi_tensor)
-            payload["roi_corners"] = [
-                [float(x), float(y)] for x, y in roi_pts.detach().cpu().tolist()
-            ]
+        # bbox in [x_min, y_min, x_max, y_max] format
+        payload["bbox"] = [x, y, x + w, y + h]
 
-        landmarks_payload = self._process_landmarks(landmark_batches)
-        payload.update(landmarks_payload)
+        # Use rectangle corners as simple keypoints + ROI corners
+        corners = [
+            (x, y),         # top-left
+            (x + w, y),     # top-right
+            (x + w, y + h), # bottom-right
+            (x, y + h),     # bottom-left
+        ]
+        payload["keypoints"] = [[cx, cy] for cx, cy in corners]
+        payload["roi_corners"] = [[cx, cy] for cx, cy in corners]
+
+        # No true landmarks from FastCV; leave empty for now
+        payload["landmarks"] = []
+        payload["num_landmarks"] = 0
 
         return {"mediapipe_face": payload}
+
+    # --- Keep these helpers for compatibility (even though we don't use them now) ---
 
     @staticmethod
     def _first_non_empty_tensor(
@@ -93,26 +103,5 @@ class MediaPipeFaceExtractor(BaseFeatureExtractor):
     def _process_landmarks(
         self, landmark_batches: list[list[torch.Tensor]]
     ) -> Dict[str, Any]:
-        if not landmark_batches:
-            return {"landmarks": [], "num_landmarks": 0}
-
-        batched_landmarks = landmark_batches[0] if landmark_batches else []
-        landmark_tensor = self._first_non_empty_tensor(batched_landmarks)
-        if landmark_tensor is None or landmark_tensor.nelement() == 0:
-            return {"landmarks": [], "num_landmarks": 0}
-
-        landmarks = self._squeeze_detection_tensor(landmark_tensor).detach().cpu()
-        landmark_list = landmarks.tolist()
-
-        payload: Dict[str, Any] = {
-            "landmarks": [
-                [float(x), float(y), float(conf)] for x, y, conf in landmark_list
-            ],
-            "num_landmarks": int(landmarks.shape[0]),
-        }
-
-        confidences = landmarks[:, 2]
-        if confidences.numel() > 0:
-            payload["confidence_mean"] = float(confidences.mean().item())
-            payload["confidence_min"] = float(confidences.min().item())
-        return payload
+        # FastCV backend does not supply landmarks yet.
+        return {"landmarks": [], "num_landmarks": 0}
