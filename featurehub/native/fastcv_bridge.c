@@ -192,10 +192,24 @@ int fastcv_detect_faces(
     int cy = best.y;
     int r  = best.radius;
 
-    int x0 = cx - r;
-    int y0 = cy - r;
-    int w  = 2 * r;
-    int h  = 2 * r;
+    // Enlarge horizontally & vertically to cover more of the face
+    // and shift the box slightly up (faces extend more downward than upward
+    // from the eye region).
+    float scale_x = 1.6f;   // widen box (was 1.0)
+    float scale_y = 2.0f;   // taller box (was 1.0)
+    float shift_up = 0.3f;  // shift box up by 0.3 * radius
+
+    int half_w = (int)(r * scale_x);
+    int half_h = (int)(r * scale_y);
+
+    // Shift the center up a bit so chin fits in the box
+    int cx_shifted = cx;
+    int cy_shifted = cy - (int)(shift_up * (float)r);
+
+    int x0 = cx_shifted - half_w;
+    int y0 = cy_shifted - half_h;
+    int w  = 2 * half_w;
+    int h  = 2 * half_h;
 
     // Clamp to image bounds
     if (x0 < 0) x0 = 0;
@@ -212,8 +226,8 @@ int fastcv_detect_faces(
     out_rects[0].width  = (uint32_t)w;
     out_rects[0].height = (uint32_t)h;
 
-    // We only output one face for now
     return 1;
+
 }
 
 #ifdef __cplusplus
