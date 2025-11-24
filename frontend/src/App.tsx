@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import BottomNav from "./components/bottomnavbar";
 import type { LucideIcon } from "lucide-react";
@@ -18,7 +18,6 @@ import {
   Move,
   Info,
 } from "lucide-react";
-
 
 /* ---------- Types ---------- */
 type Step = 1 | 2 | 3 | 4 | 5;
@@ -101,14 +100,12 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onStart }) => (
       </p>
 
       <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 leading-tight">
-        Become the{" "}
-        <span className="text-indigo-600">most confident speaker</span>{" "}
-        in the room.
+        Become the <span className="text-indigo-600">most confident speaker</span> in the room.
       </h2>
 
       <p className="text-base md:text-lg text-gray-600 max-w-xl">
-        Practice interviews, class presentations, or elevator pitches with
-        AI-powered feedback on your clarity, pacing, and body language.
+        Practice interviews, class presentations, or elevator pitches with AI-powered feedback on
+        your clarity, pacing, and body language.
       </p>
 
       {/* Benefits */}
@@ -117,9 +114,7 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onStart }) => (
           <div className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-indigo-50">
             <Target className="h-4 w-4 text-indigo-600" />
           </div>
-          <p className="text-sm font-semibold text-gray-900">
-            Goal-based practice
-          </p>
+          <p className="text-sm font-semibold text-gray-900">Goal-based practice</p>
           <p className="text-xs text-gray-500">
             Choose interview, presentation, or networking—and get targeted prompts.
           </p>
@@ -129,9 +124,7 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onStart }) => (
           <div className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-emerald-50">
             <TrendingUp className="h-4 w-4 text-emerald-600" />
           </div>
-          <p className="text-sm font-semibold text-gray-900">
-            Instant analytics
-          </p>
+          <p className="text-sm font-semibold text-gray-900">Instant analytics</p>
           <p className="text-xs text-gray-500">
             See filler words, pacing, and confidence scores after every session.
           </p>
@@ -141,9 +134,7 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onStart }) => (
           <div className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-violet-50">
             <Smile className="h-4 w-4 text-violet-600" />
           </div>
-          <p className="text-sm font-semibold text-gray-900">
-            Safe practice space
-          </p>
+          <p className="text-sm font-semibold text-gray-900">Safe practice space</p>
           <p className="text-xs text-gray-500">
             Rehearse as many times as you want before the real thing.
           </p>
@@ -226,7 +217,6 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onStart }) => (
 type GoalSettingScreenProps = { onNext: () => void };
 
 const GOAL_STORAGE_KEY = "speakeasy:lastGoal";
-const METRIC_PRIORITY_STORAGE_KEY = "speakeasy:metricPriority";
 
 const goals = [
   {
@@ -297,16 +287,15 @@ const GoalSettingScreen: React.FC<GoalSettingScreenProps> = ({ onNext }) => {
   return (
     <div className="max-w-3xl mx-auto p-6">
       <h2 className="text-3xl font-bold text-gray-900 mb-2">1. Set Your Practice Goal</h2>
-        <p className="text-gray-500 mb-2">
-           Tell us what you're working on today to get targeted feedback.
-       </p>
+      <p className="text-gray-500 mb-2">
+        Tell us what you're working on today to get targeted feedback.
+      </p>
 
       <div className="mb-6 rounded-lg bg-gray-50 border border-gray-200 px-4 py-3 text-sm text-gray-700 leading-relaxed">
-          Each session type customizes your AI feedback style and focus. Choose the option that best matches your real-world speaking scenario —
-          whether that’s interviews, presentations, networking situations, or improving overall confidence.
+        Each session type customizes your AI feedback style and focus. Choose the option that best
+        matches your real-world speaking scenario — whether that’s interviews, presentations,
+        networking situations, or improving overall confidence.
       </div>
-
-     
 
       {/* Recommended banner based on previous session */}
       {recommendedGoal && (
@@ -365,6 +354,7 @@ const GoalSettingScreen: React.FC<GoalSettingScreenProps> = ({ onNext }) => {
   );
 };
 
+/* ---------- Upload Screen ---------- */
 
 type UploadScreenProps = { onAnalysisComplete: () => void };
 
@@ -401,15 +391,14 @@ const UploadScreen: React.FC<UploadScreenProps> = ({ onAnalysisComplete }) => {
         onUploadProgress: (pe) => {
           if (!pe.total) return;
 
-          if (!startTime) {
-            setStartTime(Date.now());
-          }
+          setStartTime((prevStart) => {
+            const now = Date.now();
+            const effectiveStart = prevStart ?? now;
 
-          const percent = Math.round((pe.loaded / pe.total) * 100);
-          setProgress(percent);
+            const percent = Math.round((pe.loaded / pe.total) * 100);
+            setProgress(percent);
 
-          if (startTime) {
-            const elapsed = (Date.now() - startTime) / 1000;
+            const elapsed = (now - effectiveStart) / 1000;
             const rate = pe.loaded / elapsed; // bytes / second
             const remainingBytes = pe.total - pe.loaded;
             const remainingSeconds = Math.ceil(remainingBytes / rate);
@@ -417,7 +406,9 @@ const UploadScreen: React.FC<UploadScreenProps> = ({ onAnalysisComplete }) => {
             if (Number.isFinite(remainingSeconds)) {
               setEstimatedTime(remainingSeconds);
             }
-          }
+
+            return effectiveStart;
+          });
         },
       });
 
@@ -441,7 +432,8 @@ const UploadScreen: React.FC<UploadScreenProps> = ({ onAnalysisComplete }) => {
     <div className="max-w-2xl mx-auto p-6 text-center">
       <h2 className="text-3xl font-bold text-gray-900 mb-2">2. Upload Your Practice Video</h2>
       <p className="text-gray-500 mb-8">
-        Record your speech or mock interview on your phone, then upload the file here for AI analysis.
+        Record your speech or mock interview on your phone, then upload the file here for AI
+        analysis.
       </p>
 
       <div
@@ -475,9 +467,7 @@ const UploadScreen: React.FC<UploadScreenProps> = ({ onAnalysisComplete }) => {
           </p>
 
           {estimatedTime !== null && estimatedTime > 0 && (
-            <p className="text-sm text-gray-500">
-              ⏳ Estimated time remaining: ~{estimatedTime}s
-            </p>
+            <p className="text-sm text-gray-500">⏳ Estimated time remaining: ~{estimatedTime}s</p>
           )}
 
           <div className="flex items-center justify-between text-xs text-gray-500 mt-1 mb-1">
@@ -498,7 +488,9 @@ const UploadScreen: React.FC<UploadScreenProps> = ({ onAnalysisComplete }) => {
 
       {annotatedUrl && (
         <div className="mt-8 space-y-4">
-          <p className="text-green-700 font-semibold">Analysis complete! Your annotated video is ready.</p>
+          <p className="text-green-700 font-semibold">
+            Analysis complete! Your annotated video is ready.
+          </p>
 
           <div className="flex items-center justify-center gap-3">
             <a
@@ -520,20 +512,18 @@ const UploadScreen: React.FC<UploadScreenProps> = ({ onAnalysisComplete }) => {
     </div>
   );
 };
+
+/* ---------- Review Screen ---------- */
+
 type ReviewScreenProps = { onNext: () => void };
 
-// which metric the user wants to see first
-type PriorityMetric = "hand" | "leg" | "eye" | "posture";
 const ReviewScreen: React.FC<ReviewScreenProps> = ({ onNext }) => {
-
-  // Order control (customizable priority)
   const [order, setOrder] = useState([
     "handMovements",
     "legMovements",
     "eyeGaze",
     "posture",
   ]);
-
   const [expanded, setExpanded] = useState<string | null>(null);
 
   const analysisData = {
@@ -562,8 +552,7 @@ const ReviewScreen: React.FC<ReviewScreenProps> = ({ onNext }) => {
       value: "92%",
       color: "green" as TailwindBrand,
       desc: "Excellent eye contact.",
-      detail:
-        "Great consistency maintaining connection with the camera.",
+      detail: "Great consistency maintaining connection with the camera.",
       icon: Eye,
       timestamp: "No major issues",
     },
@@ -589,22 +578,17 @@ const ReviewScreen: React.FC<ReviewScreenProps> = ({ onNext }) => {
 
   return (
     <div className="max-w-5xl mx-auto p-6">
-
-      <h2 className="text-3xl font-bold text-gray-900 mb-2">
-        3. Session Review
-      </h2>
-      <p className="text-indigo-600 font-semibold mb-6">
-        AI Analysis Complete! Score: 78/100
-      </p>
+      <h2 className="text-3xl font-bold text-gray-900 mb-2">3. Session Review</h2>
+      <p className="text-indigo-600 font-semibold mb-6">AI Analysis Complete! Score: 78/100</p>
 
       {/* WPM Explanation */}
       <div className="mb-6 text-sm text-gray-600 bg-indigo-50 p-4 rounded-lg">
-        <strong>WPM:</strong> Words Per Minute — measures your speaking pace.  
-        Ideal range for clear delivery is typically 110–160 WPM.
+        <strong>WPM:</strong> Words Per Minute — measures your speaking pace. Ideal range for clear
+        delivery is typically 110–160 WPM.
       </div>
 
       <p className="mb-4 text-sm text-gray-500">
-        🔁 Drag priority using arrows to customize which insights matter most to you.
+        🔁 Use the prioritize button to move the feedback you care about to the top.
       </p>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -638,7 +622,9 @@ const ReviewScreen: React.FC<ReviewScreenProps> = ({ onNext }) => {
 
               {expanded === key && (
                 <div className="mt-4 bg-gray-50 p-4 rounded-lg text-sm">
-                  <p><strong>Detailed Insight:</strong> {metric.detail}</p>
+                  <p>
+                    <strong>Detailed Insight:</strong> {metric.detail}
+                  </p>
                   <p className="mt-2 text-indigo-600">
                     ⏱ Error Occurred At: {metric.timestamp}
                   </p>
@@ -661,57 +647,207 @@ const ReviewScreen: React.FC<ReviewScreenProps> = ({ onNext }) => {
   );
 };
 
+/* ---------- Analytics Screen ---------- */
+
 type AnalyticsScreenProps = { onNext: (s: Step) => void };
-const AnalyticsScreen: React.FC<AnalyticsScreenProps> = ({ onNext }) => (
-  <div className="max-w-5xl mx-auto p-6">
-    <h2 className="text-3xl font-bold text-gray-900 mb-8">4. Progress Dashboard</h2>
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-      <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-50">
-        <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center space-x-2">
-          <Hand size={20} className="text-indigo-600" /> <span>Hand Movement Control</span>
-        </h3>
-        <div className="h-40 bg-gray-100 rounded-lg flex items-end p-2 text-sm text-gray-500 relative">
-          <div className="w-1/5 h-4/5 bg-indigo-200 rounded-t-sm mx-1" title="Week 1: Frequent" />
-          <div className="w-1/5 h-3/5 bg-indigo-300 rounded-t-sm mx-1" title="Week 2: Moderate" />
-          <div className="w-1/5 h-2/5 bg-indigo-400 rounded-t-sm mx-1" title="Week 3: Controlled" />
-          <div className="w-1/5 h-2/5 bg-indigo-500 rounded-t-sm mx-1" title="Week 4: Controlled" />
-          <p className="absolute bottom-2 left-2">Mock Progress Chart showing gestures becoming more purposeful.</p>
+
+const AnalyticsScreen: React.FC<AnalyticsScreenProps> = ({ onNext }) => {
+  type SessionMetric = {
+    label: string;
+    score: number; // 0–100
+    feedback: string;
+    emoji: string;
+  };
+
+  const handHistory: SessionMetric[] = [
+    {
+      label: "Week 1",
+      score: 30,
+      feedback: "Hands were very active and sometimes covered your face or camera.",
+      emoji: "👐",
+    },
+    {
+      label: "Week 2",
+      score: 55,
+      feedback: "Gestures started to match key points, but there’s still extra movement.",
+      emoji: "🤏",
+    },
+    {
+      label: "Week 3",
+      score: 72,
+      feedback: "Most gestures felt intentional. Only a few moments of fidgeting.",
+      emoji: "👍",
+    },
+    {
+      label: "Week 4",
+      score: 85,
+      feedback: "Great control! Gestures clearly highlighted your main points.",
+      emoji: "🌟",
+    },
+  ];
+
+  const legHistory: SessionMetric[] = [
+    {
+      label: "Week 1",
+      score: 25,
+      feedback: "Lots of shifting from foot to foot and visible bouncing.",
+      emoji: "🦶",
+    },
+    {
+      label: "Week 2",
+      score: 50,
+      feedback: "Some fidgeting remained, but you stayed planted during key answers.",
+      emoji: "🙂",
+    },
+    {
+      label: "Week 3",
+      score: 70,
+      feedback: "Only occasional movement when thinking. Much more stable overall.",
+      emoji: "💪",
+    },
+    {
+      label: "Week 4",
+      score: 90,
+      feedback: "Confident, grounded stance throughout almost the entire session.",
+      emoji: "🏆",
+    },
+  ];
+
+  const [selectedHandIndex, setSelectedHandIndex] = useState<number>(handHistory.length - 1);
+  const [selectedLegIndex, setSelectedLegIndex] = useState<number>(legHistory.length - 1);
+
+  const selectedHand = handHistory[selectedHandIndex];
+  const selectedLeg = legHistory[selectedLegIndex];
+
+  return (
+    <div className="max-w-5xl mx-auto p-6">
+      <h2 className="text-3xl font-bold text-gray-900 mb-2">4. Progress Dashboard</h2>
+      <p className="text-gray-600 mb-6">
+        Tap on any bar in the graphs below to see detailed feedback from that session. ✨
+      </p>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Hand Movement Graph */}
+        <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-50">
+          <h3 className="text-xl font-semibold text-gray-800 mb-2 flex items-center gap-2">
+            <Hand size={20} className="text-indigo-600" />
+            <span>Hand Movement Control</span>
+            <span className="text-lg">👋</span>
+          </h3>
+          <p className="text-xs text-gray-500 mb-3">
+            Click a bar to see what your AI coach said that week.
+          </p>
+
+          <div className="h-44 bg-gray-100 rounded-lg flex items-end p-3 text-xs text-gray-500 relative overflow-hidden">
+            {handHistory.map((session, idx) => {
+              const isActive = idx === selectedHandIndex;
+              const heightPct = 20 + (session.score / 100) * 70; // min 20%, max 90%
+
+              return (
+                <button
+                  key={session.label}
+                  type="button"
+                  onClick={() => setSelectedHandIndex(idx)}
+                  className={`flex-1 mx-1 rounded-t-md focus:outline-none transition-transform duration-300 ${
+                    isActive
+                      ? "bg-indigo-500 scale-105 shadow-lg"
+                      : "bg-indigo-200 hover:bg-indigo-300 hover:scale-105"
+                  }`}
+                  style={{ height: `${heightPct}%` }}
+                  title={`Click to view feedback for ${session.label}`}
+                >
+                  <span className="sr-only">{session.label}</span>
+                </button>
+              );
+            })}
+
+            <p className="absolute bottom-2 left-3 text-[10px] text-gray-500">
+              Progress over last 4 sessions
+            </p>
+          </div>
+
+          {/* Hand details */}
+          <div className="mt-4 rounded-lg bg-indigo-50 border border-indigo-100 p-4 text-sm">
+            <p className="font-semibold text-indigo-800 flex items-center gap-2">
+              {selectedHand.emoji} {selectedHand.label} — Score {selectedHand.score}/100
+            </p>
+            <p className="mt-1 text-gray-700">{selectedHand.feedback}</p>
+          </div>
         </div>
-        <p className="mt-4 text-sm text-gray-600">Goal: Maintain purposeful gestures aligned to key points.</p>
+
+        {/* Leg Movement Graph */}
+        <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-50">
+          <h3 className="text-xl font-semibold text-gray-800 mb-2 flex items-center gap-2">
+            <Move size={20} className="text-indigo-600" />
+            <span>Leg Movement Stillness</span>
+            <span className="text-lg">🦵</span>
+          </h3>
+          <p className="text-xs text-gray-500 mb-3">
+            Click a bar to see how your stability has changed week to week.
+          </p>
+
+          <div className="h-44 bg-gray-100 rounded-lg flex items-end p-3 text-xs text-gray-500 relative overflow-hidden">
+            {legHistory.map((session, idx) => {
+              const isActive = idx === selectedLegIndex;
+              const heightPct = 20 + (session.score / 100) * 70;
+
+              return (
+                <button
+                  key={session.label}
+                  type="button"
+                  onClick={() => setSelectedLegIndex(idx)}
+                  className={`flex-1 mx-1 rounded-t-md focus:outline-none transition-transform duration-300 ${
+                    isActive
+                      ? "bg-emerald-500 scale-105 shadow-lg"
+                      : "bg-emerald-200 hover:bg-emerald-300 hover:scale-105"
+                  }`}
+                  style={{ height: `${heightPct}%` }}
+                  title={`Click to view feedback for ${session.label}`}
+                >
+                  <span className="sr-only">{session.label}</span>
+                </button>
+              );
+            })}
+
+            <p className="absolute bottom-2 left-3 text-[10px] text-gray-500">
+              Higher bars = more still and grounded ✅
+            </p>
+          </div>
+
+          {/* Leg details */}
+          <div className="mt-4 rounded-lg bg-emerald-50 border border-emerald-100 p-4 text-sm">
+            <p className="font-semibold text-emerald-800 flex items-center gap-2">
+              {selectedLeg.emoji} {selectedLeg.label} — Score {selectedLeg.score}/100
+            </p>
+            <p className="mt-1 text-gray-700">{selectedLeg.feedback}</p>
+          </div>
+        </div>
       </div>
 
-      <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-50">
-        <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center space-x-2">
-          <Move size={20} className="text-indigo-600" /> <span>Leg Movement Stillness</span>
-        </h3>
-        <div className="h-40 bg-gray-100 rounded-lg flex items-start p-2 text-sm text-gray-500 relative">
-          <div className="w-1/5 h-full bg-red-400 rounded-b-sm mx-1" style={{ height: "90%" }} title="Week 1: High fidgeting" />
-          <div className="w-1/5 h-full bg-red-300 rounded-b-sm mx-1" style={{ height: "60%" }} title="Week 2: Moderate" />
-          <div className="w-1/5 h-full bg-red-200 rounded-b-sm mx-1" style={{ height: "35%" }} title="Week 3: Low" />
-          <div className="w-1/5 h-full bg-green-400 rounded-b-sm mx-1" style={{ height: "20%" }} title="Week 4: Stable (Goal)" />
-          <p className="absolute top-2 left-2">Mock Progress Chart showing reduction in lower-body fidgeting.</p>
-        </div>
-        <p className="mt-4 text-sm text-gray-600">Goal: Keep feet planted and minimize shifting.</p>
+      <div className="mt-10 text-center">
+        <p className="text-lg text-gray-700 font-medium mb-2">🎯 Ready for your next practice?</p>
+        <button
+          onClick={() => onNext(2)}
+          className="inline-flex items-center gap-2 px-8 py-3 bg-indigo-600 text-white font-semibold rounded-full shadow-lg hover:bg-indigo-700 transition-transform duration-200 hover:scale-105"
+        >
+          Start New Practice
+          <ArrowRight size={18} />
+        </button>
       </div>
     </div>
-    <div className="mt-10 text-center">
-      <p className="text-lg text-gray-700 font-medium">Ready for your next session?</p>
-      <button
-        onClick={() => onNext(2)}
-        className="mt-4 px-8 py-3 bg-indigo-600 text-white font-semibold rounded-full shadow-lg hover:bg-indigo-700 transition duration-300 transform hover:scale-105"
-      >
-        Start New Practice
-      </button>
-    </div>
-  </div>
-);
+  );
+};
 
 /* ---------- Main App ---------- */
+
 const App: React.FC = () => {
   const [step, setStep] = useState<Step>(1);
 
   const navigateTo = (newStep: Step) => {
+    // simple guard so you can't jump ahead before upload/review
     if (newStep === 4 && step < 3) return;
+    if (newStep === 5 && step < 4) return;
+
     setStep(newStep);
     window.scrollTo(0, 0);
   };
@@ -737,7 +873,6 @@ const App: React.FC = () => {
     <div className="min-h-dvh bg-gray-50 font-sans antialiased flex flex-col">
       <Header onNavigate={navigateTo} currentStep={step} />
 
-      {/* Fill space between sticky header and bottom nav */}
       <main className="flex-1 py-10 pb-24">
         <div className="mx-auto px-4 sm:px-6 lg:px-8 h-full">
           <div
