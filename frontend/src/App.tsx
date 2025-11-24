@@ -16,6 +16,7 @@ import {
   TrendingUp,
   Hand,
   Move,
+  Info,
 } from "lucide-react";
 
 /* ---------- Types ---------- */
@@ -230,28 +231,34 @@ const goals = [
     id: "interview",
     name: "Job Interview Prep",
     description: "Practice the STAR method and common Q&A.",
+    hoverText:
+      "Best if you have an upcoming internship or job interview. Focuses on behavioral answers, STAR stories, and clear structure.",
   },
   {
     id: "presentation",
     name: "Class Presentation",
     description: "Improve structure, pace, and engagement.",
+    hoverText:
+      "Use this when preparing for a class or work presentation. Helps with flow, slide transitions, and audience engagement.",
   },
   {
     id: "pitch",
     name: "Networking Pitch",
     description: "Refine your elevator pitch for quick impact.",
+    hoverText:
+      "Perfect for coffee chats, career fairs, and networking events. Focuses on a tight 30–60 second intro about you.",
   },
   {
     id: "confidence",
     name: "General Confidence",
     description: "Reduce anxiety and improve overall delivery.",
+    hoverText:
+      "Choose this when you just want to get more comfortable speaking out loud—no specific event required.",
   },
 ] as const;
 
 const GoalSettingScreen: React.FC<GoalSettingScreenProps> = ({ onNext }) => {
-  // current selected goal in the UI
   const [selectedGoal, setSelectedGoal] = useState<string>(goals[0].name);
-  // last session’s goal, shown as “Recommended”
   const [recommendedGoal, setRecommendedGoal] = useState<string | null>(null);
 
   // Load last goal from localStorage on first render
@@ -267,7 +274,6 @@ const GoalSettingScreen: React.FC<GoalSettingScreenProps> = ({ onNext }) => {
     }
   }, []);
 
-  // When user clicks a card, select + save immediately
   const handleSelectGoal = (goalName: string) => {
     setSelectedGoal(goalName);
     try {
@@ -277,7 +283,6 @@ const GoalSettingScreen: React.FC<GoalSettingScreenProps> = ({ onNext }) => {
     }
   };
 
-  // When user continues, also save (just to be safe)
   const handleContinue = () => {
     try {
       localStorage.setItem(GOAL_STORAGE_KEY, selectedGoal);
@@ -312,6 +317,7 @@ const GoalSettingScreen: React.FC<GoalSettingScreenProps> = ({ onNext }) => {
                 ? "border-indigo-600 bg-indigo-50 shadow-md"
                 : "border-gray-200 hover:border-indigo-300 bg-white"
             }`}
+            title={goal.hoverText} // native browser tooltip on hover
           >
             <div className="flex justify-between items-center">
               <p className="text-lg font-semibold text-gray-800 flex items-center gap-2">
@@ -322,10 +328,18 @@ const GoalSettingScreen: React.FC<GoalSettingScreenProps> = ({ onNext }) => {
                   </span>
                 )}
               </p>
-              {selectedGoal === goal.name && (
-                <CheckCircle size={20} className="text-indigo-600" />
-              )}
+
+              {/* Info icon with hover explanation */}
+              <button
+                type="button"
+                className="p-1 rounded-full border border-indigo-100 text-indigo-400 hover:bg-indigo-50 hover:text-indigo-700"
+                onClick={(e) => e.stopPropagation()} // don’t toggle card on icon click
+                title={goal.hoverText}
+              >
+                <Info size={14} />
+              </button>
             </div>
+
             <p className="text-sm text-gray-500 mt-1">{goal.description}</p>
           </div>
         ))}
@@ -341,6 +355,7 @@ const GoalSettingScreen: React.FC<GoalSettingScreenProps> = ({ onNext }) => {
     </div>
   );
 };
+
 
 type UploadScreenProps = { onAnalysisComplete: () => void };
 const UploadScreen: React.FC<UploadScreenProps> = ({ onAnalysisComplete }) => {
