@@ -372,7 +372,7 @@ const UploadScreen: React.FC<UploadScreenProps> = ({ onAnalysisComplete }) => {
   const [annotatedUrl, setAnnotatedUrl] = useState<string>("");
   const [error, setError] = useState<string>("");
 
-  // NEW: for time remaining
+  // NEW for time remaining
   const [estimatedTime, setEstimatedTime] = useState<number | null>(null);
   const [startTime, setStartTime] = useState<number | null>(null);
 
@@ -399,21 +399,18 @@ const UploadScreen: React.FC<UploadScreenProps> = ({ onAnalysisComplete }) => {
         onUploadProgress: (pe) => {
           if (!pe.total) return;
 
-          // first progress event: capture start time
           if (!startTime) {
-            const now = Date.now();
-            setStartTime(now);
+            setStartTime(Date.now());
           }
 
           const percent = Math.round((pe.loaded / pe.total) * 100);
           setProgress(percent);
 
-          // estimate remaining time (very rough, but good for transparency)
           if (startTime) {
-            const elapsedSeconds = (Date.now() - startTime) / 1000;
-            const bytesPerSecond = pe.loaded / elapsedSeconds;
+            const elapsed = (Date.now() - startTime) / 1000;
+            const rate = pe.loaded / elapsed; // bytes / second
             const remainingBytes = pe.total - pe.loaded;
-            const remainingSeconds = Math.ceil(remainingBytes / bytesPerSecond);
+            const remainingSeconds = Math.ceil(remainingBytes / rate);
 
             if (Number.isFinite(remainingSeconds)) {
               setEstimatedTime(remainingSeconds);
@@ -434,7 +431,6 @@ const UploadScreen: React.FC<UploadScreenProps> = ({ onAnalysisComplete }) => {
       toast.error(msg);
     } finally {
       setIsUploading(false);
-      // optional: clear timing state after we're done
       setStartTime(null);
     }
   };
@@ -473,7 +469,7 @@ const UploadScreen: React.FC<UploadScreenProps> = ({ onAnalysisComplete }) => {
       {isUploading && (
         <div className="mt-8 space-y-2">
           <p className="text-lg font-medium text-gray-700">
-            Uploading & analyzing your video... ({progress}%)
+            Uploading & analyzing your video... <span className="font-semibold">{progress}%</span>
           </p>
 
           {estimatedTime !== null && estimatedTime > 0 && (
@@ -481,6 +477,11 @@ const UploadScreen: React.FC<UploadScreenProps> = ({ onAnalysisComplete }) => {
               ⏳ Estimated time remaining: ~{estimatedTime}s
             </p>
           )}
+
+          <div className="flex items-center justify-between text-xs text-gray-500 mt-1 mb-1">
+            <span>Progress</span>
+            <span>{progress}%</span>
+          </div>
 
           <div className="w-full bg-gray-200 rounded-full h-3">
             <div
