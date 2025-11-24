@@ -19,6 +19,7 @@ import {
   Info,
 } from "lucide-react";
 
+
 /* ---------- Types ---------- */
 type Step = 1 | 2 | 3 | 4 | 5;
 type TailwindBrand = "indigo" | "yellow" | "red" | "green";
@@ -225,6 +226,7 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onStart }) => (
 type GoalSettingScreenProps = { onNext: () => void };
 
 const GOAL_STORAGE_KEY = "speakeasy:lastGoal";
+const METRIC_PRIORITY_STORAGE_KEY = "speakeasy:metricPriority";
 
 const goals = [
   {
@@ -520,6 +522,10 @@ const UploadScreen: React.FC<UploadScreenProps> = ({ onAnalysisComplete }) => {
 };
 
 type ReviewScreenProps = { onNext: () => void };
+
+// which metric the user wants to see first
+type PriorityMetric = "hand" | "leg" | "eye" | "posture";
+
 const ReviewScreen: React.FC<ReviewScreenProps> = ({ onNext }) => {
   const analysisData = useMemo(
     () => ({
@@ -560,16 +566,96 @@ const ReviewScreen: React.FC<ReviewScreenProps> = ({ onNext }) => {
     []
   );
 
+  // user’s preferred first metric (default: eye gaze)
+  const [priorityMetric, setPriorityMetric] = useState<PriorityMetric>("eye");
+
+  // load from localStorage on first render
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(METRIC_PRIORITY_STORAGE_KEY) as PriorityMetric | null;
+      if (saved === "hand" || saved === "leg" || saved === "eye" || saved === "posture") {
+        setPriorityMetric(saved);
+      }
+    } catch (err) {
+      console.error("Could not read metric priority from storage", err);
+    }
+  }, []);
+
+  const handlePriorityChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = e.target.value as PriorityMetric;
+    setPriorityMetric(value);
+    try {
+      localStorage.setItem(METRIC_PRIORITY_STORAGE_KEY, value);
+    } catch (err) {
+      console.error("Could not save metric priority to storage", err);
+    }
+  };
+
+  // build list of metric cards
+  const metrics = [
+    {
+      id: "hand" as PriorityMetric,
+      title: "Hand Movements",
+      data: analysisData.handMovements,
+    },
+    {
+      id: "leg" as PriorityMetric,
+      title: "Leg Movements",
+      data: analysisData.legMovements,
+    },
+    {
+      id: "eye" as PriorityMetric,
+      title: "Eye Gaze",
+      data: analysisData.eyeGaze,
+    },
+    {
+      id: "posture" as PriorityMetric,
+      title: "Posture",
+      data: analysisData.posture,
+    },
+  ];
+
+  // reorder so the priority metric appears first
+  const sortedMetrics = [...metrics].sort((a, b) => {
+    if (a.id === priorityMetric && b.id !== priorityMetric) return -1;
+    if (b.id === priorityMetric && a.id !== priorityMetric) return 1;
+    return 0;
+  });
+
   return (
     <div className="max-w-5xl mx-auto p-6">
       <h2 className="text-3xl font-bold text-gray-900 mb-2">3. Session Review: Job Interview Prep</h2>
-      <p className="text-indigo-600 font-semibold mb-8">AI Analysis Complete! Score: 78/100</p>
+      <p className="text-indigo-600 font-semibold mb-4">AI Analysis Complete! Score: 78/100</p>
+
+      {/* NEW: preference control */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
+        <p className="text-sm text-gray-600">
+          Choose which feedback area you’d like to see first. We’ll keep that section at the top for future sessions.
+        </p>
+        <select
+          value={priorityMetric}
+          onChange={handlePriorityChange}
+          className="mt-1 sm:mt-0 border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-800 bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+        >
+          <option value="eye">Eye Gaze</option>
+          <option value="hand">Hand Movements</option>
+          <option value="leg">Leg Movements</option>
+          <option value="posture">Posture</option>
+        </select>
+      </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-        <MetricCard title="Hand Movements" value={analysisData.handMovements.value} icon={analysisData.handMovements.icon} color={analysisData.handMovements.color} description={analysisData.handMovements.desc} highlight={analysisData.handMovements.highlight} />
-        <MetricCard title="Leg Movements" value={analysisData.legMovements.value} icon={analysisData.legMovements.icon} color={analysisData.legMovements.color} description={analysisData.legMovements.desc} highlight={analysisData.legMovements.highlight} />
-        <MetricCard title="Eye Gaze" value={analysisData.eyeGaze.value} icon={analysisData.eyeGaze.icon} color={analysisData.eyeGaze.color} description={analysisData.eyeGaze.desc} highlight={analysisData.eyeGaze.highlight} />
-        <MetricCard title="Posture" value={analysisData.posture.value} icon={analysisData.posture.icon} color={analysisData.posture.color} description={analysisData.posture.desc} highlight={analysisData.posture.highlight} />
+        {sortedMetrics.map((metric) => (
+          <MetricCard
+            key={metric.id}
+            title={metric.title}
+            value={metric.data.value}
+            icon={metric.data.icon}
+            color={metric.data.color}
+            description={metric.data.desc}
+            highlight={metric.data.highlight}
+          />
+        ))}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -592,7 +678,8 @@ const ReviewScreen: React.FC<ReviewScreenProps> = ({ onNext }) => {
           </div>
           <p className="text-gray-800 leading-relaxed">
             Strong confidence markers in <strong>Eye Gaze</strong> and <strong>Posture</strong>. Focus next on
-            <strong> Hand Movements</strong> and <strong>Leg Movements</strong>: keep gestures purposeful and plant your stance to reduce lower-body fidgeting.
+            <strong> Hand Movements</strong> and <strong>Leg Movements</strong>: keep gestures purposeful and plant your stance to
+            reduce lower-body fidgeting.
           </p>
         </div>
       </div>
