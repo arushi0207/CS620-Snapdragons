@@ -520,7 +520,6 @@ const UploadScreen: React.FC<UploadScreenProps> = ({ onAnalysisComplete }) => {
     </div>
   );
 };
-
 type ReviewScreenProps = { onNext: () => void };
 
 // which metric the user wants to see first
@@ -556,6 +555,8 @@ const ReviewScreen: React.FC<ReviewScreenProps> = ({ onNext }) => {
         desc: "Confident and open stance maintained throughout the speech.",
         icon: PersonStanding as LucideIcon,
         highlight: false,
+        // NEW: mock timestamps where posture issues were detected
+        timestamps: ["00:14", "00:52", "01:37"],
       },
       facialExpression: {
         rating: 4,
@@ -566,13 +567,13 @@ const ReviewScreen: React.FC<ReviewScreenProps> = ({ onNext }) => {
     []
   );
 
-  // user’s preferred first metric (default: eye gaze)
   const [priorityMetric, setPriorityMetric] = useState<PriorityMetric>("eye");
 
-  // load from localStorage on first render
   useEffect(() => {
     try {
-      const saved = localStorage.getItem(METRIC_PRIORITY_STORAGE_KEY) as PriorityMetric | null;
+      const saved = localStorage.getItem(
+        METRIC_PRIORITY_STORAGE_KEY
+      ) as PriorityMetric | null;
       if (saved === "hand" || saved === "leg" || saved === "eye" || saved === "posture") {
         setPriorityMetric(saved);
       }
@@ -624,13 +625,18 @@ const ReviewScreen: React.FC<ReviewScreenProps> = ({ onNext }) => {
 
   return (
     <div className="max-w-5xl mx-auto p-6">
-      <h2 className="text-3xl font-bold text-gray-900 mb-2">3. Session Review: Job Interview Prep</h2>
-      <p className="text-indigo-600 font-semibold mb-4">AI Analysis Complete! Score: 78/100</p>
+      <h2 className="text-3xl font-bold text-gray-900 mb-2">
+        3. Session Review: Job Interview Prep
+      </h2>
+      <p className="text-indigo-600 font-semibold mb-4">
+        AI Analysis Complete! Score: 78/100
+      </p>
 
-      {/* NEW: preference control */}
+      {/* Priority selector */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
         <p className="text-sm text-gray-600">
-          Choose which feedback area you’d like to see first. We’ll keep that section at the top for future sessions.
+          Choose which feedback area you’d like to see first. We’ll keep that
+          section at the top for future sessions.
         </p>
         <select
           value={priorityMetric}
@@ -644,7 +650,8 @@ const ReviewScreen: React.FC<ReviewScreenProps> = ({ onNext }) => {
         </select>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+      {/* Metric cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
         {sortedMetrics.map((metric) => (
           <MetricCard
             key={metric.id}
@@ -658,11 +665,35 @@ const ReviewScreen: React.FC<ReviewScreenProps> = ({ onNext }) => {
         ))}
       </div>
 
+      {/* NEW: posture timestamps section */}
+      <div className="mb-10 rounded-xl bg-white border border-gray-100 p-5 shadow-sm">
+        <h3 className="text-md font-semibold text-gray-900 mb-2">
+          Posture moments to review
+        </h3>
+        <p className="text-sm text-gray-600 mb-3">
+          We noticed posture issues around these timestamps in your video. Use
+          them to scrub quickly to the right moment when reviewing your
+          recording.
+        </p>
+        <div className="flex flex-wrap gap-2">
+          {analysisData.posture.timestamps.map((ts) => (
+            <span
+              key={ts}
+              className="px-3 py-1 rounded-full text-xs font-medium bg-indigo-50 text-indigo-700 border border-indigo-100"
+            >
+              {ts}
+            </span>
+          ))}
+        </div>
+      </div>
+
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-1 bg-white p-6 rounded-xl shadow-lg border border-gray-50">
           <div className="flex items-center space-x-3 text-indigo-600 mb-4">
             <Smile size={24} />
-            <h3 className="text-xl font-semibold text-gray-800">Facial Expression</h3>
+            <h3 className="text-xl font-semibold text-gray-800">
+              Facial Expression
+            </h3>
           </div>
           <p className="text-3xl font-extrabold text-yellow-600 mb-2">
             {"⭐".repeat(analysisData.facialExpression.rating)}
@@ -677,9 +708,11 @@ const ReviewScreen: React.FC<ReviewScreenProps> = ({ onNext }) => {
             <h3 className="text-xl font-bold text-indigo-700">AI Coach Summary</h3>
           </div>
           <p className="text-gray-800 leading-relaxed">
-            Strong confidence markers in <strong>Eye Gaze</strong> and <strong>Posture</strong>. Focus next on
-            <strong> Hand Movements</strong> and <strong>Leg Movements</strong>: keep gestures purposeful and plant your stance to
-            reduce lower-body fidgeting.
+            Strong confidence markers in <strong>Eye Gaze</strong> and{" "}
+            <strong>Posture</strong>. Focus next on
+            <strong> Hand Movements</strong> and <strong>Leg Movements</strong>:
+            keep gestures purposeful and plant your stance to reduce lower-body
+            fidgeting.
           </p>
         </div>
       </div>
