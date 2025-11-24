@@ -1,66 +1,120 @@
-import os
+from __future__ import annotations
+
+from ctypes import (
+    CDLL,
+    Structure,
+    POINTER,
+    c_uint8,
+    c_int,
+    c_float,
+)
+from pathlib import Path
+from typing import List, Tuple
+
+import sys
 import numpy as np
-from ctypes import cdll, c_int, c_void_p
 
-# Load the DLL
-_LIB_PATH = os.path.join(os.path.dirname(__file__), "native", "fastcv_bridge.dll")
-_lib = cdll.LoadLibrary(_LIB_PATH)
+# --------------------------------------
+# Load the native fastcv_bridge library
+# --------------------------------------
 
-# --- dummy_add_one (still useful for testing) ---
-_lib.dummy_add_one.argtypes = [c_void_p, c_int]
-_lib.dummy_add_one.restype = None
+if sys.platform == "win32":
+    _LIB_NAME = "fastcv_bridge.dll"
+elif sys.platform == "linux":
+    _LIB_NAME = "libfastcv_bridge.so"
+elif sys.platform == "darwin":
+    _LIB_NAME = "libfastcv_bridge.dylib"
+else:
+    raise RuntimeError(f"Unsupported platform: {sys.platform}")
+
+_here = Path(__file__).resolve().parent
+_lib_path = _here / _LIB_NAME
+if not _lib_path.exists():
+    raise FileNotFoundError(f"FastCV bridge library not found at {_lib_path}")
+
+_lib = CDLL(str(_lib_path))
 
 
-def dummy_add_one(arr: np.ndarray) -> np.ndarray:
-    if not arr.flags["C_CONTIGUOUS"]:
-        arr = np.ascontiguousarray(arr)
-    ptr = arr.ctypes.data_as(c_void_p)
-    _lib.dummy_add_one(ptr, c_int(arr.size))
-    return arr
+# --------------------------------------
+# Optional: existing dummy_add_one
+# --------------------------------------
+
+# If you still have dummy_add_one in C, keep this:
+try:
+    _lib.dummy_add_one.argtypes = [POINTER(c_uint8), c_int]
+    _lib.dummy_add_one.restype = None
+
+    def dummy_add_one(buf: np.ndarray) -> None:
+        if buf.dtype != np.uint8:
+            raise ValueError("dummy_add_one expects uint8 array")
+        ptr = buf.ctypes.data_as(POINTER(c_uint8))
+        _lib.dummy_add_one(ptr, buf.size)
+
+except AttributeError:
+    # Function not in DLL, ignore
+    pass
 
 
-# --- bgr_to_rgb_crop_resize_fastcv wrapper ---
+# --------------------------------------
+# FastCV face detection bindings
+# --------------------------------------
 
-_lib.bgr_to_rgb_crop_resize_fastcv.argtypes = [
-    c_void_p,       # src pointer
-    c_int, c_int,   # src_w, src_h
-    c_int, c_int,   # crop_x, crop_y
-    c_int, c_int,   # crop_w, crop_h
-    c_void_p,       # dst pointer
-    c_int, c_int,   # dst_w, dst_h
+class FcvRect(Structure):
+    _fields_ = [
+        ("x", c_float),
+        ("y", c_float),
+        ("width", c_float),
+        ("height", c_float),
+    ]
+
+
+# Make sure the symbol exists in the DLL before touching argtypes
+try:
+    _fastcv_detect_faces = _lib.fastcv_detect_faces
+except AttributeError as e:
+    raise AttributeError(
+        "fastcv_detect_faces not found in fastcv_bridge library. "
+        "Did you rebuild fastcv_bridge.c after adding the function?"
+    ) from e
+
+_fastcv_detect_faces.argtypes = [
+    POINTER(c_uint8),   # gray image data
+    c_int,              # width
+    c_int,              # height
+    POINTER(FcvRect),   # output rectangles
+    c_int,              # max_faces
 ]
-_lib.bgr_to_rgb_crop_resize_fastcv.restype = None
+_fastcv_detect_faces.restype = c_int
 
 
-def fastcv_crop_resize_bgr_to_rgb(
-    frame_bgr: np.ndarray,
-    crop_x: int,
-    crop_y: int,
-    crop_w: int,
-    crop_h: int,
-    dst_w: int,
-    dst_h: int,
-) -> np.ndarray:
+def fastcv_detect_faces(
+    gray: np.ndarray, max_faces: int = 8
+) -> List[Tuple[float, float, float, float]]:
     """
-    frame_bgr: H x W x 3, BGR, uint8 (from OpenCV)
-    returns: dst_h x dst_w x 3, RGB, uint8
+    Run FastCV face detection on a grayscale uint8 image.
+    Returns a list of (x, y, w, h) in pixel coordinates.
     """
-    assert frame_bgr.dtype == np.uint8
-    assert frame_bgr.ndim == 3 and frame_bgr.shape[2] == 3
+    if gray.ndim != 2:
+        raise ValueError(f"Expected 2D grayscale image, got shape {gray.shape}")
+    if gray.dtype != np.uint8:
+        gray = gray.astype(np.uint8, copy=False)
 
-    if not frame_bgr.flags["C_CONTIGUOUS"]:
-        frame_bgr = np.ascontiguousarray(frame_bgr)
+    h, w = gray.shape
+    rects = (FcvRect * max_faces)()
 
-    src_h, src_w, _ = frame_bgr.shape
-    dst = np.empty((dst_h, dst_w, 3), dtype=np.uint8)
-
-    _lib.bgr_to_rgb_crop_resize_fastcv(
-        frame_bgr.ctypes.data_as(c_void_p),
-        c_int(src_w), c_int(src_h),
-        c_int(crop_x), c_int(copy_y := crop_y),  # Python 3.8 safe trick
-        c_int(crop_w), c_int(crop_h),
-        dst.ctypes.data_as(c_void_p),
-        c_int(dst_w), c_int(dst_h),
+    count = _fastcv_detect_faces(
+        gray.ctypes.data_as(POINTER(c_uint8)),
+        w,
+        h,
+        rects,
+        max_faces,
     )
 
-    return dst
+    if count <= 0:
+        return []
+
+    count = min(count, max_faces)
+    return [
+        (float(r.x), float(r.y), float(r.width), float(r.height))
+        for r in rects[:count]
+    ]

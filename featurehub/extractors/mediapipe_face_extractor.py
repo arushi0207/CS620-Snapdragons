@@ -9,8 +9,9 @@ import torch
 from .base import BaseFeatureExtractor
 from ..registry import register_extractor
 
-from qai_hub_models.models.mediapipe_face.app import MediaPipeFaceApp
+# from qai_hub_models.models.mediapipe_face.app import MediaPipeFaceApp
 from qai_hub_models.models.mediapipe_face.model import MediaPipeFace
+from featurehub.native.fastcv_bridge import fastcv_detect_faces
 
 
 @register_extractor("mediapipe_face")
