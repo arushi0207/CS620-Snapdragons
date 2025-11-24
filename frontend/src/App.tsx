@@ -295,9 +295,16 @@ const GoalSettingScreen: React.FC<GoalSettingScreenProps> = ({ onNext }) => {
   return (
     <div className="max-w-3xl mx-auto p-6">
       <h2 className="text-3xl font-bold text-gray-900 mb-2">1. Set Your Practice Goal</h2>
-      <p className="text-gray-500 mb-4">
-        Tell us what you're working on today to get targeted feedback.
-      </p>
+        <p className="text-gray-500 mb-2">
+           Tell us what you're working on today to get targeted feedback.
+       </p>
+
+      <div className="mb-6 rounded-lg bg-gray-50 border border-gray-200 px-4 py-3 text-sm text-gray-700 leading-relaxed">
+          Each session type customizes your AI feedback style and focus. Choose the option that best matches your real-world speaking scenario —
+          whether that’s interviews, presentations, networking situations, or improving overall confidence.
+      </div>
+
+     
 
       {/* Recommended banner based on previous session */}
       {recommendedGoal && (
