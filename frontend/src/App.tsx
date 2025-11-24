@@ -365,11 +365,16 @@ const GoalSettingScreen: React.FC<GoalSettingScreenProps> = ({ onNext }) => {
 
 
 type UploadScreenProps = { onAnalysisComplete: () => void };
+
 const UploadScreen: React.FC<UploadScreenProps> = ({ onAnalysisComplete }) => {
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const [progress, setProgress] = useState<number>(0);
   const [annotatedUrl, setAnnotatedUrl] = useState<string>("");
   const [error, setError] = useState<string>("");
+
+  // NEW: for time remaining
+  const [estimatedTime, setEstimatedTime] = useState<number | null>(null);
+  const [startTime, setStartTime] = useState<number | null>(null);
 
   const API_BASE = (import.meta as any).env?.VITE_API_BASE_URL || "http://localhost:8000";
 
@@ -381,6 +386,8 @@ const UploadScreen: React.FC<UploadScreenProps> = ({ onAnalysisComplete }) => {
     setError("");
     setProgress(0);
     setAnnotatedUrl("");
+    setEstimatedTime(null);
+    setStartTime(null);
 
     try {
       const form = new FormData();
@@ -391,8 +398,27 @@ const UploadScreen: React.FC<UploadScreenProps> = ({ onAnalysisComplete }) => {
         headers: { "Content-Type": "multipart/form-data" },
         onUploadProgress: (pe) => {
           if (!pe.total) return;
-          const p = Math.round((pe.loaded / pe.total) * 100);
-          setProgress(p);
+
+          // first progress event: capture start time
+          if (!startTime) {
+            const now = Date.now();
+            setStartTime(now);
+          }
+
+          const percent = Math.round((pe.loaded / pe.total) * 100);
+          setProgress(percent);
+
+          // estimate remaining time (very rough, but good for transparency)
+          if (startTime) {
+            const elapsedSeconds = (Date.now() - startTime) / 1000;
+            const bytesPerSecond = pe.loaded / elapsedSeconds;
+            const remainingBytes = pe.total - pe.loaded;
+            const remainingSeconds = Math.ceil(remainingBytes / bytesPerSecond);
+
+            if (Number.isFinite(remainingSeconds)) {
+              setEstimatedTime(remainingSeconds);
+            }
+          }
         },
       });
 
@@ -400,6 +426,7 @@ const UploadScreen: React.FC<UploadScreenProps> = ({ onAnalysisComplete }) => {
       const url = URL.createObjectURL(blob);
       setAnnotatedUrl(url);
       setProgress(100);
+      setEstimatedTime(0);
       toast.success("Video processed!");
     } catch (err: any) {
       const msg = err?.message || "Upload failed";
@@ -407,6 +434,8 @@ const UploadScreen: React.FC<UploadScreenProps> = ({ onAnalysisComplete }) => {
       toast.error(msg);
     } finally {
       setIsUploading(false);
+      // optional: clear timing state after we're done
+      setStartTime(null);
     }
   };
 
@@ -423,7 +452,9 @@ const UploadScreen: React.FC<UploadScreenProps> = ({ onAnalysisComplete }) => {
         }`}
       >
         <Upload className="w-12 h-12 mx-auto text-indigo-500 mb-3" />
-        <p className="text-gray-600 font-medium">Drag & drop your video here, or click to select file.</p>
+        <p className="text-gray-600 font-medium">
+          Drag & drop your video here, or click to select file.
+        </p>
         <p className="text-sm text-gray-400 mt-1">MP4 or MOV files under 500MB recommended.</p>
       </div>
 
@@ -440,8 +471,17 @@ const UploadScreen: React.FC<UploadScreenProps> = ({ onAnalysisComplete }) => {
       )}
 
       {isUploading && (
-        <div className="mt-8">
-          <p className="text-lg font-medium text-gray-700 mb-2">Uploading... ({progress}%)</p>
+        <div className="mt-8 space-y-2">
+          <p className="text-lg font-medium text-gray-700">
+            Uploading & analyzing your video... ({progress}%)
+          </p>
+
+          {estimatedTime !== null && estimatedTime > 0 && (
+            <p className="text-sm text-gray-500">
+              ⏳ Estimated time remaining: ~{estimatedTime}s
+            </p>
+          )}
+
           <div className="w-full bg-gray-200 rounded-full h-3">
             <div
               className="bg-indigo-600 h-3 rounded-full transition-all duration-500 ease-out"
