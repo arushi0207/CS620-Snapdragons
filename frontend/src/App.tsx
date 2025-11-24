@@ -524,203 +524,135 @@ type ReviewScreenProps = { onNext: () => void };
 
 // which metric the user wants to see first
 type PriorityMetric = "hand" | "leg" | "eye" | "posture";
-
 const ReviewScreen: React.FC<ReviewScreenProps> = ({ onNext }) => {
-  const analysisData = useMemo(
-    () => ({
-      handMovements: {
-        value: "Frequent",
-        color: "yellow" as TailwindBrand,
-        desc: "Hands are active and sometimes distracting. Anchor gestures to key points.",
-        icon: Hand as LucideIcon,
-        highlight: true,
-      },
-      legMovements: {
-        value: "Restless",
-        color: "red" as TailwindBrand,
-        desc: "Notable shifting/foot tapping detected. Aim for a planted, stable stance.",
-        icon: Move as LucideIcon,
-        highlight: true,
-      },
-      eyeGaze: {
-        value: "92%",
-        color: "green" as TailwindBrand,
-        desc: "Excellent. You maintained strong eye contact with the camera.",
-        icon: Eye as LucideIcon,
-        highlight: false,
-      },
-      posture: {
-        value: "Good",
-        color: "green" as TailwindBrand,
-        desc: "Confident and open stance maintained throughout the speech.",
-        icon: PersonStanding as LucideIcon,
-        highlight: false,
-        // NEW: mock timestamps where posture issues were detected
-        timestamps: ["00:14", "00:52", "01:37"],
-      },
-      facialExpression: {
-        rating: 4,
-        comment:
-          "Your energy and smile were engaging, especially when discussing your previous work. Use expression to emphasize key points.",
-      },
-    }),
-    []
-  );
 
-  const [priorityMetric, setPriorityMetric] = useState<PriorityMetric>("eye");
+  // Order control (customizable priority)
+  const [order, setOrder] = useState([
+    "handMovements",
+    "legMovements",
+    "eyeGaze",
+    "posture",
+  ]);
 
-  useEffect(() => {
-    try {
-      const saved = localStorage.getItem(
-        METRIC_PRIORITY_STORAGE_KEY
-      ) as PriorityMetric | null;
-      if (saved === "hand" || saved === "leg" || saved === "eye" || saved === "posture") {
-        setPriorityMetric(saved);
-      }
-    } catch (err) {
-      console.error("Could not read metric priority from storage", err);
-    }
-  }, []);
+  const [expanded, setExpanded] = useState<string | null>(null);
 
-  const handlePriorityChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const value = e.target.value as PriorityMetric;
-    setPriorityMetric(value);
-    try {
-      localStorage.setItem(METRIC_PRIORITY_STORAGE_KEY, value);
-    } catch (err) {
-      console.error("Could not save metric priority to storage", err);
-    }
+  const analysisData = {
+    handMovements: {
+      title: "Hand Movements",
+      value: "Frequent",
+      color: "yellow" as TailwindBrand,
+      desc: "Hands are active and sometimes distracting.",
+      detail:
+        "Try using gestures only when emphasizing key points. Keep hands relaxed near waist level.",
+      icon: Hand,
+      timestamp: "00:42, 01:18",
+    },
+    legMovements: {
+      title: "Leg Movements",
+      value: "Restless",
+      color: "red" as TailwindBrand,
+      desc: "Notable shifting detected.",
+      detail:
+        "Frequent weight shifting reduces perceived confidence. Focus on grounding both feet.",
+      icon: Move,
+      timestamp: "00:57, 01:25",
+    },
+    eyeGaze: {
+      title: "Eye Gaze",
+      value: "92%",
+      color: "green" as TailwindBrand,
+      desc: "Excellent eye contact.",
+      detail:
+        "Great consistency maintaining connection with the camera.",
+      icon: Eye,
+      timestamp: "No major issues",
+    },
+    posture: {
+      title: "Posture",
+      value: "Needs Adjustment",
+      color: "red" as TailwindBrand,
+      desc: "Slouching detected.",
+      detail:
+        "Posture dipped during moments of hesitation. Keep shoulders open and chin neutral.",
+      icon: PersonStanding,
+      timestamp: "00:33, 01:02",
+    },
   };
 
-  // build list of metric cards
-  const metrics = [
-    {
-      id: "hand" as PriorityMetric,
-      title: "Hand Movements",
-      data: analysisData.handMovements,
-    },
-    {
-      id: "leg" as PriorityMetric,
-      title: "Leg Movements",
-      data: analysisData.legMovements,
-    },
-    {
-      id: "eye" as PriorityMetric,
-      title: "Eye Gaze",
-      data: analysisData.eyeGaze,
-    },
-    {
-      id: "posture" as PriorityMetric,
-      title: "Posture",
-      data: analysisData.posture,
-    },
-  ];
-
-  // reorder so the priority metric appears first
-  const sortedMetrics = [...metrics].sort((a, b) => {
-    if (a.id === priorityMetric && b.id !== priorityMetric) return -1;
-    if (b.id === priorityMetric && a.id !== priorityMetric) return 1;
-    return 0;
-  });
+  const moveUp = (key: string) => {
+    const idx = order.indexOf(key);
+    if (idx === 0) return;
+    const newOrder = [...order];
+    [newOrder[idx - 1], newOrder[idx]] = [newOrder[idx], newOrder[idx - 1]];
+    setOrder(newOrder);
+  };
 
   return (
     <div className="max-w-5xl mx-auto p-6">
+
       <h2 className="text-3xl font-bold text-gray-900 mb-2">
-        3. Session Review: Job Interview Prep
+        3. Session Review
       </h2>
-      <p className="text-indigo-600 font-semibold mb-4">
+      <p className="text-indigo-600 font-semibold mb-6">
         AI Analysis Complete! Score: 78/100
       </p>
 
-      {/* Priority selector */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
-        <p className="text-sm text-gray-600">
-          Choose which feedback area you’d like to see first. We’ll keep that
-          section at the top for future sessions.
-        </p>
-        <select
-          value={priorityMetric}
-          onChange={handlePriorityChange}
-          className="mt-1 sm:mt-0 border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-800 bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-        >
-          <option value="eye">Eye Gaze</option>
-          <option value="hand">Hand Movements</option>
-          <option value="leg">Leg Movements</option>
-          <option value="posture">Posture</option>
-        </select>
+      {/* WPM Explanation */}
+      <div className="mb-6 text-sm text-gray-600 bg-indigo-50 p-4 rounded-lg">
+        <strong>WPM:</strong> Words Per Minute — measures your speaking pace.  
+        Ideal range for clear delivery is typically 110–160 WPM.
       </div>
 
-      {/* Metric cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-        {sortedMetrics.map((metric) => (
-          <MetricCard
-            key={metric.id}
-            title={metric.title}
-            value={metric.data.value}
-            icon={metric.data.icon}
-            color={metric.data.color}
-            description={metric.data.desc}
-            highlight={metric.data.highlight}
-          />
-        ))}
-      </div>
+      <p className="mb-4 text-sm text-gray-500">
+        🔁 Drag priority using arrows to customize which insights matter most to you.
+      </p>
 
-      {/* NEW: posture timestamps section */}
-      <div className="mb-10 rounded-xl bg-white border border-gray-100 p-5 shadow-sm">
-        <h3 className="text-md font-semibold text-gray-900 mb-2">
-          Posture moments to review
-        </h3>
-        <p className="text-sm text-gray-600 mb-3">
-          We noticed posture issues around these timestamps in your video. Use
-          them to scrub quickly to the right moment when reviewing your
-          recording.
-        </p>
-        <div className="flex flex-wrap gap-2">
-          {analysisData.posture.timestamps.map((ts) => (
-            <span
-              key={ts}
-              className="px-3 py-1 rounded-full text-xs font-medium bg-indigo-50 text-indigo-700 border border-indigo-100"
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {order.map((key) => {
+          const metric = analysisData[key as keyof typeof analysisData];
+          return (
+            <div
+              key={key}
+              className="bg-white p-5 rounded-xl border shadow hover:shadow-lg cursor-pointer transition"
+              onClick={() => setExpanded(expanded === key ? null : key)}
             >
-              {ts}
-            </span>
-          ))}
-        </div>
-      </div>
+              <div className="flex justify-between items-center">
+                <div className="flex items-center space-x-3">
+                  <metric.icon className={`text-${metric.color}-600`} />
+                  <h3 className="text-lg font-semibold">{metric.title}</h3>
+                </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-1 bg-white p-6 rounded-xl shadow-lg border border-gray-50">
-          <div className="flex items-center space-x-3 text-indigo-600 mb-4">
-            <Smile size={24} />
-            <h3 className="text-xl font-semibold text-gray-800">
-              Facial Expression
-            </h3>
-          </div>
-          <p className="text-3xl font-extrabold text-yellow-600 mb-2">
-            {"⭐".repeat(analysisData.facialExpression.rating)}
-            {"☆".repeat(5 - analysisData.facialExpression.rating)}
-          </p>
-          <p className="text-gray-700">{analysisData.facialExpression.comment}</p>
-        </div>
+                <button
+                  className="text-indigo-500 text-sm"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    moveUp(key);
+                  }}
+                >
+                  ↑ Prioritize
+                </button>
+              </div>
 
-        <div className="lg:col-span-2 bg-indigo-50 p-6 rounded-xl shadow-inner border border-indigo-100">
-          <div className="flex items-center space-x-3 text-indigo-600 mb-4">
-            <TrendingUp size={24} />
-            <h3 className="text-xl font-bold text-indigo-700">AI Coach Summary</h3>
-          </div>
-          <p className="text-gray-800 leading-relaxed">
-            Strong confidence markers in <strong>Eye Gaze</strong> and{" "}
-            <strong>Posture</strong>. Focus next on
-            <strong> Hand Movements</strong> and <strong>Leg Movements</strong>:
-            keep gestures purposeful and plant your stance to reduce lower-body
-            fidgeting.
-          </p>
-        </div>
+              <p className="text-2xl font-bold mt-2">{metric.value}</p>
+              <p className="text-gray-500 text-sm">{metric.desc}</p>
+
+              {expanded === key && (
+                <div className="mt-4 bg-gray-50 p-4 rounded-lg text-sm">
+                  <p><strong>Detailed Insight:</strong> {metric.detail}</p>
+                  <p className="mt-2 text-indigo-600">
+                    ⏱ Error Occurred At: {metric.timestamp}
+                  </p>
+                </div>
+              )}
+            </div>
+          );
+        })}
       </div>
 
       <div className="mt-10 flex justify-center">
         <button
           onClick={onNext}
-          className="px-8 py-3 bg-gray-900 text-white font-semibold rounded-full shadow-lg hover:bg-gray-700 transition duration-300 transform hover:scale-105"
+          className="px-8 py-3 bg-gray-900 text-white font-semibold rounded-full shadow-lg hover:bg-gray-700 transition"
         >
           View Full Progress Dashboard
         </button>
