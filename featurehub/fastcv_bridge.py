@@ -1,23 +1,17 @@
-from __future__ import annotations
-
 from ctypes import (
     CDLL,
     Structure,
     POINTER,
     c_uint8,
     c_int,
-    c_float,
+    c_int32,
+    c_uint32,
 )
-from pathlib import Path
-from typing import List, Tuple
-
-import sys
 import numpy as np
+from pathlib import Path
+import sys
 
-# --------------------------------------
-# Load the native fastcv_bridge library
-# --------------------------------------
-
+# Load DLL from featurehub/native/
 if sys.platform == "win32":
     _LIB_NAME = "fastcv_bridge.dll"
 elif sys.platform == "linux":
@@ -28,81 +22,61 @@ else:
     raise RuntimeError(f"Unsupported platform: {sys.platform}")
 
 _here = Path(__file__).resolve().parent
-_lib_path = _here / _LIB_NAME
+_native_dir = _here / "native"
+_lib_path = _native_dir / _LIB_NAME
+
 if not _lib_path.exists():
-    raise FileNotFoundError(f"FastCV bridge library not found at {_lib_path}")
+    raise FileNotFoundError(f"FastCV bridge library not found at: {_lib_path}")
 
 _lib = CDLL(str(_lib_path))
 
 
-# --------------------------------------
-# Optional: existing dummy_add_one
-# --------------------------------------
-
-# If you still have dummy_add_one in C, keep this:
-try:
-    _lib.dummy_add_one.argtypes = [POINTER(c_uint8), c_int]
-    _lib.dummy_add_one.restype = None
-
-    def dummy_add_one(buf: np.ndarray) -> None:
-        if buf.dtype != np.uint8:
-            raise ValueError("dummy_add_one expects uint8 array")
-        ptr = buf.ctypes.data_as(POINTER(c_uint8))
-        _lib.dummy_add_one(ptr, buf.size)
-
-except AttributeError:
-    # Function not in DLL, ignore
-    pass
-
-
-# --------------------------------------
-# FastCV face detection bindings
-# --------------------------------------
-
+# -----------------------------
+# STRUCT (must match the C file)
+# -----------------------------
 class FcvRect(Structure):
     _fields_ = [
-        ("x", c_float),
-        ("y", c_float),
-        ("width", c_float),
-        ("height", c_float),
+        ("x", c_int32),
+        ("y", c_int32),
+        ("width", c_uint32),
+        ("height", c_uint32),
     ]
 
 
-# Make sure the symbol exists in the DLL before touching argtypes
+# -----------------------------
+# BIND NATIVE FUNCTION
+# -----------------------------
 try:
-    _fastcv_detect_faces = _lib.fastcv_detect_faces
-except AttributeError as e:
-    raise AttributeError(
-        "fastcv_detect_faces not found in fastcv_bridge library. "
-        "Did you rebuild fastcv_bridge.c after adding the function?"
-    ) from e
-
-_fastcv_detect_faces.argtypes = [
-    POINTER(c_uint8),   # gray image data
-    c_int,              # width
-    c_int,              # height
-    POINTER(FcvRect),   # output rectangles
-    c_int,              # max_faces
-]
-_fastcv_detect_faces.restype = c_int
+    _lib.fastcv_detect_faces.argtypes = [
+        POINTER(c_uint8),
+        c_int,
+        c_int,
+        POINTER(FcvRect),
+        c_int,
+    ]
+    _lib.fastcv_detect_faces.restype = c_int
+except AttributeError:
+    raise RuntimeError("fastcv_detect_faces not found in DLL.")
 
 
-def fastcv_detect_faces(
-    gray: np.ndarray, max_faces: int = 8
-) -> List[Tuple[float, float, float, float]]:
-    """
-    Run FastCV face detection on a grayscale uint8 image.
-    Returns a list of (x, y, w, h) in pixel coordinates.
-    """
+# -----------------------------
+# PYTHON WRAPPER
+# -----------------------------
+def fastcv_detect_faces(gray: np.ndarray, max_faces: int = 8):
+    """Call the FastCV C face-detection function."""
+    if not isinstance(gray, np.ndarray):
+        raise TypeError("Input must be a numpy array.")
+
     if gray.ndim != 2:
-        raise ValueError(f"Expected 2D grayscale image, got shape {gray.shape}")
+        raise ValueError("Expected a grayscale HxW image.")
+
     if gray.dtype != np.uint8:
-        gray = gray.astype(np.uint8, copy=False)
+        gray = gray.astype(np.uint8)
 
     h, w = gray.shape
     rects = (FcvRect * max_faces)()
 
-    count = _fastcv_detect_faces(
+    count = _lib.fastcv_detect_faces(
         gray.ctypes.data_as(POINTER(c_uint8)),
         w,
         h,
@@ -110,11 +84,4 @@ def fastcv_detect_faces(
         max_faces,
     )
 
-    if count <= 0:
-        return []
-
-    count = min(count, max_faces)
-    return [
-        (float(r.x), float(r.y), float(r.width), float(r.height))
-        for r in rects[:count]
-    ]
+    return rects[:count]
