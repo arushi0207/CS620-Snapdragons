@@ -1,8 +1,9 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import BottomNav from "./components/bottomnavbar";
 import type { LucideIcon } from "lucide-react";
 import { toast } from "sonner";
+
 import {
   Target,
   Upload,
@@ -221,25 +222,91 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onStart }) => (
 );
 
 type GoalSettingScreenProps = { onNext: () => void };
+
+const GOAL_STORAGE_KEY = "speakeasy:lastGoal";
+
+const goals = [
+  {
+    id: "interview",
+    name: "Job Interview Prep",
+    description: "Practice the STAR method and common Q&A.",
+  },
+  {
+    id: "presentation",
+    name: "Class Presentation",
+    description: "Improve structure, pace, and engagement.",
+  },
+  {
+    id: "pitch",
+    name: "Networking Pitch",
+    description: "Refine your elevator pitch for quick impact.",
+  },
+  {
+    id: "confidence",
+    name: "General Confidence",
+    description: "Reduce anxiety and improve overall delivery.",
+  },
+] as const;
+
 const GoalSettingScreen: React.FC<GoalSettingScreenProps> = ({ onNext }) => {
-  const [selectedGoal, setSelectedGoal] = useState<string>("Job Interview Prep");
-  const goals = [
-    { id: "interview", name: "Job Interview Prep", description: "Practice the STAR method and common Q&A." },
-    { id: "presentation", name: "Class Presentation", description: "Improve structure, pace, and engagement." },
-    { id: "pitch", name: "Networking Pitch", description: "Refine your elevator pitch for quick impact." },
-    { id: "confidence", name: "General Confidence", description: "Reduce anxiety and improve overall delivery." },
-  ] as const;
+  // current selected goal in the UI
+  const [selectedGoal, setSelectedGoal] = useState<string>(goals[0].name);
+  // last session’s goal, shown as “Recommended”
+  const [recommendedGoal, setRecommendedGoal] = useState<string | null>(null);
+
+  // Load last goal from localStorage on first render
+  useEffect(() => {
+    try {
+      const lastGoal = localStorage.getItem(GOAL_STORAGE_KEY);
+      if (lastGoal) {
+        setSelectedGoal(lastGoal);
+        setRecommendedGoal(lastGoal);
+      }
+    } catch (err) {
+      console.error("Could not read last goal from storage", err);
+    }
+  }, []);
+
+  // When user clicks a card, select + save immediately
+  const handleSelectGoal = (goalName: string) => {
+    setSelectedGoal(goalName);
+    try {
+      localStorage.setItem(GOAL_STORAGE_KEY, goalName);
+    } catch (err) {
+      console.error("Could not save last goal to storage", err);
+    }
+  };
+
+  // When user continues, also save (just to be safe)
+  const handleContinue = () => {
+    try {
+      localStorage.setItem(GOAL_STORAGE_KEY, selectedGoal);
+    } catch (err) {
+      console.error("Could not save last goal to storage", err);
+    }
+    onNext();
+  };
 
   return (
     <div className="max-w-3xl mx-auto p-6">
       <h2 className="text-3xl font-bold text-gray-900 mb-2">1. Set Your Practice Goal</h2>
-      <p className="text-gray-500 mb-8">Tell us what you're working on today to get targeted feedback.</p>
+      <p className="text-gray-500 mb-4">
+        Tell us what you're working on today to get targeted feedback.
+      </p>
+
+      {/* Recommended banner based on previous session */}
+      {recommendedGoal && (
+        <div className="mb-6 rounded-lg bg-indigo-50 border border-indigo-100 px-4 py-3 text-sm text-indigo-800">
+          Recommended based on your last session:
+          <span className="font-semibold ml-1">{recommendedGoal}</span>
+        </div>
+      )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
         {goals.map((goal) => (
           <div
             key={goal.id}
-            onClick={() => setSelectedGoal(goal.name)}
+            onClick={() => handleSelectGoal(goal.name)}
             className={`p-5 rounded-xl border-2 cursor-pointer transition duration-200 ${
               selectedGoal === goal.name
                 ? "border-indigo-600 bg-indigo-50 shadow-md"
@@ -247,8 +314,17 @@ const GoalSettingScreen: React.FC<GoalSettingScreenProps> = ({ onNext }) => {
             }`}
           >
             <div className="flex justify-between items-center">
-              <p className="text-lg font-semibold text-gray-800">{goal.name}</p>
-              {selectedGoal === goal.name && <CheckCircle size={20} className="text-indigo-600" />}
+              <p className="text-lg font-semibold text-gray-800 flex items-center gap-2">
+                {goal.name}
+                {recommendedGoal === goal.name && (
+                  <span className="text-xs px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-700 font-semibold">
+                    Recommended
+                  </span>
+                )}
+              </p>
+              {selectedGoal === goal.name && (
+                <CheckCircle size={20} className="text-indigo-600" />
+              )}
             </div>
             <p className="text-sm text-gray-500 mt-1">{goal.description}</p>
           </div>
@@ -256,7 +332,7 @@ const GoalSettingScreen: React.FC<GoalSettingScreenProps> = ({ onNext }) => {
       </div>
 
       <button
-        onClick={onNext}
+        onClick={handleContinue}
         className="w-full flex items-center justify-center space-x-2 px-8 py-3 bg-indigo-600 text-white font-semibold rounded-xl shadow-md hover:bg-indigo-700 transition duration-300"
       >
         <span>Continue to Upload ({selectedGoal})</span>
