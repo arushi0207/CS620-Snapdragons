@@ -17,6 +17,8 @@ import {
   Hand,
   Move,
   Info,
+  Sun,
+  Moon,
 } from "lucide-react";
 
 /* ---------- Types ---------- */
@@ -24,38 +26,129 @@ type Step = 1 | 2 | 3 | 4 | 5;
 type TailwindBrand = "indigo" | "yellow" | "red" | "green";
 
 /* ---------- Reusable Components ---------- */
-type HeaderProps = { onNavigate: (step: Step) => void; currentStep: Step };
+type HeaderProps = {
+  onNavigate: (step: Step) => void;
+  currentStep: Step;
+  isDarkMode: boolean;
+  onToggleTheme: () => void;
+};
 
-const Header: React.FC<HeaderProps> = ({ onNavigate, currentStep }) => (
-  <header className="flex justify-between items-center p-4 bg-white border-b border-gray-100 shadow-sm sticky top-0 z-10">
-    <h1 className="text-2xl font-extrabold text-indigo-600 tracking-tight">
-      Speak<span className="text-gray-900">Easy</span> AI Coach
+const Header: React.FC<HeaderProps> = ({
+  onNavigate,
+  currentStep,
+  isDarkMode,
+  onToggleTheme,
+}) => (
+  <header
+    className={`flex justify-between items-center p-4 border-b shadow-sm sticky top-0 z-10 transition-colors duration-300 ${
+      isDarkMode ? "bg-slate-900 border-slate-800" : "bg-white border-gray-100"
+    }`}
+  >
+    <h1
+      className={`text-2xl font-extrabold tracking-tight ${
+        isDarkMode ? "text-indigo-300" : "text-indigo-600"
+      }`}
+    >
+      Speak
+      <span className={isDarkMode ? "text-white" : "text-gray-900"}>Easy</span>{" "}
+      AI Coach
     </h1>
+
     <nav className="hidden sm:flex space-x-4">
-      <NavItem title="Home" step={1} currentStep={currentStep} onClick={() => onNavigate(1)} />
-      <NavItem title="Goals" step={2} currentStep={currentStep} onClick={() => onNavigate(2)} />
-      <NavItem title="Upload" step={3} currentStep={currentStep} onClick={() => onNavigate(3)} />
-      <NavItem title="Review" step={4} currentStep={currentStep} onClick={() => onNavigate(4)} />
-      <NavItem title="Analytics" step={5} currentStep={currentStep} onClick={() => onNavigate(5)} />
+      <NavItem
+        title="Home"
+        step={1}
+        currentStep={currentStep}
+        onClick={() => onNavigate(1)}
+        isDarkMode={isDarkMode}
+      />
+      <NavItem
+        title="Goals"
+        step={2}
+        currentStep={currentStep}
+        onClick={() => onNavigate(2)}
+        isDarkMode={isDarkMode}
+      />
+      <NavItem
+        title="Upload"
+        step={3}
+        currentStep={currentStep}
+        onClick={() => onNavigate(3)}
+        isDarkMode={isDarkMode}
+      />
+      <NavItem
+        title="Review"
+        step={4}
+        currentStep={currentStep}
+        onClick={() => onNavigate(4)}
+        isDarkMode={isDarkMode}
+      />
+      <NavItem
+        title="Analytics"
+        step={5}
+        currentStep={currentStep}
+        onClick={() => onNavigate(5)}
+        isDarkMode={isDarkMode}
+      />
     </nav>
-    <Menu className="sm:hidden text-indigo-600 cursor-pointer" size={24} />
+
+    <div className="flex items-center gap-3">
+      {/* Dark theme toggle */}
+      <button
+        type="button"
+        onClick={onToggleTheme}
+        className={`inline-flex items-center justify-center w-9 h-9 rounded-full border text-xs font-medium transition-colors duration-200 ${
+          isDarkMode
+            ? "bg-slate-800 border-slate-700 text-slate-100 hover:bg-slate-700"
+            : "bg-white border-gray-200 text-gray-700 hover:bg-gray-50"
+        }`}
+        title="Toggle light / dark mode"
+      >
+        {isDarkMode ? <Sun size={16} /> : <Moon size={16} />}
+      </button>
+
+      <Menu
+        className={`sm:hidden cursor-pointer ${
+          isDarkMode ? "text-indigo-300" : "text-indigo-600"
+        }`}
+        size={24}
+      />
+    </div>
   </header>
 );
 
-type NavItemProps = { title: string; step: Step; currentStep: Step; onClick: () => void };
+type NavItemProps = {
+  title: string;
+  step: Step;
+  currentStep: Step;
+  onClick: () => void;
+  isDarkMode: boolean;
+};
 
-const NavItem: React.FC<NavItemProps> = ({ title, step, currentStep, onClick }) => (
-  <button
-    onClick={onClick}
-    className={`px-3 py-1 text-sm font-medium rounded-full transition duration-150 ${
-      currentStep === step
-        ? "bg-indigo-600 text-white shadow-md"
-        : "text-gray-600 hover:text-indigo-600 hover:bg-indigo-50"
-    }`}
-  >
-    {title}
-  </button>
-);
+const NavItem: React.FC<NavItemProps> = ({
+  title,
+  step,
+  currentStep,
+  onClick,
+  isDarkMode,
+}) => {
+  const active =
+    "bg-indigo-600 text-white shadow-md hover:bg-indigo-700 border border-indigo-500";
+  const inactive = isDarkMode
+    ? "text-slate-200 hover:text-white hover:bg-slate-800"
+    : "text-gray-600 hover:text-indigo-600 hover:bg-indigo-50";
+
+  return (
+    <button
+      onClick={onClick}
+      className={`px-3 py-1 text-sm font-medium rounded-full transition duration-150 ${
+        currentStep === step ? active : inactive
+      }`}
+    >
+      {title}
+    </button>
+  );
+};
 
 type MetricCardProps = {
   title: string;
@@ -80,7 +173,11 @@ const MetricCard: React.FC<MetricCardProps> = ({
       <Icon size={32} className={`bg-${color}-100 p-2 rounded-lg`} />
       <h3 className="text-lg font-semibold text-gray-800">{title}</h3>
     </div>
-    <p className={`text-4xl font-extrabold mb-2 ${highlight ? `text-${color}-600` : "text-gray-900"}`}>
+    <p
+      className={`text-4xl font-extrabold mb-2 ${
+        highlight ? `text-${color}-600` : "text-gray-900"
+      }`}
+    >
       {value}
     </p>
     <p className="text-sm text-gray-500">{description}</p>
@@ -100,17 +197,18 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onStart }) => (
       </p>
 
       <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 leading-tight">
-        Become the <span className="text-indigo-600">most confident speaker</span> in the room.
+        Become the <span className="text-indigo-600">most confident speaker</span>{" "}
+        in the room.
       </h2>
 
       <p className="text-base md:text-lg text-gray-600 max-w-xl">
-        Practice interviews, class presentations, or elevator pitches with AI-powered feedback on
-        your clarity, pacing, and body language.
+        Practice interviews, class presentations, or elevator pitches with
+        AI-powered feedback on your clarity, pacing, and body language.
       </p>
 
       {/* Benefits */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 flex flex-col gap-2">
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 flex flex-col gap-2 hover:shadow-md transition">
           <div className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-indigo-50">
             <Target className="h-4 w-4 text-indigo-600" />
           </div>
@@ -120,7 +218,7 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onStart }) => (
           </p>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 flex flex-col gap-2">
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 flex flex-col gap-2 hover:shadow-md transition">
           <div className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-emerald-50">
             <TrendingUp className="h-4 w-4 text-emerald-600" />
           </div>
@@ -130,7 +228,7 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onStart }) => (
           </p>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 flex flex-col gap-2">
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 flex flex-col gap-2 hover:shadow-md transition">
           <div className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-violet-50">
             <Smile className="h-4 w-4 text-violet-600" />
           </div>
@@ -145,7 +243,7 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onStart }) => (
       <div className="flex flex-wrap items-center gap-3 pt-2">
         <button
           onClick={onStart}
-          className="inline-flex items-center gap-2 rounded-full bg-indigo-600 px-6 py-3 text-sm md:text-base font-semibold text-white shadow-lg shadow-indigo-300/40 hover:bg-indigo-700 transition"
+          className="inline-flex items-center gap-2 rounded-full bg-indigo-600 px-6 py-3 text-sm md:text-base font-semibold text-white shadow-lg shadow-indigo-300/40 hover:bg-indigo-700 transition hover:scale-[1.02]"
         >
           Start my first session
           <ArrowRight className="h-4 w-4" />
@@ -286,15 +384,19 @@ const GoalSettingScreen: React.FC<GoalSettingScreenProps> = ({ onNext }) => {
 
   return (
     <div className="max-w-3xl mx-auto p-6">
-      <h2 className="text-3xl font-bold text-gray-900 mb-2">1. Set Your Practice Goal</h2>
+      <h2 className="text-3xl font-bold text-gray-900 mb-2">
+        1. Set Your Practice Goal
+      </h2>
       <p className="text-gray-500 mb-2">
         Tell us what you're working on today to get targeted feedback.
       </p>
 
+      {/* Short description under the goal options */}
       <div className="mb-6 rounded-lg bg-gray-50 border border-gray-200 px-4 py-3 text-sm text-gray-700 leading-relaxed">
-        Each session type customizes your AI feedback style and focus. Choose the option that best
-        matches your real-world speaking scenario — whether that’s interviews, presentations,
-        networking situations, or improving overall confidence.
+        Each session type customizes your AI feedback style and focus. Choose
+        the option that best matches your real-world speaking scenario—whether
+        that’s interviews, presentations, networking situations, or improving
+        overall confidence.
       </div>
 
       {/* Recommended banner based on previous session */}
@@ -338,6 +440,7 @@ const GoalSettingScreen: React.FC<GoalSettingScreenProps> = ({ onNext }) => {
               </button>
             </div>
 
+            {/* Short description already present under each card */}
             <p className="text-sm text-gray-500 mt-1">{goal.description}</p>
           </div>
         ))}
@@ -354,7 +457,7 @@ const GoalSettingScreen: React.FC<GoalSettingScreenProps> = ({ onNext }) => {
   );
 };
 
-/* ---------- Upload Screen ---------- */
+/* ---------- Upload / Analysis Screen ---------- */
 
 type UploadScreenProps = { onAnalysisComplete: () => void };
 
@@ -366,11 +469,13 @@ const UploadScreen: React.FC<UploadScreenProps> = ({ onAnalysisComplete }) => {
 
   // NEW for time remaining
   const [estimatedTime, setEstimatedTime] = useState<number | null>(null);
-  const [startTime, setStartTime] = useState<number | null>(null);
 
-  const API_BASE = (import.meta as any).env?.VITE_API_BASE_URL || "http://localhost:8000";
+  const API_BASE =
+    (import.meta as any).env?.VITE_API_BASE_URL || "http://localhost:8000";
 
-  const onFileSelected: React.ChangeEventHandler<HTMLInputElement> = async (e) => {
+  const onFileSelected: React.ChangeEventHandler<HTMLInputElement> = async (
+    e
+  ) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
@@ -379,7 +484,8 @@ const UploadScreen: React.FC<UploadScreenProps> = ({ onAnalysisComplete }) => {
     setProgress(0);
     setAnnotatedUrl("");
     setEstimatedTime(null);
-    setStartTime(null);
+
+    const uploadStart = Date.now();
 
     try {
       const form = new FormData();
@@ -391,24 +497,17 @@ const UploadScreen: React.FC<UploadScreenProps> = ({ onAnalysisComplete }) => {
         onUploadProgress: (pe) => {
           if (!pe.total) return;
 
-          setStartTime((prevStart) => {
-            const now = Date.now();
-            const effectiveStart = prevStart ?? now;
+          const percent = Math.round((pe.loaded / pe.total) * 100);
+          setProgress(percent);
 
-            const percent = Math.round((pe.loaded / pe.total) * 100);
-            setProgress(percent);
-
-            const elapsed = (now - effectiveStart) / 1000;
-            const rate = pe.loaded / elapsed; // bytes / second
-            const remainingBytes = pe.total - pe.loaded;
-            const remainingSeconds = Math.ceil(remainingBytes / rate);
-
-            if (Number.isFinite(remainingSeconds)) {
-              setEstimatedTime(remainingSeconds);
-            }
-
-            return effectiveStart;
-          });
+          // estimate time remaining
+          const elapsed = (Date.now() - uploadStart) / 1000; // seconds
+          const rate = pe.loaded / elapsed; // bytes per sec
+          const remainingBytes = pe.total - pe.loaded;
+          const remainingSeconds = Math.ceil(remainingBytes / rate);
+          if (Number.isFinite(remainingSeconds)) {
+            setEstimatedTime(remainingSeconds);
+          }
         },
       });
 
@@ -424,31 +523,42 @@ const UploadScreen: React.FC<UploadScreenProps> = ({ onAnalysisComplete }) => {
       toast.error(msg);
     } finally {
       setIsUploading(false);
-      setStartTime(null);
     }
   };
 
   return (
     <div className="max-w-2xl mx-auto p-6 text-center">
-      <h2 className="text-3xl font-bold text-gray-900 mb-2">2. Upload Your Practice Video</h2>
+      <h2 className="text-3xl font-bold text-gray-900 mb-2">
+        2. Upload Your Practice Video
+      </h2>
       <p className="text-gray-500 mb-8">
-        Record your speech or mock interview on your phone, then upload the file here for AI
-        analysis.
+        Record your speech or mock interview on your phone, then upload the file
+        here for AI analysis.
       </p>
 
       <div
         className={`border-4 border-dashed rounded-2xl p-12 mb-8 transition duration-300 ${
-          isUploading ? "border-indigo-400 bg-indigo-50" : "border-gray-300 hover:border-indigo-500 hover:bg-gray-50"
+          isUploading
+            ? "border-indigo-400 bg-indigo-50"
+            : "border-gray-300 hover:border-indigo-500 hover:bg-gray-50"
         }`}
       >
-        <Upload className="w-12 h-12 mx-auto text-indigo-500 mb-3" />
+        <Upload className="w-12 h-12 mx-auto text-indigo-500 mb-3 animate-pulse" />
         <p className="text-gray-600 font-medium">
           Drag & drop your video here, or click to select file.
         </p>
-        <p className="text-sm text-gray-400 mt-1">MP4 or MOV files under 500MB recommended.</p>
+        <p className="text-sm text-gray-400 mt-1">
+          MP4 or MOV files under 500MB recommended.
+        </p>
       </div>
 
-      <input type="file" id="video-upload" accept="video/*" className="hidden" onChange={onFileSelected} />
+      <input
+        type="file"
+        id="video-upload"
+        accept="video/*"
+        className="hidden"
+        onChange={onFileSelected}
+      />
 
       {!isUploading && (
         <label
@@ -463,11 +573,14 @@ const UploadScreen: React.FC<UploadScreenProps> = ({ onAnalysisComplete }) => {
       {isUploading && (
         <div className="mt-8 space-y-2">
           <p className="text-lg font-medium text-gray-700">
-            Uploading & analyzing your video... <span className="font-semibold">{progress}%</span>
+            Uploading & analyzing your video...{" "}
+            <span className="font-semibold">{progress}%</span>
           </p>
 
           {estimatedTime !== null && estimatedTime > 0 && (
-            <p className="text-sm text-gray-500">⏳ Estimated time remaining: ~{estimatedTime}s</p>
+            <p className="text-sm text-gray-500">
+              ⏳ Estimated time remaining: ~{estimatedTime}s
+            </p>
           )}
 
           <div className="flex items-center justify-between text-xs text-gray-500 mt-1 mb-1">
@@ -492,6 +605,19 @@ const UploadScreen: React.FC<UploadScreenProps> = ({ onAnalysisComplete }) => {
             Analysis complete! Your annotated video is ready.
           </p>
 
+          {/* Full-screen / zoom option via HTML5 video player */}
+          <video
+            controls
+            className="w-full max-h-96 rounded-xl shadow-lg border border-gray-200"
+          >
+            <source src={annotatedUrl} type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+          <p className="text-xs text-gray-500">
+            Tip: use the full-screen icon in the player to zoom in while you
+            review your delivery.
+          </p>
+
           <div className="flex items-center justify-center gap-3">
             <a
               href={annotatedUrl}
@@ -513,7 +639,7 @@ const UploadScreen: React.FC<UploadScreenProps> = ({ onAnalysisComplete }) => {
   );
 };
 
-/* ---------- Review Screen ---------- */
+/* ---------- Review Screen (Session feedback) ---------- */
 
 type ReviewScreenProps = { onNext: () => void };
 
@@ -552,7 +678,8 @@ const ReviewScreen: React.FC<ReviewScreenProps> = ({ onNext }) => {
       value: "92%",
       color: "green" as TailwindBrand,
       desc: "Excellent eye contact.",
-      detail: "Great consistency maintaining connection with the camera.",
+      detail:
+        "Great consistency maintaining connection with the camera across the whole session.",
       icon: Eye,
       timestamp: "No major issues",
     },
@@ -560,9 +687,9 @@ const ReviewScreen: React.FC<ReviewScreenProps> = ({ onNext }) => {
       title: "Posture",
       value: "Needs Adjustment",
       color: "red" as TailwindBrand,
-      desc: "Slouching detected.",
+      desc: "Slouching detected during certain moments.",
       detail:
-        "Posture dipped during moments of hesitation. Keep shoulders open and chin neutral.",
+        "Posture dipped during moments of hesitation. Keep shoulders open and chin neutral to project confidence.",
       icon: PersonStanding,
       timestamp: "00:33, 01:02",
     },
@@ -578,36 +705,50 @@ const ReviewScreen: React.FC<ReviewScreenProps> = ({ onNext }) => {
 
   return (
     <div className="max-w-5xl mx-auto p-6">
-      <h2 className="text-3xl font-bold text-gray-900 mb-2">3. Session Review</h2>
-      <p className="text-indigo-600 font-semibold mb-6">AI Analysis Complete! Score: 78/100</p>
+      <h2 className="text-3xl font-bold text-gray-900 mb-2">
+        3. Session Review
+      </h2>
+      <p className="text-indigo-600 font-semibold mb-6">
+        AI Analysis Complete! Score: 78/100
+      </p>
 
-      {/* WPM Explanation */}
-      <div className="mb-6 text-sm text-gray-600 bg-indigo-50 p-4 rounded-lg">
-        <strong>WPM:</strong> Words Per Minute — measures your speaking pace. Ideal range for clear
-        delivery is typically 110–160 WPM.
+      {/* WPM explanation */}
+      <div className="mb-6 text-sm text-gray-600 bg-indigo-50 p-4 rounded-lg flex items-start gap-2">
+        <span className="mt-[2px]">ℹ️</span>
+        <p>
+          <strong>WPM</strong> stands for <strong>Words Per Minute</strong> and
+          measures your speaking pace. A clear, comfortable range for most
+          presentations is usually around <strong>110–160 WPM</strong>.
+        </p>
       </div>
 
       <p className="mb-4 text-sm text-gray-500">
-        🔁 Use the prioritize button to move the feedback you care about to the top.
+        🔁 Use the “Prioritize” arrows to customize the order of your feedback
+        sections. Click any card to see detailed insights and timestamps where
+        key issues appeared.
       </p>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {order.map((key) => {
           const metric = analysisData[key as keyof typeof analysisData];
+
           return (
             <div
               key={key}
-              className="bg-white p-5 rounded-xl border shadow hover:shadow-lg cursor-pointer transition"
+              className="bg-white p-5 rounded-xl border shadow hover:shadow-lg cursor-pointer transition transform hover:-translate-y-[1px]"
               onClick={() => setExpanded(expanded === key ? null : key)}
             >
               <div className="flex justify-between items-center">
                 <div className="flex items-center space-x-3">
-                  <metric.icon className={`text-${metric.color}-600`} />
+                  <metric.icon
+                    className={`text-${metric.color}-600`}
+                    size={22}
+                  />
                   <h3 className="text-lg font-semibold">{metric.title}</h3>
                 </div>
 
                 <button
-                  className="text-indigo-500 text-sm"
+                  className="text-indigo-500 text-sm hover:underline"
                   onClick={(e) => {
                     e.stopPropagation();
                     moveUp(key);
@@ -621,12 +762,16 @@ const ReviewScreen: React.FC<ReviewScreenProps> = ({ onNext }) => {
               <p className="text-gray-500 text-sm">{metric.desc}</p>
 
               {expanded === key && (
-                <div className="mt-4 bg-gray-50 p-4 rounded-lg text-sm">
+                <div className="mt-4 bg-gray-50 p-4 rounded-lg text-sm animate-fade-in">
                   <p>
                     <strong>Detailed Insight:</strong> {metric.detail}
                   </p>
                   <p className="mt-2 text-indigo-600">
-                    ⏱ Error Occurred At: {metric.timestamp}
+                    ⏱ Error occurred at: {metric.timestamp}
+                  </p>
+                  <p className="mt-1 text-xs text-gray-500">
+                    Tip: revisit these timestamps in your annotated video to see
+                    exactly what happened.
                   </p>
                 </div>
               )}
@@ -638,7 +783,7 @@ const ReviewScreen: React.FC<ReviewScreenProps> = ({ onNext }) => {
       <div className="mt-10 flex justify-center">
         <button
           onClick={onNext}
-          className="px-8 py-3 bg-gray-900 text-white font-semibold rounded-full shadow-lg hover:bg-gray-700 transition"
+          className="px-8 py-3 bg-gray-900 text-white font-semibold rounded-full shadow-lg hover:bg-gray-700 transition transform hover:scale-105"
         >
           View Full Progress Dashboard
         </button>
@@ -647,7 +792,7 @@ const ReviewScreen: React.FC<ReviewScreenProps> = ({ onNext }) => {
   );
 };
 
-/* ---------- Analytics Screen ---------- */
+/* ---------- Analytics / Progress Tracking Screen ---------- */
 
 type AnalyticsScreenProps = { onNext: (s: Step) => void };
 
@@ -663,25 +808,29 @@ const AnalyticsScreen: React.FC<AnalyticsScreenProps> = ({ onNext }) => {
     {
       label: "Week 1",
       score: 30,
-      feedback: "Hands were very active and sometimes covered your face or camera.",
+      feedback:
+        "Hands were very active and sometimes covered your face or camera.",
       emoji: "👐",
     },
     {
       label: "Week 2",
       score: 55,
-      feedback: "Gestures started to match key points, but there’s still extra movement.",
+      feedback:
+        "Gestures started to match key points, but there’s still extra movement.",
       emoji: "🤏",
     },
     {
       label: "Week 3",
       score: 72,
-      feedback: "Most gestures felt intentional. Only a few moments of fidgeting.",
+      feedback:
+        "Most gestures felt intentional. Only a few moments of fidgeting.",
       emoji: "👍",
     },
     {
       label: "Week 4",
       score: 85,
-      feedback: "Great control! Gestures clearly highlighted your main points.",
+      feedback:
+        "Great control! Gestures clearly highlighted your main points.",
       emoji: "🌟",
     },
   ];
@@ -696,34 +845,44 @@ const AnalyticsScreen: React.FC<AnalyticsScreenProps> = ({ onNext }) => {
     {
       label: "Week 2",
       score: 50,
-      feedback: "Some fidgeting remained, but you stayed planted during key answers.",
+      feedback:
+        "Some fidgeting remained, but you stayed planted during key answers.",
       emoji: "🙂",
     },
     {
       label: "Week 3",
       score: 70,
-      feedback: "Only occasional movement when thinking. Much more stable overall.",
+      feedback:
+        "Only occasional movement when thinking. Much more stable overall.",
       emoji: "💪",
     },
     {
       label: "Week 4",
       score: 90,
-      feedback: "Confident, grounded stance throughout almost the entire session.",
+      feedback:
+        "Confident, grounded stance throughout almost the entire session.",
       emoji: "🏆",
     },
   ];
 
-  const [selectedHandIndex, setSelectedHandIndex] = useState<number>(handHistory.length - 1);
-  const [selectedLegIndex, setSelectedLegIndex] = useState<number>(legHistory.length - 1);
+  const [selectedHandIndex, setSelectedHandIndex] = useState<number>(
+    handHistory.length - 1
+  );
+  const [selectedLegIndex, setSelectedLegIndex] = useState<number>(
+    legHistory.length - 1
+  );
 
   const selectedHand = handHistory[selectedHandIndex];
   const selectedLeg = legHistory[selectedLegIndex];
 
   return (
     <div className="max-w-5xl mx-auto p-6">
-      <h2 className="text-3xl font-bold text-gray-900 mb-2">4. Progress Dashboard</h2>
+      <h2 className="text-3xl font-bold text-gray-900 mb-2">
+        4. Progress Dashboard
+      </h2>
       <p className="text-gray-600 mb-6">
-        Tap on any bar in the graphs below to see detailed feedback from that session. ✨
+        Tap on any bar in the graphs below to see detailed feedback from that
+        session. ✨
       </p>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -769,7 +928,8 @@ const AnalyticsScreen: React.FC<AnalyticsScreenProps> = ({ onNext }) => {
           {/* Hand details */}
           <div className="mt-4 rounded-lg bg-indigo-50 border border-indigo-100 p-4 text-sm">
             <p className="font-semibold text-indigo-800 flex items-center gap-2">
-              {selectedHand.emoji} {selectedHand.label} — Score {selectedHand.score}/100
+              {selectedHand.emoji} {selectedHand.label} — Score{" "}
+              {selectedHand.score}/100
             </p>
             <p className="mt-1 text-gray-700">{selectedHand.feedback}</p>
           </div>
@@ -817,7 +977,8 @@ const AnalyticsScreen: React.FC<AnalyticsScreenProps> = ({ onNext }) => {
           {/* Leg details */}
           <div className="mt-4 rounded-lg bg-emerald-50 border border-emerald-100 p-4 text-sm">
             <p className="font-semibold text-emerald-800 flex items-center gap-2">
-              {selectedLeg.emoji} {selectedLeg.label} — Score {selectedLeg.score}/100
+              {selectedLeg.emoji} {selectedLeg.label} — Score{" "}
+              {selectedLeg.score}/100
             </p>
             <p className="mt-1 text-gray-700">{selectedLeg.feedback}</p>
           </div>
@@ -825,7 +986,9 @@ const AnalyticsScreen: React.FC<AnalyticsScreenProps> = ({ onNext }) => {
       </div>
 
       <div className="mt-10 text-center">
-        <p className="text-lg text-gray-700 font-medium mb-2">🎯 Ready for your next practice?</p>
+        <p className="text-lg text-gray-700 font-medium mb-2">
+          🎯 Ready for your next practice?
+        </p>
         <button
           onClick={() => onNext(2)}
           className="inline-flex items-center gap-2 px-8 py-3 bg-indigo-600 text-white font-semibold rounded-full shadow-lg hover:bg-indigo-700 transition-transform duration-200 hover:scale-105"
@@ -842,12 +1005,10 @@ const AnalyticsScreen: React.FC<AnalyticsScreenProps> = ({ onNext }) => {
 
 const App: React.FC = () => {
   const [step, setStep] = useState<Step>(1);
+  const [isDarkMode, setIsDarkMode] = useState(false);
 
   const navigateTo = (newStep: Step) => {
-    // simple guard so you can't jump ahead before upload/review
     if (newStep === 4 && step < 3) return;
-    if (newStep === 5 && step < 4) return;
-
     setStep(newStep);
     window.scrollTo(0, 0);
   };
@@ -870,9 +1031,19 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-dvh bg-gray-50 font-sans antialiased flex flex-col">
-      <Header onNavigate={navigateTo} currentStep={step} />
+    <div
+      className={`min-h-dvh font-sans antialiased flex flex-col transition-colors duration-300 ${
+        isDarkMode ? "bg-slate-950 text-slate-50" : "bg-gray-50 text-gray-900"
+      }`}
+    >
+      <Header
+        onNavigate={navigateTo}
+        currentStep={step}
+        isDarkMode={isDarkMode}
+        onToggleTheme={() => setIsDarkMode((d) => !d)}
+      />
 
+      {/* Fill space between sticky header and bottom nav */}
       <main className="flex-1 py-10 pb-24">
         <div className="mx-auto px-4 sm:px-6 lg:px-8 h-full">
           <div
