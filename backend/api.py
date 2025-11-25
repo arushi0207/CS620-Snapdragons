@@ -5,6 +5,7 @@ A comprehensive FastAPI backend for video analysis and speech feedback.
 
 from fastapi import FastAPI, File, UploadFile, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse, FileResponse
 from pydantic import BaseModel, Field
 from typing import Optional, List, Dict, Any
 from enum import Enum
@@ -13,6 +14,7 @@ import os
 import uvicorn
 import logging
 import uuid
+import json
 from pathlib import Path
 
 # ---------------------------
@@ -441,12 +443,14 @@ async def analyze_video(
     try:
         logger.info(f"Received video upload request: {file.filename}, goal: {goal}")
         
-        # Create session first
+        # Create session first with timestamp tracking
+        now = datetime.now()
         sessions_db[session_id] = {
             "session_id": session_id,
             "goal": goal,
             "session_name": session_name,
-            "created_at": datetime.now().isoformat(),
+            "created_at": now.isoformat(),
+            "updated_at": now.isoformat(),
             "status": "processing"
         }
         
@@ -461,7 +465,9 @@ async def analyze_video(
         results_db[session_id] = result
         sessions_db[session_id].update({
             "status": "completed",
-            "has_results": True
+            "has_results": True,
+            "updated_at": datetime.now().isoformat(),
+            "completed_at": datetime.now().isoformat()
         })
         
         logger.info(f"Analysis completed for session: {session_id}")
@@ -469,12 +475,18 @@ async def analyze_video(
         
     except HTTPException:
         if session_id in sessions_db:
-            sessions_db[session_id]["status"] = "failed"
+            sessions_db[session_id].update({
+                "status": "failed",
+                "updated_at": datetime.now().isoformat()
+            })
         raise
     except Exception as e:
         logger.error(f"Error in analyze_video: {str(e)}", exc_info=True)
         if session_id in sessions_db:
-            sessions_db[session_id]["status"] = "failed"
+            sessions_db[session_id].update({
+                "status": "failed",
+                "updated_at": datetime.now().isoformat()
+            })
         raise HTTPException(
             status_code=500,
             detail=f"Error processing video: {str(e)}"
@@ -536,25 +548,34 @@ async def get_text_feedback(request: TextFeedbackRequest):
 @app.get("/api/sessions", response_model=List[SessionInfo])
 async def get_sessions(
     goal: Optional[GoalType] = Query(None, description="Filter by goal type"),
+    session_name: Optional[str] = Query(None, description="Search sessions by name (case-insensitive partial match)"),
     limit: int = Query(50, ge=1, le=100, description="Maximum number of sessions to return")
 ):
     """
-    Get list of all analysis sessions.
+    Get list of all analysis sessions with optional filtering by goal and session name.
     """
     try:
         # Use list comprehension for better performance
-        sessions = [
-            SessionInfo(
+        sessions = []
+        for session_data in sessions_db.values():
+            # Filter by goal
+            if goal is not None and session_data.get("goal") != goal:
+                continue
+            
+            # Filter by session name (case-insensitive partial match)
+            if session_name is not None:
+                session_name_value = session_data.get("session_name", "")
+                if not session_name_value or session_name.lower() not in session_name_value.lower():
+                    continue
+            
+            sessions.append(SessionInfo(
                 session_id=session_data["session_id"],
                 goal=session_data["goal"],
                 session_name=session_data.get("session_name"),
                 created_at=datetime.fromisoformat(session_data["created_at"]),
                 status=session_data["status"],
                 has_results=session_data.get("has_results", False)
-            )
-            for session_data in sessions_db.values()
-            if goal is None or session_data.get("goal") == goal
-        ]
+            ))
         
         # Sort by creation date (newest first) and limit
         sessions.sort(key=lambda x: x.created_at, reverse=True)
@@ -580,6 +601,48 @@ async def get_session_result(session_id: str):
         )
     
     return results_db[session_id]
+
+
+@app.get("/api/sessions/{session_id}/export")
+async def export_session_result(session_id: str):
+    """
+    Export analysis result as JSON file download.
+    """
+    if session_id not in results_db:
+        raise HTTPException(
+            status_code=404,
+            detail=f"Session {session_id} not found"
+        )
+    
+    try:
+        result = results_db[session_id]
+        
+        # Convert to dict and make it JSON serializable
+        result_dict = result.model_dump()
+        result_dict["timestamp"] = result_dict["timestamp"].isoformat()
+        
+        # Create export file
+        export_filename = f"speakeasy-analysis-{session_id}.json"
+        export_path = os.path.join(RESULTS_DIR, export_filename)
+        
+        with open(export_path, "w") as f:
+            json.dump(result_dict, f, indent=2)
+        
+        logger.info(f"Exported session {session_id} to {export_path}")
+        
+        return FileResponse(
+            export_path,
+            media_type="application/json",
+            filename=export_filename,
+            headers={"Content-Disposition": f"attachment; filename={export_filename}"}
+        )
+        
+    except Exception as e:
+        logger.error(f"Error exporting session {session_id}: {str(e)}", exc_info=True)
+        raise HTTPException(
+            status_code=500,
+            detail=f"Error exporting session: {str(e)}"
+        )
 
 
 @app.delete("/api/sessions/{session_id}")
@@ -637,6 +700,13 @@ async def get_stats():
             total_score = sum(r.overall_score for r in results_db.values())
             avg_score = round(total_score / len(results_db), 2)
         
+        # Calculate processing times if available
+        avg_processing_time = None
+        if results_db:
+            processing_times = [r.processing_time for r in results_db.values() if hasattr(r, 'processing_time')]
+            if processing_times:
+                avg_processing_time = round(sum(processing_times) / len(processing_times), 2)
+        
         return {
             "total_sessions": total_sessions,
             "completed_sessions": completed_count,
@@ -644,6 +714,7 @@ async def get_stats():
             "failed_sessions": total_sessions - completed_count - processing_count,
             "goal_distribution": goal_distribution,
             "average_score": avg_score,
+            "average_processing_time_seconds": avg_processing_time,
             "timestamp": datetime.now().isoformat()
         }
         
