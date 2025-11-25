@@ -621,7 +621,6 @@ async def export_session_result(session_id: str):
         result_dict = result.model_dump()
         result_dict["timestamp"] = result_dict["timestamp"].isoformat()
         
-        # Create export file
         export_filename = f"speakeasy-analysis-{session_id}.json"
         export_path = os.path.join(RESULTS_DIR, export_filename)
         
