@@ -80,14 +80,7 @@ def main() -> None:
         "video_path": args.video,
         "model": "dummy-evaluator",
         "generated_at": datetime.utcnow().isoformat() + "Z",
-        "overall_score": 0.85,
         "summary": "This is a dummy evaluation for frontend integration (no real LLM is used).",
-        "details": {
-            "clarity": 0.9,
-            "structure": 0.8,
-            "engagement": 0.75,
-            "timing": 0.88,
-        },
         "notes": [
             "This result is a fixed dummy output for frontend-backend integration testing only.",
             "When a real model is available, you can switch back to scripts/llm_eval.py.",
