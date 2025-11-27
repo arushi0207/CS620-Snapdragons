@@ -1030,7 +1030,6 @@ const AnalyticsScreen: React.FC<AnalyticsScreenProps> = ({
       {children}
     </div>
   );
-
   const renderGraphCard = (key: FeedbackKey) => {
     switch (key) {
       case "handMovements":
@@ -1052,9 +1051,10 @@ const AnalyticsScreen: React.FC<AnalyticsScreenProps> = ({
             >
               Click a bar to see what your AI coach said that week.
             </p>
-
+  
+            {/* GRAPH */}
             <div
-              className={`h-44 rounded-lg flex items-end p-3 text-xs relative overflow-hidden ${
+              className={`h-44 rounded-lg flex items-end p-3 text-xs overflow-hidden ${
                 isDarkMode
                   ? "bg-slate-800 text-slate-400"
                   : "bg-gray-100 text-gray-500"
@@ -1063,7 +1063,7 @@ const AnalyticsScreen: React.FC<AnalyticsScreenProps> = ({
               {handHistory.map((session, idx) => {
                 const isActive = idx === selectedHandIndex;
                 const heightPct = 20 + (session.score / 100) * 70;
-
+  
                 return (
                   <button
                     key={session.label}
@@ -1081,12 +1081,18 @@ const AnalyticsScreen: React.FC<AnalyticsScreenProps> = ({
                   </button>
                 );
               })}
-
-              <p className="absolute bottom-2 left-3 text-[10px]">
-                Progress over last 4 sessions
-              </p>
             </div>
-
+  
+            {/* CAPTION BELOW GRAPH */}
+            <p
+              className={`mt-2 text-[10px] ${
+                isDarkMode ? "text-slate-400" : "text-gray-500"
+              }`}
+            >
+              Progress over last 4 sessions
+            </p>
+  
+            {/* DETAILS CARD */}
             <div
               className={`mt-4 rounded-lg border p-4 text-sm ${
                 isDarkMode
@@ -1102,7 +1108,7 @@ const AnalyticsScreen: React.FC<AnalyticsScreenProps> = ({
             </div>
           </>
         );
-
+  
       case "legMovements":
         return cardShell(
           <>
@@ -1122,9 +1128,9 @@ const AnalyticsScreen: React.FC<AnalyticsScreenProps> = ({
             >
               Click a bar to see how your stability has changed week to week.
             </p>
-
+  
             <div
-              className={`h-44 rounded-lg flex items-end p-3 text-xs relative overflow-hidden ${
+              className={`h-44 rounded-lg flex items-end p-3 text-xs overflow-hidden ${
                 isDarkMode
                   ? "bg-slate-800 text-slate-400"
                   : "bg-gray-100 text-gray-500"
@@ -1133,7 +1139,7 @@ const AnalyticsScreen: React.FC<AnalyticsScreenProps> = ({
               {legHistory.map((session, idx) => {
                 const isActive = idx === selectedLegIndex;
                 const heightPct = 20 + (session.score / 100) * 70;
-
+  
                 return (
                   <button
                     key={session.label}
@@ -1151,12 +1157,16 @@ const AnalyticsScreen: React.FC<AnalyticsScreenProps> = ({
                   </button>
                 );
               })}
-
-              <p className="absolute bottom-2 left-3 text-[10px]">
-                Higher bars = more still and grounded ✅
-              </p>
             </div>
-
+  
+            <p
+              className={`mt-2 text-[10px] ${
+                isDarkMode ? "text-slate-400" : "text-gray-500"
+              }`}
+            >
+              Higher bars = more still and grounded ✅
+            </p>
+  
             <div
               className={`mt-4 rounded-lg border p-4 text-sm ${
                 isDarkMode
@@ -1172,7 +1182,7 @@ const AnalyticsScreen: React.FC<AnalyticsScreenProps> = ({
             </div>
           </>
         );
-
+  
       case "eyeGaze":
         return cardShell(
           <>
@@ -1192,9 +1202,9 @@ const AnalyticsScreen: React.FC<AnalyticsScreenProps> = ({
             >
               Higher scores mean more consistent, engaging eye contact.
             </p>
-
+  
             <div
-              className={`h-44 rounded-lg flex items-end p-3 text-xs relative overflow-hidden ${
+              className={`h-44 rounded-lg flex items-end p-3 text-xs overflow-hidden ${
                 isDarkMode
                   ? "bg-slate-800 text-slate-400"
                   : "bg-gray-100 text-gray-500"
@@ -1203,7 +1213,7 @@ const AnalyticsScreen: React.FC<AnalyticsScreenProps> = ({
               {eyeHistory.map((session, idx) => {
                 const isActive = idx === selectedEyeIndex;
                 const heightPct = 20 + (session.score / 100) * 70;
-
+  
                 return (
                   <button
                     key={session.label}
@@ -1221,12 +1231,16 @@ const AnalyticsScreen: React.FC<AnalyticsScreenProps> = ({
                   </button>
                 );
               })}
-
-              <p className="absolute bottom-2 left-3 text-[10px]">
-                Higher bars = more consistent eye contact ✅
-              </p>
             </div>
-
+  
+            <p
+              className={`mt-2 text-[10px] ${
+                isDarkMode ? "text-slate-400" : "text-gray-500"
+              }`}
+            >
+              Higher bars = more consistent eye contact ✅
+            </p>
+  
             <div
               className={`mt-4 rounded-lg border p-4 text-sm ${
                 isDarkMode
@@ -1242,7 +1256,7 @@ const AnalyticsScreen: React.FC<AnalyticsScreenProps> = ({
             </div>
           </>
         );
-
+  
       case "posture":
       default:
         return cardShell(
@@ -1264,9 +1278,9 @@ const AnalyticsScreen: React.FC<AnalyticsScreenProps> = ({
               These scores capture how open, upright, and confident your posture
               appeared.
             </p>
-
+  
             <div
-              className={`h-44 rounded-lg flex items-end p-3 text-xs relative overflow-hidden ${
+              className={`h-44 rounded-lg flex items-end p-3 text-xs overflow-hidden ${
                 isDarkMode
                   ? "bg-slate-800 text-slate-400"
                   : "bg-gray-100 text-gray-500"
@@ -1275,7 +1289,7 @@ const AnalyticsScreen: React.FC<AnalyticsScreenProps> = ({
               {postureHistory.map((session, idx) => {
                 const isActive = idx === selectedPostureIndex;
                 const heightPct = 20 + (session.score / 100) * 70;
-
+  
                 return (
                   <button
                     key={session.label}
@@ -1293,12 +1307,16 @@ const AnalyticsScreen: React.FC<AnalyticsScreenProps> = ({
                   </button>
                 );
               })}
-
-              <p className="absolute bottom-2 left-3 text-[10px]">
-                Higher bars = more confident, upright posture ✅
-              </p>
             </div>
-
+  
+            <p
+              className={`mt-2 text-[10px] ${
+                isDarkMode ? "text-slate-400" : "text-gray-500"
+              }`}
+            >
+              Higher bars = more confident, upright posture ✅
+            </p>
+  
             <div
               className={`mt-4 rounded-lg border p-4 text-sm ${
                 isDarkMode
@@ -1316,7 +1334,7 @@ const AnalyticsScreen: React.FC<AnalyticsScreenProps> = ({
         );
     }
   };
-
+  
   return (
     <div className="max-w-5xl mx-auto p-6">
       <h2
