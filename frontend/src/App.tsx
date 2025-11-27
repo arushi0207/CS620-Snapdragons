@@ -24,6 +24,7 @@ import {
 /* ---------- Types ---------- */
 type Step = 1 | 2 | 3 | 4 | 5;
 type TailwindBrand = "indigo" | "yellow" | "red" | "green";
+type FeedbackKey = "handMovements" | "legMovements" | "eyeGaze" | "posture";
 
 /* ---------- Reusable Components ---------- */
 type HeaderProps = {
@@ -186,119 +187,54 @@ const MetricCard: React.FC<MetricCardProps> = ({
 
 /* ---------- Screens ---------- */
 
-type WelcomeScreenProps = { onStart: () => void; isDarkMode: boolean };
+type WelcomeScreenProps = { onStart: () => void };
 
-const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
-  onStart,
-  isDarkMode,
-}) => (
+const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onStart }) => (
   <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-[1.4fr,1fr] gap-10 items-center py-10">
     {/* Left side: hero text + benefits */}
     <section className="space-y-6">
-      <p
-        className={`text-xs font-semibold uppercase tracking-[0.2em] ${
-          isDarkMode ? "text-indigo-300" : "text-indigo-500"
-        }`}
-      >
+      <p className="text-xs font-semibold text-indigo-500 uppercase tracking-[0.2em]">
         SpeakEasy AI Coach
       </p>
 
-      <h2
-        className={`text-4xl md:text-5xl font-extrabold leading-tight ${
-          isDarkMode ? "text-slate-50" : "text-gray-900"
-        }`}
-      >
-        Become the{" "}
-        <span className="text-indigo-600">most confident speaker</span> in the
-        room.
+      <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 leading-tight">
+        Become the <span className="text-indigo-600">most confident speaker</span>{" "}
+        in the room.
       </h2>
 
-      <p
-        className={`text-base md:text-lg max-w-xl ${
-          isDarkMode ? "text-slate-300" : "text-gray-600"
-        }`}
-      >
+      <p className="text-base md:text-lg text-gray-600 max-w-xl">
         Practice interviews, class presentations, or elevator pitches with
         AI-powered feedback on your clarity, pacing, and body language.
       </p>
 
       {/* Benefits */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div
-          className={`rounded-2xl shadow-sm border p-4 flex flex-col gap-2 hover:shadow-md transition ${
-            isDarkMode
-              ? "bg-slate-900 border-slate-800"
-              : "bg-white border-gray-100"
-          }`}
-        >
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 flex flex-col gap-2 hover:shadow-md transition">
           <div className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-indigo-50">
             <Target className="h-4 w-4 text-indigo-600" />
           </div>
-          <p
-            className={`text-sm font-semibold ${
-              isDarkMode ? "text-slate-50" : "text-gray-900"
-            }`}
-          >
-            Goal-based practice
-          </p>
-          <p
-            className={`text-xs ${
-              isDarkMode ? "text-slate-400" : "text-gray-500"
-            }`}
-          >
-            Choose interview, presentation, or networking—and get targeted
-            prompts.
+          <p className="text-sm font-semibold text-gray-900">Goal-based practice</p>
+          <p className="text-xs text-gray-500">
+            Choose interview, presentation, or networking—and get targeted prompts.
           </p>
         </div>
 
-        <div
-          className={`rounded-2xl shadow-sm border p-4 flex flex-col gap-2 hover:shadow-md transition ${
-            isDarkMode
-              ? "bg-slate-900 border-slate-800"
-              : "bg-white border-gray-100"
-          }`}
-        >
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 flex flex-col gap-2 hover:shadow-md transition">
           <div className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-emerald-50">
             <TrendingUp className="h-4 w-4 text-emerald-600" />
           </div>
-          <p
-            className={`text-sm font-semibold ${
-              isDarkMode ? "text-slate-50" : "text-gray-900"
-            }`}
-          >
-            Instant analytics
-          </p>
-          <p
-            className={`text-xs ${
-              isDarkMode ? "text-slate-400" : "text-gray-500"
-            }`}
-          >
+          <p className="text-sm font-semibold text-gray-900">Instant analytics</p>
+          <p className="text-xs text-gray-500">
             See filler words, pacing, and confidence scores after every session.
           </p>
         </div>
 
-        <div
-          className={`rounded-2xl shadow-sm border p-4 flex flex-col gap-2 hover:shadow-md transition ${
-            isDarkMode
-              ? "bg-slate-900 border-slate-800"
-              : "bg-white border-gray-100"
-          }`}
-        >
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 flex flex-col gap-2 hover:shadow-md transition">
           <div className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-violet-50">
             <Smile className="h-4 w-4 text-violet-600" />
           </div>
-          <p
-            className={`text-sm font-semibold ${
-              isDarkMode ? "text-slate-50" : "text-gray-900"
-            }`}
-          >
-            Safe practice space
-          </p>
-          <p
-            className={`text-xs ${
-              isDarkMode ? "text-slate-400" : "text-gray-500"
-            }`}
-          >
+          <p className="text-sm font-semibold text-gray-900">Safe practice space</p>
+          <p className="text-xs text-gray-500">
             Rehearse as many times as you want before the real thing.
           </p>
         </div>
@@ -313,40 +249,20 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
           Start my first session
           <ArrowRight className="h-4 w-4" />
         </button>
-        <button
-          className={`text-sm underline-offset-2 hover:underline ${
-            isDarkMode
-              ? "text-slate-300 hover:text-white"
-              : "text-gray-600 hover:text-gray-900"
-          }`}
-        >
+        <button className="text-sm text-gray-600 hover:text-gray-900 underline-offset-2 hover:underline">
           View sample feedback
         </button>
       </div>
     </section>
 
     {/* Right side: "Next session" card */}
-    <aside
-      className={`rounded-3xl shadow-xl border p-6 space-y-6 ${
-        isDarkMode
-          ? "bg-slate-900 border-slate-800"
-          : "bg-white border-gray-100"
-      }`}
-    >
+    <aside className="bg-white rounded-3xl shadow-xl border border-gray-100 p-6 space-y-6">
       <div className="flex items-center justify-between gap-2">
         <div>
-          <p
-            className={`text-xs font-medium uppercase tracking-[0.18em] ${
-              isDarkMode ? "text-indigo-300" : "text-indigo-500"
-            }`}
-          >
+          <p className="text-xs font-medium text-indigo-500 uppercase tracking-[0.18em]">
             Next session
           </p>
-          <p
-            className={`text-base md:text-lg font-semibold ${
-              isDarkMode ? "text-slate-50" : "text-gray-900"
-            }`}
-          >
+          <p className="text-base md:text-lg font-semibold text-gray-900">
             Behavioral interview practice
           </p>
         </div>
@@ -356,18 +272,8 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
         </span>
       </div>
 
-      <div
-        className={`space-y-3 text-sm ${
-          isDarkMode ? "text-slate-300" : "text-gray-600"
-        }`}
-      >
-        <p
-          className={`font-medium ${
-            isDarkMode ? "text-slate-50" : "text-gray-900"
-          }`}
-        >
-          Today’s focus:
-        </p>
+      <div className="space-y-3 text-sm text-gray-600">
+        <p className="font-medium text-gray-900">Today’s focus:</p>
         <ul className="space-y-1">
           <li className="flex gap-2">
             <CheckCircle className="h-4 w-4 mt-[2px] text-emerald-500" />
@@ -385,66 +291,20 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
       </div>
 
       <div className="space-y-3">
-        <p
-          className={`text-xs font-medium uppercase tracking-[0.18em] ${
-            isDarkMode ? "text-slate-400" : "text-gray-500"
-          }`}
-        >
+        <p className="text-xs font-medium text-gray-500 uppercase tracking-[0.18em]">
           Last session snapshot
         </p>
         <div className="grid grid-cols-3 gap-3 text-center">
-          <div
-            className={`rounded-2xl p-3 ${
-              isDarkMode ? "bg-slate-800" : "bg-gray-50"
-            }`}
-          >
-            <p
-              className={`text-xs ${
-                isDarkMode ? "text-slate-400" : "text-gray-500"
-              }`}
-            >
-              Clarity
-            </p>
-            <p
-              className={`text-lg font-semibold ${
-                isDarkMode ? "text-slate-50" : "text-gray-900"
-              }`}
-            >
-              8.6
-            </p>
+          <div className="rounded-2xl bg-gray-50 p-3">
+            <p className="text-xs text-gray-500">Clarity</p>
+            <p className="text-lg font-semibold text-gray-900">8.6</p>
           </div>
-          <div
-            className={`rounded-2xl p-3 ${
-              isDarkMode ? "bg-slate-800" : "bg-gray-50"
-            }`}
-          >
-            <p
-              className={`text-xs ${
-                isDarkMode ? "text-slate-400" : "text-gray-500"
-              }`}
-            >
-              Confidence
-            </p>
-            <p
-              className={`text-lg font-semibold ${
-                isDarkMode ? "text-slate-50" : "text-gray-900"
-              }`}
-            >
-              7.9
-            </p>
+          <div className="rounded-2xl bg-gray-50 p-3">
+            <p className="text-xs text-gray-500">Confidence</p>
+            <p className="text-lg font-semibold text-gray-900">7.9</p>
           </div>
-          <div
-            className={`rounded-2xl p-3 ${
-              isDarkMode ? "bg-slate-800" : "bg-gray-50"
-            }`}
-          >
-            <p
-              className={`text-xs ${
-                isDarkMode ? "text-slate-400" : "text-gray-500"
-              }`}
-            >
-              Filler words
-            </p>
+          <div className="rounded-2xl bg-gray-50 p-3">
+            <p className="text-xs text-gray-500">Filler words</p>
             <p className="text-lg font-semibold text-emerald-600">-32%</p>
           </div>
         </div>
@@ -453,7 +313,7 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
   </div>
 );
 
-type GoalSettingScreenProps = { onNext: () => void; isDarkMode: boolean };
+type GoalSettingScreenProps = { onNext: () => void };
 
 const GOAL_STORAGE_KEY = "speakeasy:lastGoal";
 
@@ -488,10 +348,7 @@ const goals = [
   },
 ] as const;
 
-const GoalSettingScreen: React.FC<GoalSettingScreenProps> = ({
-  onNext,
-  isDarkMode,
-}) => {
+const GoalSettingScreen: React.FC<GoalSettingScreenProps> = ({ onNext }) => {
   const [selectedGoal, setSelectedGoal] = useState<string>(goals[0].name);
   const [recommendedGoal, setRecommendedGoal] = useState<string | null>(null);
 
@@ -528,29 +385,15 @@ const GoalSettingScreen: React.FC<GoalSettingScreenProps> = ({
 
   return (
     <div className="max-w-3xl mx-auto p-6">
-      <h2
-        className={`text-3xl font-bold mb-2 ${
-          isDarkMode ? "text-slate-50" : "text-gray-900"
-        }`}
-      >
+      <h2 className="text-3xl font-bold text-gray-900 mb-2">
         1. Set Your Practice Goal
       </h2>
-      <p
-        className={`mb-2 ${
-          isDarkMode ? "text-slate-400" : "text-gray-500"
-        }`}
-      >
+      <p className="text-gray-500 mb-2">
         Tell us what you're working on today to get targeted feedback.
       </p>
 
       {/* Short description under the goal options */}
-      <div
-        className={`mb-6 rounded-lg px-4 py-3 text-sm leading-relaxed border ${
-          isDarkMode
-            ? "bg-slate-900 border-slate-700 text-slate-200"
-            : "bg-gray-50 border-gray-200 text-gray-700"
-        }`}
-      >
+      <div className="mb-6 rounded-lg bg-gray-50 border border-gray-200 px-4 py-3 text-sm text-gray-700 leading-relaxed">
         Each session type customizes your AI feedback style and focus. Choose
         the option that best matches your real-world speaking scenario—whether
         that’s interviews, presentations, networking situations, or improving
@@ -559,13 +402,7 @@ const GoalSettingScreen: React.FC<GoalSettingScreenProps> = ({
 
       {/* Recommended banner based on previous session */}
       {recommendedGoal && (
-        <div
-          className={`mb-6 rounded-lg px-4 py-3 text-sm border ${
-            isDarkMode
-              ? "bg-indigo-950/40 border-indigo-800 text-indigo-200"
-              : "bg-indigo-50 border-indigo-100 text-indigo-800"
-          }`}
-        >
+        <div className="mb-6 rounded-lg bg-indigo-50 border border-indigo-100 px-4 py-3 text-sm text-indigo-800">
           Recommended based on your last session:
           <span className="font-semibold ml-1">{recommendedGoal}</span>
         </div>
@@ -578,21 +415,13 @@ const GoalSettingScreen: React.FC<GoalSettingScreenProps> = ({
             onClick={() => handleSelectGoal(goal.name)}
             className={`p-5 rounded-xl border-2 cursor-pointer transition duration-200 ${
               selectedGoal === goal.name
-                ? isDarkMode
-                  ? "border-indigo-500 bg-indigo-950/40 shadow-md"
-                  : "border-indigo-600 bg-indigo-50 shadow-md"
-                : isDarkMode
-                ? "border-slate-700 bg-slate-900 hover:border-indigo-500"
-                : "border-gray-200 bg-white hover:border-indigo-300"
+                ? "border-indigo-600 bg-indigo-50 shadow-md"
+                : "border-gray-200 hover:border-indigo-300 bg-white"
             }`}
             title={goal.hoverText} // native browser tooltip on hover
           >
             <div className="flex justify-between items-center">
-              <p
-                className={`text-lg font-semibold flex items-center gap-2 ${
-                  isDarkMode ? "text-slate-50" : "text-gray-800"
-                }`}
-              >
+              <p className="text-lg font-semibold text-gray-800 flex items-center gap-2">
                 {goal.name}
                 {recommendedGoal === goal.name && (
                   <span className="text-xs px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-700 font-semibold">
@@ -613,13 +442,7 @@ const GoalSettingScreen: React.FC<GoalSettingScreenProps> = ({
             </div>
 
             {/* Short description already present under each card */}
-            <p
-              className={`text-sm mt-1 ${
-                isDarkMode ? "text-slate-400" : "text-gray-500"
-              }`}
-            >
-              {goal.description}
-            </p>
+            <p className="text-sm text-gray-500 mt-1">{goal.description}</p>
           </div>
         ))}
       </div>
@@ -637,15 +460,9 @@ const GoalSettingScreen: React.FC<GoalSettingScreenProps> = ({
 
 /* ---------- Upload / Analysis Screen ---------- */
 
-type UploadScreenProps = {
-  onAnalysisComplete: () => void;
-  isDarkMode: boolean;
-};
+type UploadScreenProps = { onAnalysisComplete: () => void };
 
-const UploadScreen: React.FC<UploadScreenProps> = ({
-  onAnalysisComplete,
-  isDarkMode,
-}) => {
+const UploadScreen: React.FC<UploadScreenProps> = ({ onAnalysisComplete }) => {
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const [progress, setProgress] = useState<number>(0);
   const [annotatedUrl, setAnnotatedUrl] = useState<string>("");
@@ -712,18 +529,10 @@ const UploadScreen: React.FC<UploadScreenProps> = ({
 
   return (
     <div className="max-w-2xl mx-auto p-6 text-center">
-      <h2
-        className={`text-3xl font-bold mb-2 ${
-          isDarkMode ? "text-slate-50" : "text-gray-900"
-        }`}
-      >
+      <h2 className="text-3xl font-bold text-gray-900 mb-2">
         2. Upload Your Practice Video
       </h2>
-      <p
-        className={`mb-8 ${
-          isDarkMode ? "text-slate-400" : "text-gray-500"
-        }`}
-      >
+      <p className="text-gray-500 mb-8">
         Record your speech or mock interview on your phone, then upload the file
         here for AI analysis.
       </p>
@@ -731,31 +540,15 @@ const UploadScreen: React.FC<UploadScreenProps> = ({
       <div
         className={`border-4 border-dashed rounded-2xl p-12 mb-8 transition duration-300 ${
           isUploading
-            ? isDarkMode
-              ? "border-indigo-400 bg-slate-900"
-              : "border-indigo-400 bg-indigo-50"
-            : isDarkMode
-            ? "border-slate-700 hover:border-indigo-500 hover:bg-slate-900"
+            ? "border-indigo-400 bg-indigo-50"
             : "border-gray-300 hover:border-indigo-500 hover:bg-gray-50"
         }`}
       >
-        <Upload
-          className={`w-12 h-12 mx-auto mb-3 animate-pulse ${
-            isDarkMode ? "text-indigo-300" : "text-indigo-500"
-          }`}
-        />
-        <p
-          className={`font-medium ${
-            isDarkMode ? "text-slate-100" : "text-gray-600"
-          }`}
-        >
+        <Upload className="w-12 h-12 mx-auto text-indigo-500 mb-3 animate-pulse" />
+        <p className="text-gray-600 font-medium">
           Drag & drop your video here, or click to select file.
         </p>
-        <p
-          className={`text-sm mt-1 ${
-            isDarkMode ? "text-slate-400" : "text-gray-400"
-          }`}
-        >
+        <p className="text-sm text-gray-400 mt-1">
           MP4 or MOV files under 500MB recommended.
         </p>
       </div>
@@ -780,39 +573,23 @@ const UploadScreen: React.FC<UploadScreenProps> = ({
 
       {isUploading && (
         <div className="mt-8 space-y-2">
-          <p
-            className={`text-lg font-medium ${
-              isDarkMode ? "text-slate-100" : "text-gray-700"
-            }`}
-          >
+          <p className="text-lg font-medium text-gray-700">
             Uploading & analyzing your video...{" "}
             <span className="font-semibold">{progress}%</span>
           </p>
 
           {estimatedTime !== null && estimatedTime > 0 && (
-            <p
-              className={`text-sm ${
-                isDarkMode ? "text-slate-400" : "text-gray-500"
-              }`}
-            >
+            <p className="text-sm text-gray-500">
               ⏳ Estimated time remaining: ~{estimatedTime}s
             </p>
           )}
 
-          <div
-            className={`flex items-center justify-between text-xs mt-1 mb-1 ${
-              isDarkMode ? "text-slate-400" : "text-gray-500"
-            }`}
-          >
+          <div className="flex items-center justify-between text-xs text-gray-500 mt-1 mb-1">
             <span>Progress</span>
             <span>{progress}%</span>
           </div>
 
-          <div
-            className={`w-full rounded-full h-3 ${
-              isDarkMode ? "bg-slate-800" : "bg-gray-200"
-            }`}
-          >
+          <div className="w-full bg-gray-200 rounded-full h-3">
             <div
               className="bg-indigo-600 h-3 rounded-full transition-all duration-500 ease-out"
               style={{ width: `${progress}%` }}
@@ -821,35 +598,23 @@ const UploadScreen: React.FC<UploadScreenProps> = ({
         </div>
       )}
 
-      {!!error && (
-        <p className="text-red-500 mt-3 font-semibold">{error}</p>
-      )}
+      {!!error && <p className="text-red-600 mt-3 font-semibold">{error}</p>}
 
       {annotatedUrl && (
         <div className="mt-8 space-y-4">
-          <p
-            className={`font-semibold ${
-              isDarkMode ? "text-emerald-300" : "text-green-700"
-            }`}
-          >
+          <p className="text-green-700 font-semibold">
             Analysis complete! Your annotated video is ready.
           </p>
 
           {/* Full-screen / zoom option via HTML5 video player */}
           <video
             controls
-            className={`w-full max-h-96 rounded-xl shadow-lg border ${
-              isDarkMode ? "border-slate-700" : "border-gray-200"
-            }`}
+            className="w-full max-h-96 rounded-xl shadow-lg border border-gray-200"
           >
             <source src={annotatedUrl} type="video/mp4" />
             Your browser does not support the video tag.
           </video>
-          <p
-            className={`text-xs ${
-              isDarkMode ? "text-slate-400" : "text-gray-500"
-            }`}
-          >
+          <p className="text-xs text-gray-500">
             Tip: use the full-screen icon in the player to zoom in while you
             review your delivery.
           </p>
@@ -877,22 +642,37 @@ const UploadScreen: React.FC<UploadScreenProps> = ({
 
 /* ---------- Review Screen (Session feedback) ---------- */
 
-type ReviewScreenProps = { onNext: () => void; isDarkMode: boolean };
+type ReviewScreenProps = {
+  onNext: () => void;
+  isDarkMode: boolean;
+  order: FeedbackKey[];
+  onReorder: (order: FeedbackKey[]) => void;
+};
 
-const ReviewScreen: React.FC<ReviewScreenProps> = ({ onNext, isDarkMode }) => {
-  const [order, setOrder] = useState([
-    "handMovements",
-    "legMovements",
-    "eyeGaze",
-    "posture",
-  ]);
+const ReviewScreen: React.FC<ReviewScreenProps> = ({
+  onNext,
+  isDarkMode,
+  order,
+  onReorder,
+}) => {
   const [expanded, setExpanded] = useState<string | null>(null);
 
-  const analysisData = {
+  const analysisData: Record<
+    FeedbackKey,
+    {
+      title: string;
+      value: string;
+      color: TailwindBrand;
+      desc: string;
+      detail: string;
+      icon: LucideIcon;
+      timestamp: string;
+    }
+  > = {
     handMovements: {
       title: "Hand Movements",
       value: "Frequent",
-      color: "yellow" as TailwindBrand,
+      color: "yellow",
       desc: "Hands are active and sometimes distracting.",
       detail:
         "Try using gestures only when emphasizing key points. Keep hands relaxed near waist level.",
@@ -902,7 +682,7 @@ const ReviewScreen: React.FC<ReviewScreenProps> = ({ onNext, isDarkMode }) => {
     legMovements: {
       title: "Leg Movements",
       value: "Restless",
-      color: "red" as TailwindBrand,
+      color: "red",
       desc: "Notable shifting detected.",
       detail:
         "Frequent weight shifting reduces perceived confidence. Focus on grounding both feet.",
@@ -912,7 +692,7 @@ const ReviewScreen: React.FC<ReviewScreenProps> = ({ onNext, isDarkMode }) => {
     eyeGaze: {
       title: "Eye Gaze",
       value: "92%",
-      color: "green" as TailwindBrand,
+      color: "green",
       desc: "Excellent eye contact.",
       detail:
         "Great consistency maintaining connection with the camera across the whole session.",
@@ -922,7 +702,7 @@ const ReviewScreen: React.FC<ReviewScreenProps> = ({ onNext, isDarkMode }) => {
     posture: {
       title: "Posture",
       value: "Needs Adjustment",
-      color: "red" as TailwindBrand,
+      color: "red",
       desc: "Slouching detected during certain moments.",
       detail:
         "Posture dipped during moments of hesitation. Keep shoulders open and chin neutral to project confidence.",
@@ -931,12 +711,12 @@ const ReviewScreen: React.FC<ReviewScreenProps> = ({ onNext, isDarkMode }) => {
     },
   };
 
-  const moveUp = (key: string) => {
+  const moveUp = (key: FeedbackKey) => {
     const idx = order.indexOf(key);
     if (idx === 0) return;
     const newOrder = [...order];
     [newOrder[idx - 1], newOrder[idx]] = [newOrder[idx], newOrder[idx - 1]];
-    setOrder(newOrder);
+    onReorder(newOrder);
   };
 
   return (
@@ -984,7 +764,7 @@ const ReviewScreen: React.FC<ReviewScreenProps> = ({ onNext, isDarkMode }) => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {order.map((key) => {
-          const metric = analysisData[key as keyof typeof analysisData];
+          const metric = analysisData[key];
 
           return (
             <div
@@ -1038,10 +818,10 @@ const ReviewScreen: React.FC<ReviewScreenProps> = ({ onNext, isDarkMode }) => {
               </p>
 
               {expanded === key && (
-                <div className="mt-4 bg-gray-50 dark:bg-slate-800 p-4 rounded-lg text-sm">
+                <div className="mt-4 bg-gray-50 p-4 rounded-lg text-sm">
                   <p
                     className={
-                      isDarkMode ? "text-slate-200" : "text-gray-700"
+                      isDarkMode ? "text-slate-800" : "text-gray-700"
                     }
                   >
                     <strong>Detailed Insight:</strong> {metric.detail}
@@ -1051,7 +831,7 @@ const ReviewScreen: React.FC<ReviewScreenProps> = ({ onNext, isDarkMode }) => {
                   </p>
                   <p
                     className={`mt-1 text-xs ${
-                      isDarkMode ? "text-slate-400" : "text-gray-500"
+                      isDarkMode ? "text-slate-500" : "text-gray-500"
                     }`}
                   >
                     Tip: revisit these timestamps in your annotated video to see
@@ -1078,11 +858,16 @@ const ReviewScreen: React.FC<ReviewScreenProps> = ({ onNext, isDarkMode }) => {
 
 /* ---------- Analytics / Progress Tracking Screen ---------- */
 
-type AnalyticsScreenProps = { onNext: (s: Step) => void; isDarkMode: boolean };
+type AnalyticsScreenProps = {
+  onNext: (s: Step) => void;
+  isDarkMode: boolean;
+  order: FeedbackKey[];
+};
 
 const AnalyticsScreen: React.FC<AnalyticsScreenProps> = ({
   onNext,
   isDarkMode,
+  order,
 }) => {
   type SessionMetric = {
     label: string;
@@ -1091,7 +876,7 @@ const AnalyticsScreen: React.FC<AnalyticsScreenProps> = ({
     emoji: string;
   };
 
-  // Hand movements over time
+  // histories per feature
   const handHistory: SessionMetric[] = [
     {
       label: "Week 1",
@@ -1123,7 +908,6 @@ const AnalyticsScreen: React.FC<AnalyticsScreenProps> = ({
     },
   ];
 
-  // Leg movement / stillness over time
   const legHistory: SessionMetric[] = [
     {
       label: "Week 1",
@@ -1154,7 +938,6 @@ const AnalyticsScreen: React.FC<AnalyticsScreenProps> = ({
     },
   ];
 
-  // Eye gaze consistency over time
   const eyeHistory: SessionMetric[] = [
     {
       label: "Week 1",
@@ -1186,7 +969,6 @@ const AnalyticsScreen: React.FC<AnalyticsScreenProps> = ({
     },
   ];
 
-  // Posture quality over time
   const postureHistory: SessionMetric[] = [
     {
       label: "Week 1",
@@ -1218,7 +1000,7 @@ const AnalyticsScreen: React.FC<AnalyticsScreenProps> = ({
     },
   ];
 
-  // which bar is selected in each graph
+  // which week is selected for each feature
   const [selectedHandIndex, setSelectedHandIndex] = useState(
     handHistory.length - 1
   );
@@ -1237,6 +1019,304 @@ const AnalyticsScreen: React.FC<AnalyticsScreenProps> = ({
   const selectedEye = eyeHistory[selectedEyeIndex];
   const selectedPosture = postureHistory[selectedPostureIndex];
 
+  const cardShell = (children: React.ReactNode) => (
+    <div
+      className={`p-6 rounded-xl shadow-lg border ${
+        isDarkMode
+          ? "bg-slate-900 border-slate-800"
+          : "bg-white border-gray-50"
+      }`}
+    >
+      {children}
+    </div>
+  );
+
+  const renderGraphCard = (key: FeedbackKey) => {
+    switch (key) {
+      case "handMovements":
+        return cardShell(
+          <>
+            <h3
+              className={`text-xl font-semibold mb-2 flex items-center gap-2 ${
+                isDarkMode ? "text-slate-50" : "text-gray-800"
+              }`}
+            >
+              <Hand size={20} className="text-indigo-600" />
+              <span>Hand Movement Control</span>
+              <span className="text-lg">👋</span>
+            </h3>
+            <p
+              className={`text-xs mb-3 ${
+                isDarkMode ? "text-slate-400" : "text-gray-500"
+              }`}
+            >
+              Click a bar to see what your AI coach said that week.
+            </p>
+
+            <div
+              className={`h-44 rounded-lg flex items-end p-3 text-xs relative overflow-hidden ${
+                isDarkMode
+                  ? "bg-slate-800 text-slate-400"
+                  : "bg-gray-100 text-gray-500"
+              }`}
+            >
+              {handHistory.map((session, idx) => {
+                const isActive = idx === selectedHandIndex;
+                const heightPct = 20 + (session.score / 100) * 70;
+
+                return (
+                  <button
+                    key={session.label}
+                    type="button"
+                    onClick={() => setSelectedHandIndex(idx)}
+                    className={`flex-1 mx-1 rounded-t-md focus:outline-none transition-transform duration-300 ${
+                      isActive
+                        ? "bg-indigo-500 scale-105 shadow-lg"
+                        : "bg-indigo-200 hover:bg-indigo-300 hover:scale-105"
+                    }`}
+                    style={{ height: `${heightPct}%` }}
+                    title={`Click to view feedback for ${session.label}`}
+                  >
+                    <span className="sr-only">{session.label}</span>
+                  </button>
+                );
+              })}
+
+              <p className="absolute bottom-2 left-3 text-[10px]">
+                Progress over last 4 sessions
+              </p>
+            </div>
+
+            <div
+              className={`mt-4 rounded-lg border p-4 text-sm ${
+                isDarkMode
+                  ? "bg-indigo-950/40 border-indigo-900 text-slate-100"
+                  : "bg-indigo-50 border-indigo-100 text-gray-700"
+              }`}
+            >
+              <p className="font-semibold flex items-center gap-2">
+                {selectedHand.emoji} {selectedHand.label} — Score{" "}
+                {selectedHand.score}/100
+              </p>
+              <p className="mt-1">{selectedHand.feedback}</p>
+            </div>
+          </>
+        );
+
+      case "legMovements":
+        return cardShell(
+          <>
+            <h3
+              className={`text-xl font-semibold mb-2 flex items-center gap-2 ${
+                isDarkMode ? "text-slate-50" : "text-gray-800"
+              }`}
+            >
+              <Move size={20} className="text-indigo-600" />
+              <span>Leg Movement Stillness</span>
+              <span className="text-lg">🦵</span>
+            </h3>
+            <p
+              className={`text-xs mb-3 ${
+                isDarkMode ? "text-slate-400" : "text-gray-500"
+              }`}
+            >
+              Click a bar to see how your stability has changed week to week.
+            </p>
+
+            <div
+              className={`h-44 rounded-lg flex items-end p-3 text-xs relative overflow-hidden ${
+                isDarkMode
+                  ? "bg-slate-800 text-slate-400"
+                  : "bg-gray-100 text-gray-500"
+              }`}
+            >
+              {legHistory.map((session, idx) => {
+                const isActive = idx === selectedLegIndex;
+                const heightPct = 20 + (session.score / 100) * 70;
+
+                return (
+                  <button
+                    key={session.label}
+                    type="button"
+                    onClick={() => setSelectedLegIndex(idx)}
+                    className={`flex-1 mx-1 rounded-t-md focus:outline-none transition-transform duration-300 ${
+                      isActive
+                        ? "bg-emerald-500 scale-105 shadow-lg"
+                        : "bg-emerald-200 hover:bg-emerald-300 hover:scale-105"
+                    }`}
+                    style={{ height: `${heightPct}%` }}
+                    title={`Click to view feedback for ${session.label}`}
+                  >
+                    <span className="sr-only">{session.label}</span>
+                  </button>
+                );
+              })}
+
+              <p className="absolute bottom-2 left-3 text-[10px]">
+                Higher bars = more still and grounded ✅
+              </p>
+            </div>
+
+            <div
+              className={`mt-4 rounded-lg border p-4 text-sm ${
+                isDarkMode
+                  ? "bg-emerald-950/40 border-emerald-900 text-slate-100"
+                  : "bg-emerald-50 border-emerald-100 text-gray-700"
+              }`}
+            >
+              <p className="font-semibold flex items-center gap-2">
+                {selectedLeg.emoji} {selectedLeg.label} — Score{" "}
+                {selectedLeg.score}/100
+              </p>
+              <p className="mt-1">{selectedLeg.feedback}</p>
+            </div>
+          </>
+        );
+
+      case "eyeGaze":
+        return cardShell(
+          <>
+            <h3
+              className={`text-xl font-semibold mb-2 flex items-center gap-2 ${
+                isDarkMode ? "text-slate-50" : "text-gray-800"
+              }`}
+            >
+              <Eye size={20} className="text-indigo-600" />
+              <span>Eye Gaze Consistency</span>
+              <span className="text-lg">👁️</span>
+            </h3>
+            <p
+              className={`text-xs mb-3 ${
+                isDarkMode ? "text-slate-400" : "text-gray-500"
+              }`}
+            >
+              Higher scores mean more consistent, engaging eye contact.
+            </p>
+
+            <div
+              className={`h-44 rounded-lg flex items-end p-3 text-xs relative overflow-hidden ${
+                isDarkMode
+                  ? "bg-slate-800 text-slate-400"
+                  : "bg-gray-100 text-gray-500"
+              }`}
+            >
+              {eyeHistory.map((session, idx) => {
+                const isActive = idx === selectedEyeIndex;
+                const heightPct = 20 + (session.score / 100) * 70;
+
+                return (
+                  <button
+                    key={session.label}
+                    type="button"
+                    onClick={() => setSelectedEyeIndex(idx)}
+                    className={`flex-1 mx-1 rounded-t-md focus:outline-none transition-transform duration-300 ${
+                      isActive
+                        ? "bg-sky-500 scale-105 shadow-lg"
+                        : "bg-sky-200 hover:bg-sky-300 hover:scale-105"
+                    }`}
+                    style={{ height: `${heightPct}%` }}
+                    title={`Click to view feedback for ${session.label}`}
+                  >
+                    <span className="sr-only">{session.label}</span>
+                  </button>
+                );
+              })}
+
+              <p className="absolute bottom-2 left-3 text-[10px]">
+                Higher bars = more consistent eye contact ✅
+              </p>
+            </div>
+
+            <div
+              className={`mt-4 rounded-lg border p-4 text-sm ${
+                isDarkMode
+                  ? "bg-sky-950/40 border-sky-900 text-slate-100"
+                  : "bg-sky-50 border-sky-100 text-gray-700"
+              }`}
+            >
+              <p className="font-semibold flex items-center gap-2">
+                {selectedEye.emoji} {selectedEye.label} — Score{" "}
+                {selectedEye.score}/100
+              </p>
+              <p className="mt-1">{selectedEye.feedback}</p>
+            </div>
+          </>
+        );
+
+      case "posture":
+      default:
+        return cardShell(
+          <>
+            <h3
+              className={`text-xl font-semibold mb-2 flex items-center gap-2 ${
+                isDarkMode ? "text-slate-50" : "text-gray-800"
+              }`}
+            >
+              <PersonStanding size={20} className="text-indigo-600" />
+              <span>Posture Confidence</span>
+              <span className="text-lg">🧍‍♀️</span>
+            </h3>
+            <p
+              className={`text-xs mb-3 ${
+                isDarkMode ? "text-slate-400" : "text-gray-500"
+              }`}
+            >
+              These scores capture how open, upright, and confident your posture
+              appeared.
+            </p>
+
+            <div
+              className={`h-44 rounded-lg flex items-end p-3 text-xs relative overflow-hidden ${
+                isDarkMode
+                  ? "bg-slate-800 text-slate-400"
+                  : "bg-gray-100 text-gray-500"
+              }`}
+            >
+              {postureHistory.map((session, idx) => {
+                const isActive = idx === selectedPostureIndex;
+                const heightPct = 20 + (session.score / 100) * 70;
+
+                return (
+                  <button
+                    key={session.label}
+                    type="button"
+                    onClick={() => setSelectedPostureIndex(idx)}
+                    className={`flex-1 mx-1 rounded-t-md focus:outline-none transition-transform duration-300 ${
+                      isActive
+                        ? "bg-rose-500 scale-105 shadow-lg"
+                        : "bg-rose-200 hover:bg-rose-300 hover:scale-105"
+                    }`}
+                    style={{ height: `${heightPct}%` }}
+                    title={`Click to view feedback for ${session.label}`}
+                  >
+                    <span className="sr-only">{session.label}</span>
+                  </button>
+                );
+              })}
+
+              <p className="absolute bottom-2 left-3 text-[10px]">
+                Higher bars = more confident, upright posture ✅
+              </p>
+            </div>
+
+            <div
+              className={`mt-4 rounded-lg border p-4 text-sm ${
+                isDarkMode
+                  ? "bg-rose-950/40 border-rose-900 text-slate-100"
+                  : "bg-rose-50 border-rose-100 text-gray-700"
+              }`}
+            >
+              <p className="font-semibold flex items-center gap-2">
+                {selectedPosture.emoji} {selectedPosture.label} — Score{" "}
+                {selectedPosture.score}/100
+              </p>
+              <p className="mt-1">{selectedPosture.feedback}</p>
+            </div>
+          </>
+        );
+    }
+  };
+
   return (
     <div className="max-w-5xl mx-auto p-6">
       <h2
@@ -1251,311 +1331,16 @@ const AnalyticsScreen: React.FC<AnalyticsScreenProps> = ({
           isDarkMode ? "text-slate-400" : "text-gray-600"
         }`}
       >
-        Track how your body language and delivery have improved across sessions.
-        Tap any bar to see specific feedback from that week. ✨
+        These graphs mirror your Review feedback and show how each area has
+        changed over time. The order matches your prioritized feedback.
       </p>
 
-      {/* 4 graphs = one for each Review feature */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Hand Movement Graph */}
-        <div
-          className={`p-6 rounded-xl shadow-lg border ${
-            isDarkMode
-              ? "bg-slate-900 border-slate-800"
-              : "bg-white border-gray-50"
-          }`}
-        >
-          <h3
-            className={`text-xl font-semibold mb-2 flex items-center gap-2 ${
-              isDarkMode ? "text-slate-50" : "text-gray-800"
-            }`}
-          >
-            <Hand size={20} className="text-indigo-600" />
-            <span>Hand Movement Control</span>
-            <span className="text-lg">👋</span>
-          </h3>
-          <p
-            className={`text-xs mb-3 ${
-              isDarkMode ? "text-slate-400" : "text-gray-500"
-            }`}
-          >
-            Click a bar to see what your AI coach said that week.
-          </p>
-
-          <div
-            className={`h-44 rounded-lg flex items-end p-3 text-xs relative overflow-hidden ${
-              isDarkMode
-                ? "bg-slate-800 text-slate-400"
-                : "bg-gray-100 text-gray-500"
-            }`}
-          >
-            {handHistory.map((session, idx) => {
-              const isActive = idx === selectedHandIndex;
-              const heightPct = 20 + (session.score / 100) * 70;
-
-              return (
-                <button
-                  key={session.label}
-                  type="button"
-                  onClick={() => setSelectedHandIndex(idx)}
-                  className={`flex-1 mx-1 rounded-t-md focus:outline-none transition-transform duration-300 ${
-                    isActive
-                      ? "bg-indigo-500 scale-105 shadow-lg"
-                      : "bg-indigo-200 hover:bg-indigo-300 hover:scale-105"
-                  }`}
-                  style={{ height: `${heightPct}%` }}
-                  title={`Click to view feedback for ${session.label}`}
-                >
-                  <span className="sr-only">{session.label}</span>
-                </button>
-              );
-            })}
-
-            <p className="absolute bottom-2 left-3 text-[10px]">
-              Progress over last 4 sessions
-            </p>
-          </div>
-
-          <div
-            className={`mt-4 rounded-lg border p-4 text-sm ${
-              isDarkMode
-                ? "bg-indigo-950/40 border-indigo-900 text-slate-100"
-                : "bg-indigo-50 border-indigo-100 text-gray-700"
-            }`}
-          >
-            <p className="font-semibold flex items-center gap-2">
-              {selectedHand.emoji} {selectedHand.label} — Score{" "}
-              {selectedHand.score}/100
-            </p>
-            <p className="mt-1">{selectedHand.feedback}</p>
-          </div>
-        </div>
-
-        {/* Leg Movement Graph */}
-        <div
-          className={`p-6 rounded-xl shadow-lg border ${
-            isDarkMode
-              ? "bg-slate-900 border-slate-800"
-              : "bg-white border-gray-50"
-          }`}
-        >
-          <h3
-            className={`text-xl font-semibold mb-2 flex items-center gap-2 ${
-              isDarkMode ? "text-slate-50" : "text-gray-800"
-            }`}
-          >
-            <Move size={20} className="text-indigo-600" />
-            <span>Leg Movement Stillness</span>
-            <span className="text-lg">🦵</span>
-          </h3>
-          <p
-            className={`text-xs mb-3 ${
-              isDarkMode ? "text-slate-400" : "text-gray-500"
-            }`}
-          >
-            Click a bar to see how your stability has changed week to week.
-          </p>
-
-          <div
-            className={`h-44 rounded-lg flex items-end p-3 text-xs relative overflow-hidden ${
-              isDarkMode
-                ? "bg-slate-800 text-slate-400"
-                : "bg-gray-100 text-gray-500"
-            }`}
-          >
-            {legHistory.map((session, idx) => {
-              const isActive = idx === selectedLegIndex;
-              const heightPct = 20 + (session.score / 100) * 70;
-
-              return (
-                <button
-                  key={session.label}
-                  type="button"
-                  onClick={() => setSelectedLegIndex(idx)}
-                  className={`flex-1 mx-1 rounded-t-md focus:outline-none transition-transform duration-300 ${
-                    isActive
-                      ? "bg-emerald-500 scale-105 shadow-lg"
-                      : "bg-emerald-200 hover:bg-emerald-300 hover:scale-105"
-                  }`}
-                  style={{ height: `${heightPct}%` }}
-                  title={`Click to view feedback for ${session.label}`}
-                >
-                  <span className="sr-only">{session.label}</span>
-                </button>
-              );
-            })}
-
-            <p className="absolute bottom-2 left-3 text-[10px]">
-              Higher bars = more still and grounded ✅
-            </p>
-          </div>
-
-          <div
-            className={`mt-4 rounded-lg border p-4 text-sm ${
-              isDarkMode
-                ? "bg-emerald-950/40 border-emerald-900 text-slate-100"
-                : "bg-emerald-50 border-emerald-100 text-gray-700"
-            }`}
-          >
-            <p className="font-semibold flex items-center gap-2">
-              {selectedLeg.emoji} {selectedLeg.label} — Score{" "}
-              {selectedLeg.score}/100
-            </p>
-            <p className="mt-1">{selectedLeg.feedback}</p>
-          </div>
-        </div>
-
-        {/* Eye Gaze Graph */}
-        <div
-          className={`p-6 rounded-xl shadow-lg border ${
-            isDarkMode
-              ? "bg-slate-900 border-slate-800"
-              : "bg-white border-gray-50"
-          }`}
-        >
-          <h3
-            className={`text-xl font-semibold mb-2 flex items-center gap-2 ${
-              isDarkMode ? "text-slate-50" : "text-gray-800"
-            }`}
-          >
-            <Eye size={20} className="text-indigo-600" />
-            <span>Eye Gaze Consistency</span>
-            <span className="text-lg">👁️</span>
-          </h3>
-          <p
-            className={`text-xs mb-3 ${
-              isDarkMode ? "text-slate-400" : "text-gray-500"
-            }`}
-          >
-            Higher scores mean more consistent, engaging eye contact.
-          </p>
-
-          <div
-            className={`h-44 rounded-lg flex items-end p-3 text-xs relative overflow-hidden ${
-              isDarkMode
-                ? "bg-slate-800 text-slate-400"
-                : "bg-gray-100 text-gray-500"
-            }`}
-          >
-            {eyeHistory.map((session, idx) => {
-              const isActive = idx === selectedEyeIndex;
-              const heightPct = 20 + (session.score / 100) * 70;
-
-              return (
-                <button
-                  key={session.label}
-                  type="button"
-                  onClick={() => setSelectedEyeIndex(idx)}
-                  className={`flex-1 mx-1 rounded-t-md focus:outline-none transition-transform duration-300 ${
-                    isActive
-                      ? "bg-sky-500 scale-105 shadow-lg"
-                      : "bg-sky-200 hover:bg-sky-300 hover:scale-105"
-                  }`}
-                  style={{ height: `${heightPct}%` }}
-                  title={`Click to view feedback for ${session.label}`}
-                >
-                  <span className="sr-only">{session.label}</span>
-                </button>
-              );
-            })}
-
-            <p className="absolute bottom-2 left-3 text-[10px]">
-              Higher bars = more consistent eye contact ✅
-            </p>
-          </div>
-
-          <div
-            className={`mt-4 rounded-lg border p-4 text-sm ${
-              isDarkMode
-                ? "bg-sky-950/40 border-sky-900 text-slate-100"
-                : "bg-sky-50 border-sky-100 text-gray-700"
-            }`}
-          >
-            <p className="font-semibold flex items-center gap-2">
-              {selectedEye.emoji} {selectedEye.label} — Score{" "}
-              {selectedEye.score}/100
-            </p>
-            <p className="mt-1">{selectedEye.feedback}</p>
-          </div>
-        </div>
-
-        {/* Posture Graph */}
-        <div
-          className={`p-6 rounded-xl shadow-lg border ${
-            isDarkMode
-              ? "bg-slate-900 border-slate-800"
-              : "bg-white border-gray-50"
-          }`}
-        >
-          <h3
-            className={`text-xl font-semibold mb-2 flex items-center gap-2 ${
-              isDarkMode ? "text-slate-50" : "text-gray-800"
-            }`}
-          >
-            <PersonStanding size={20} className="text-indigo-600" />
-            <span>Posture Confidence</span>
-            <span className="text-lg">🧍‍♀️</span>
-          </h3>
-          <p
-            className={`text-xs mb-3 ${
-              isDarkMode ? "text-slate-400" : "text-gray-500"
-            }`}
-          >
-            These scores capture how open, upright, and confident your posture
-            appeared.
-          </p>
-
-          <div
-            className={`h-44 rounded-lg flex items-end p-3 text-xs relative overflow-hidden ${
-              isDarkMode
-                ? "bg-slate-800 text-slate-400"
-                : "bg-gray-100 text-gray-500"
-            }`}
-          >
-            {postureHistory.map((session, idx) => {
-              const isActive = idx === selectedPostureIndex;
-              const heightPct = 20 + (session.score / 100) * 70;
-
-              return (
-                <button
-                  key={session.label}
-                  type="button"
-                  onClick={() => setSelectedPostureIndex(idx)}
-                  className={`flex-1 mx-1 rounded-t-md focus:outline-none transition-transform duration-300 ${
-                    isActive
-                      ? "bg-rose-500 scale-105 shadow-lg"
-                      : "bg-rose-200 hover:bg-rose-300 hover:scale-105"
-                  }`}
-                  style={{ height: `${heightPct}%` }}
-                  title={`Click to view feedback for ${session.label}`}
-                >
-                  <span className="sr-only">{session.label}</span>
-                </button>
-              );
-            })}
-
-            <p className="absolute bottom-2 left-3 text-[10px]">
-              Higher bars = more confident, upright posture ✅
-            </p>
-          </div>
-
-          <div
-            className={`mt-4 rounded-lg border p-4 text-sm ${
-              isDarkMode
-                ? "bg-rose-950/40 border-rose-900 text-slate-100"
-                : "bg-rose-50 border-rose-100 text-gray-700"
-            }`}
-          >
-            <p className="font-semibold flex items-center gap-2">
-              {selectedPosture.emoji} {selectedPosture.label} — Score{" "}
-              {selectedPosture.score}/100
-            </p>
-            <p className="mt-1">{selectedPosture.feedback}</p>
-          </div>
-        </div>
+        {order.map((key) => (
+          <React.Fragment key={key}>{renderGraphCard(key)}</React.Fragment>
+        ))}
       </div>
 
-      {/* CTA */}
       <div className="mt-10 text-center">
         <p
           className={`text-lg font-medium mb-2 ${
@@ -1576,12 +1361,19 @@ const AnalyticsScreen: React.FC<AnalyticsScreenProps> = ({
   );
 };
 
-
 /* ---------- Main App ---------- */
 
 const App: React.FC = () => {
   const [step, setStep] = useState<Step>(1);
   const [isDarkMode, setIsDarkMode] = useState(false);
+
+  // shared priority order between Review + Analytics
+  const [feedbackOrder, setFeedbackOrder] = useState<FeedbackKey[]>([
+    "handMovements",
+    "legMovements",
+    "eyeGaze",
+    "posture",
+  ]);
 
   const navigateTo = (newStep: Step) => {
     if (newStep === 4 && step < 3) return;
@@ -1592,34 +1384,30 @@ const App: React.FC = () => {
   const renderContent = () => {
     switch (step) {
       case 1:
-        return (
-          <WelcomeScreen
-            onStart={() => navigateTo(2)}
-            isDarkMode={isDarkMode}
-          />
-        );
+        return <WelcomeScreen onStart={() => navigateTo(2)} />;
       case 2:
-        return (
-          <GoalSettingScreen onNext={() => navigateTo(3)} isDarkMode={isDarkMode} />
-        );
+        return <GoalSettingScreen onNext={() => navigateTo(3)} />;
       case 3:
-        return (
-          <UploadScreen
-            onAnalysisComplete={() => navigateTo(4)}
-            isDarkMode={isDarkMode}
-          />
-        );
+        return <UploadScreen onAnalysisComplete={() => navigateTo(4)} />;
       case 4:
-        return <ReviewScreen onNext={() => navigateTo(5)} isDarkMode={isDarkMode} />;
-      case 5:
-        return <AnalyticsScreen onNext={navigateTo} isDarkMode={isDarkMode} />;
-      default:
         return (
-          <WelcomeScreen
-            onStart={() => navigateTo(2)}
+          <ReviewScreen
+            onNext={() => navigateTo(5)}
             isDarkMode={isDarkMode}
+            order={feedbackOrder}
+            onReorder={setFeedbackOrder}
           />
         );
+      case 5:
+        return (
+          <AnalyticsScreen
+            onNext={navigateTo}
+            isDarkMode={isDarkMode}
+            order={feedbackOrder}
+          />
+        );
+      default:
+        return <WelcomeScreen onStart={() => navigateTo(2)} />;
     }
   };
 
@@ -1640,11 +1428,8 @@ const App: React.FC = () => {
       <main className="flex-1 py-10 pb-24">
         <div className="mx-auto px-4 sm:px-6 lg:px-8 h-full">
           <div
-            className={`p-8 sm:p-12 rounded-2xl shadow-2xl min-h-[calc(100dvh-128px)] flex items-center justify-center border transition-colors duration-300 ${
-              isDarkMode
-                ? "bg-slate-900 border-slate-800"
-                : "bg-white border-gray-100"
-            }`}
+            className="bg-white p-8 sm:p-12 rounded-2xl shadow-2xl
+                       min-h-[calc(100dvh-128px)] flex items-center justify-center"
           >
             {renderContent()}
           </div>
