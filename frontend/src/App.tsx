@@ -21,12 +21,12 @@ import {
   Moon,
 } from "lucide-react";
 
-/* ---------- Types ---------- */
+
 type Step = 1 | 2 | 3 | 4 | 5;
 type TailwindBrand = "indigo" | "yellow" | "red" | "green";
 type FeedbackKey = "handMovements" | "legMovements" | "eyeGaze" | "posture";
 
-/* ---------- Reusable Components ---------- */
+
 type HeaderProps = {
   onNavigate: (step: Step) => void;
   currentStep: Step;
@@ -94,7 +94,7 @@ const Header: React.FC<HeaderProps> = ({
     </nav>
 
     <div className="flex items-center gap-3">
-      {/* Dark theme toggle */}
+    
       <button
         type="button"
         onClick={onToggleTheme}
@@ -169,7 +169,7 @@ const MetricCard: React.FC<MetricCardProps> = ({
   highlight,
 }) => (
   <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-50 hover:shadow-xl transition duration-300 transform hover:scale-[1.02]">
-    {/* NOTE: if you purge Tailwind, safelist these dynamic classes */}
+   
     <div className={`flex items-center space-x-4 mb-3 text-${color}-600`}>
       <Icon size={32} className={`bg-${color}-100 p-2 rounded-lg`} />
       <h3 className="text-lg font-semibold text-gray-800">{title}</h3>
@@ -185,13 +185,13 @@ const MetricCard: React.FC<MetricCardProps> = ({
   </div>
 );
 
-/* ---------- Screens ---------- */
+
 
 type WelcomeScreenProps = { onStart: () => void };
 
 const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onStart }) => (
   <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-[1.4fr,1fr] gap-10 items-center py-10">
-    {/* Left side: hero text + benefits */}
+  
     <section className="space-y-6">
       <p className="text-xs font-semibold text-indigo-500 uppercase tracking-[0.2em]">
         SpeakEasy AI Coach
@@ -207,7 +207,6 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onStart }) => (
         AI-powered feedback on your clarity, pacing, and body language.
       </p>
 
-      {/* Benefits */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 flex flex-col gap-2 hover:shadow-md transition">
           <div className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-indigo-50">
@@ -240,7 +239,7 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onStart }) => (
         </div>
       </div>
 
-      {/* CTA buttons */}
+   
       <div className="flex flex-wrap items-center gap-3 pt-2">
         <button
           onClick={onStart}
@@ -255,7 +254,6 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onStart }) => (
       </div>
     </section>
 
-    {/* Right side: "Next session" card */}
     <aside className="bg-white rounded-3xl shadow-xl border border-gray-100 p-6 space-y-6">
       <div className="flex items-center justify-between gap-2">
         <div>
@@ -352,7 +350,7 @@ const GoalSettingScreen: React.FC<GoalSettingScreenProps> = ({ onNext }) => {
   const [selectedGoal, setSelectedGoal] = useState<string>(goals[0].name);
   const [recommendedGoal, setRecommendedGoal] = useState<string | null>(null);
 
-  // Load last goal from localStorage on first render
+
   useEffect(() => {
     try {
       const lastGoal = localStorage.getItem(GOAL_STORAGE_KEY);
@@ -392,7 +390,6 @@ const GoalSettingScreen: React.FC<GoalSettingScreenProps> = ({ onNext }) => {
         Tell us what you're working on today to get targeted feedback.
       </p>
 
-      {/* Short description under the goal options */}
       <div className="mb-6 rounded-lg bg-gray-50 border border-gray-200 px-4 py-3 text-sm text-gray-700 leading-relaxed">
         Each session type customizes your AI feedback style and focus. Choose
         the option that best matches your real-world speaking scenario—whether
@@ -400,7 +397,6 @@ const GoalSettingScreen: React.FC<GoalSettingScreenProps> = ({ onNext }) => {
         overall confidence.
       </div>
 
-      {/* Recommended banner based on previous session */}
       {recommendedGoal && (
         <div className="mb-6 rounded-lg bg-indigo-50 border border-indigo-100 px-4 py-3 text-sm text-indigo-800">
           Recommended based on your last session:
@@ -418,7 +414,7 @@ const GoalSettingScreen: React.FC<GoalSettingScreenProps> = ({ onNext }) => {
                 ? "border-indigo-600 bg-indigo-50 shadow-md"
                 : "border-gray-200 hover:border-indigo-300 bg-white"
             }`}
-            title={goal.hoverText} // native browser tooltip on hover
+            title={goal.hoverText} 
           >
             <div className="flex justify-between items-center">
               <p className="text-lg font-semibold text-gray-800 flex items-center gap-2">
@@ -430,18 +426,16 @@ const GoalSettingScreen: React.FC<GoalSettingScreenProps> = ({ onNext }) => {
                 )}
               </p>
 
-              {/* Info icon with hover explanation */}
               <button
                 type="button"
                 className="p-1 rounded-full border border-indigo-100 text-indigo-400 hover:bg-indigo-50 hover:text-indigo-700"
-                onClick={(e) => e.stopPropagation()} // don’t toggle card on icon click
+                onClick={(e) => e.stopPropagation()} 
                 title={goal.hoverText}
               >
                 <Info size={14} />
               </button>
             </div>
 
-            {/* Short description already present under each card */}
             <p className="text-sm text-gray-500 mt-1">{goal.description}</p>
           </div>
         ))}
@@ -458,7 +452,6 @@ const GoalSettingScreen: React.FC<GoalSettingScreenProps> = ({ onNext }) => {
   );
 };
 
-/* ---------- Upload / Analysis Screen ---------- */
 
 type UploadScreenProps = { onAnalysisComplete: () => void };
 
@@ -468,7 +461,7 @@ const UploadScreen: React.FC<UploadScreenProps> = ({ onAnalysisComplete }) => {
   const [annotatedUrl, setAnnotatedUrl] = useState<string>("");
   const [error, setError] = useState<string>("");
 
-  // NEW for time remaining
+
   const [estimatedTime, setEstimatedTime] = useState<number | null>(null);
 
   const API_BASE =
@@ -501,9 +494,9 @@ const UploadScreen: React.FC<UploadScreenProps> = ({ onAnalysisComplete }) => {
           const percent = Math.round((pe.loaded / pe.total) * 100);
           setProgress(percent);
 
-          // estimate time remaining
-          const elapsed = (Date.now() - uploadStart) / 1000; // seconds
-          const rate = pe.loaded / elapsed; // bytes per sec
+       
+          const elapsed = (Date.now() - uploadStart) / 1000; 
+          const rate = pe.loaded / elapsed; 
           const remainingBytes = pe.total - pe.loaded;
           const remainingSeconds = Math.ceil(remainingBytes / rate);
           if (Number.isFinite(remainingSeconds)) {
@@ -606,7 +599,6 @@ const UploadScreen: React.FC<UploadScreenProps> = ({ onAnalysisComplete }) => {
             Analysis complete! Your annotated video is ready.
           </p>
 
-          {/* Full-screen / zoom option via HTML5 video player */}
           <video
             controls
             className="w-full max-h-96 rounded-xl shadow-lg border border-gray-200"
@@ -640,7 +632,6 @@ const UploadScreen: React.FC<UploadScreenProps> = ({ onAnalysisComplete }) => {
   );
 };
 
-/* ---------- Review Screen (Session feedback) ---------- */
 
 type ReviewScreenProps = {
   onNext: () => void;
@@ -736,7 +727,6 @@ const ReviewScreen: React.FC<ReviewScreenProps> = ({
         AI Analysis Complete! Score: 78/100
       </p>
 
-      {/* WPM explanation */}
       <div
         className={`mb-6 text-sm p-4 rounded-lg flex items-start gap-2 ${
           isDarkMode
@@ -856,7 +846,6 @@ const ReviewScreen: React.FC<ReviewScreenProps> = ({
   );
 };
 
-/* ---------- Analytics / Progress Tracking Screen ---------- */
 
 type AnalyticsScreenProps = {
   onNext: (s: Step) => void;
@@ -871,12 +860,12 @@ const AnalyticsScreen: React.FC<AnalyticsScreenProps> = ({
 }) => {
   type SessionMetric = {
     label: string;
-    score: number; // 0–100
+    score: number; 
     feedback: string;
     emoji: string;
   };
 
-  // histories per feature
+  
   const handHistory: SessionMetric[] = [
     {
       label: "Week 1",
@@ -1000,7 +989,7 @@ const AnalyticsScreen: React.FC<AnalyticsScreenProps> = ({
     },
   ];
 
-  // which week is selected for each feature
+
   const [selectedHandIndex, setSelectedHandIndex] = useState(
     handHistory.length - 1
   );
@@ -1052,7 +1041,7 @@ const AnalyticsScreen: React.FC<AnalyticsScreenProps> = ({
               Click a bar to see what your AI coach said that week.
             </p>
   
-            {/* GRAPH */}
+     
             <div
               className={`h-44 rounded-lg flex items-end p-3 text-xs overflow-hidden ${
                 isDarkMode
@@ -1083,7 +1072,7 @@ const AnalyticsScreen: React.FC<AnalyticsScreenProps> = ({
               })}
             </div>
   
-            {/* CAPTION BELOW GRAPH */}
+            
             <p
               className={`mt-2 text-[10px] ${
                 isDarkMode ? "text-slate-400" : "text-gray-500"
@@ -1092,7 +1081,6 @@ const AnalyticsScreen: React.FC<AnalyticsScreenProps> = ({
               Progress over last 4 sessions
             </p>
   
-            {/* DETAILS CARD */}
             <div
               className={`mt-4 rounded-lg border p-4 text-sm ${
                 isDarkMode
@@ -1379,13 +1367,13 @@ const AnalyticsScreen: React.FC<AnalyticsScreenProps> = ({
   );
 };
 
-/* ---------- Main App ---------- */
+
 
 const App: React.FC = () => {
   const [step, setStep] = useState<Step>(1);
   const [isDarkMode, setIsDarkMode] = useState(false);
 
-  // shared priority order between Review + Analytics
+  
   const [feedbackOrder, setFeedbackOrder] = useState<FeedbackKey[]>([
     "handMovements",
     "legMovements",
@@ -1442,7 +1430,6 @@ const App: React.FC = () => {
         onToggleTheme={() => setIsDarkMode((d) => !d)}
       />
 
-      {/* Fill space between sticky header and bottom nav */}
       <main className="flex-1 py-10 pb-24">
         <div className="mx-auto px-4 sm:px-6 lg:px-8 h-full">
           <div
