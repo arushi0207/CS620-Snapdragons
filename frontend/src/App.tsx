@@ -186,54 +186,119 @@ const MetricCard: React.FC<MetricCardProps> = ({
 
 /* ---------- Screens ---------- */
 
-type WelcomeScreenProps = { onStart: () => void };
+type WelcomeScreenProps = { onStart: () => void; isDarkMode: boolean };
 
-const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onStart }) => (
+const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
+  onStart,
+  isDarkMode,
+}) => (
   <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-[1.4fr,1fr] gap-10 items-center py-10">
     {/* Left side: hero text + benefits */}
     <section className="space-y-6">
-      <p className="text-xs font-semibold text-indigo-500 uppercase tracking-[0.2em]">
+      <p
+        className={`text-xs font-semibold uppercase tracking-[0.2em] ${
+          isDarkMode ? "text-indigo-300" : "text-indigo-500"
+        }`}
+      >
         SpeakEasy AI Coach
       </p>
 
-      <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 leading-tight">
-        Become the <span className="text-indigo-600">most confident speaker</span>{" "}
-        in the room.
+      <h2
+        className={`text-4xl md:text-5xl font-extrabold leading-tight ${
+          isDarkMode ? "text-slate-50" : "text-gray-900"
+        }`}
+      >
+        Become the{" "}
+        <span className="text-indigo-600">most confident speaker</span> in the
+        room.
       </h2>
 
-      <p className="text-base md:text-lg text-gray-600 max-w-xl">
+      <p
+        className={`text-base md:text-lg max-w-xl ${
+          isDarkMode ? "text-slate-300" : "text-gray-600"
+        }`}
+      >
         Practice interviews, class presentations, or elevator pitches with
         AI-powered feedback on your clarity, pacing, and body language.
       </p>
 
       {/* Benefits */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 flex flex-col gap-2 hover:shadow-md transition">
+        <div
+          className={`rounded-2xl shadow-sm border p-4 flex flex-col gap-2 hover:shadow-md transition ${
+            isDarkMode
+              ? "bg-slate-900 border-slate-800"
+              : "bg-white border-gray-100"
+          }`}
+        >
           <div className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-indigo-50">
             <Target className="h-4 w-4 text-indigo-600" />
           </div>
-          <p className="text-sm font-semibold text-gray-900">Goal-based practice</p>
-          <p className="text-xs text-gray-500">
-            Choose interview, presentation, or networking—and get targeted prompts.
+          <p
+            className={`text-sm font-semibold ${
+              isDarkMode ? "text-slate-50" : "text-gray-900"
+            }`}
+          >
+            Goal-based practice
+          </p>
+          <p
+            className={`text-xs ${
+              isDarkMode ? "text-slate-400" : "text-gray-500"
+            }`}
+          >
+            Choose interview, presentation, or networking—and get targeted
+            prompts.
           </p>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 flex flex-col gap-2 hover:shadow-md transition">
+        <div
+          className={`rounded-2xl shadow-sm border p-4 flex flex-col gap-2 hover:shadow-md transition ${
+            isDarkMode
+              ? "bg-slate-900 border-slate-800"
+              : "bg-white border-gray-100"
+          }`}
+        >
           <div className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-emerald-50">
             <TrendingUp className="h-4 w-4 text-emerald-600" />
           </div>
-          <p className="text-sm font-semibold text-gray-900">Instant analytics</p>
-          <p className="text-xs text-gray-500">
+          <p
+            className={`text-sm font-semibold ${
+              isDarkMode ? "text-slate-50" : "text-gray-900"
+            }`}
+          >
+            Instant analytics
+          </p>
+          <p
+            className={`text-xs ${
+              isDarkMode ? "text-slate-400" : "text-gray-500"
+            }`}
+          >
             See filler words, pacing, and confidence scores after every session.
           </p>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 flex flex-col gap-2 hover:shadow-md transition">
+        <div
+          className={`rounded-2xl shadow-sm border p-4 flex flex-col gap-2 hover:shadow-md transition ${
+            isDarkMode
+              ? "bg-slate-900 border-slate-800"
+              : "bg-white border-gray-100"
+          }`}
+        >
           <div className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-violet-50">
             <Smile className="h-4 w-4 text-violet-600" />
           </div>
-          <p className="text-sm font-semibold text-gray-900">Safe practice space</p>
-          <p className="text-xs text-gray-500">
+          <p
+            className={`text-sm font-semibold ${
+              isDarkMode ? "text-slate-50" : "text-gray-900"
+            }`}
+          >
+            Safe practice space
+          </p>
+          <p
+            className={`text-xs ${
+              isDarkMode ? "text-slate-400" : "text-gray-500"
+            }`}
+          >
             Rehearse as many times as you want before the real thing.
           </p>
         </div>
@@ -248,20 +313,40 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onStart }) => (
           Start my first session
           <ArrowRight className="h-4 w-4" />
         </button>
-        <button className="text-sm text-gray-600 hover:text-gray-900 underline-offset-2 hover:underline">
+        <button
+          className={`text-sm underline-offset-2 hover:underline ${
+            isDarkMode
+              ? "text-slate-300 hover:text-white"
+              : "text-gray-600 hover:text-gray-900"
+          }`}
+        >
           View sample feedback
         </button>
       </div>
     </section>
 
     {/* Right side: "Next session" card */}
-    <aside className="bg-white rounded-3xl shadow-xl border border-gray-100 p-6 space-y-6">
+    <aside
+      className={`rounded-3xl shadow-xl border p-6 space-y-6 ${
+        isDarkMode
+          ? "bg-slate-900 border-slate-800"
+          : "bg-white border-gray-100"
+      }`}
+    >
       <div className="flex items-center justify-between gap-2">
         <div>
-          <p className="text-xs font-medium text-indigo-500 uppercase tracking-[0.18em]">
+          <p
+            className={`text-xs font-medium uppercase tracking-[0.18em] ${
+              isDarkMode ? "text-indigo-300" : "text-indigo-500"
+            }`}
+          >
             Next session
           </p>
-          <p className="text-base md:text-lg font-semibold text-gray-900">
+          <p
+            className={`text-base md:text-lg font-semibold ${
+              isDarkMode ? "text-slate-50" : "text-gray-900"
+            }`}
+          >
             Behavioral interview practice
           </p>
         </div>
@@ -271,8 +356,18 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onStart }) => (
         </span>
       </div>
 
-      <div className="space-y-3 text-sm text-gray-600">
-        <p className="font-medium text-gray-900">Today’s focus:</p>
+      <div
+        className={`space-y-3 text-sm ${
+          isDarkMode ? "text-slate-300" : "text-gray-600"
+        }`}
+      >
+        <p
+          className={`font-medium ${
+            isDarkMode ? "text-slate-50" : "text-gray-900"
+          }`}
+        >
+          Today’s focus:
+        </p>
         <ul className="space-y-1">
           <li className="flex gap-2">
             <CheckCircle className="h-4 w-4 mt-[2px] text-emerald-500" />
@@ -290,20 +385,66 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onStart }) => (
       </div>
 
       <div className="space-y-3">
-        <p className="text-xs font-medium text-gray-500 uppercase tracking-[0.18em]">
+        <p
+          className={`text-xs font-medium uppercase tracking-[0.18em] ${
+            isDarkMode ? "text-slate-400" : "text-gray-500"
+          }`}
+        >
           Last session snapshot
         </p>
         <div className="grid grid-cols-3 gap-3 text-center">
-          <div className="rounded-2xl bg-gray-50 p-3">
-            <p className="text-xs text-gray-500">Clarity</p>
-            <p className="text-lg font-semibold text-gray-900">8.6</p>
+          <div
+            className={`rounded-2xl p-3 ${
+              isDarkMode ? "bg-slate-800" : "bg-gray-50"
+            }`}
+          >
+            <p
+              className={`text-xs ${
+                isDarkMode ? "text-slate-400" : "text-gray-500"
+              }`}
+            >
+              Clarity
+            </p>
+            <p
+              className={`text-lg font-semibold ${
+                isDarkMode ? "text-slate-50" : "text-gray-900"
+              }`}
+            >
+              8.6
+            </p>
           </div>
-          <div className="rounded-2xl bg-gray-50 p-3">
-            <p className="text-xs text-gray-500">Confidence</p>
-            <p className="text-lg font-semibold text-gray-900">7.9</p>
+          <div
+            className={`rounded-2xl p-3 ${
+              isDarkMode ? "bg-slate-800" : "bg-gray-50"
+            }`}
+          >
+            <p
+              className={`text-xs ${
+                isDarkMode ? "text-slate-400" : "text-gray-500"
+              }`}
+            >
+              Confidence
+            </p>
+            <p
+              className={`text-lg font-semibold ${
+                isDarkMode ? "text-slate-50" : "text-gray-900"
+              }`}
+            >
+              7.9
+            </p>
           </div>
-          <div className="rounded-2xl bg-gray-50 p-3">
-            <p className="text-xs text-gray-500">Filler words</p>
+          <div
+            className={`rounded-2xl p-3 ${
+              isDarkMode ? "bg-slate-800" : "bg-gray-50"
+            }`}
+          >
+            <p
+              className={`text-xs ${
+                isDarkMode ? "text-slate-400" : "text-gray-500"
+              }`}
+            >
+              Filler words
+            </p>
             <p className="text-lg font-semibold text-emerald-600">-32%</p>
           </div>
         </div>
@@ -312,7 +453,7 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onStart }) => (
   </div>
 );
 
-type GoalSettingScreenProps = { onNext: () => void };
+type GoalSettingScreenProps = { onNext: () => void; isDarkMode: boolean };
 
 const GOAL_STORAGE_KEY = "speakeasy:lastGoal";
 
@@ -347,7 +488,10 @@ const goals = [
   },
 ] as const;
 
-const GoalSettingScreen: React.FC<GoalSettingScreenProps> = ({ onNext }) => {
+const GoalSettingScreen: React.FC<GoalSettingScreenProps> = ({
+  onNext,
+  isDarkMode,
+}) => {
   const [selectedGoal, setSelectedGoal] = useState<string>(goals[0].name);
   const [recommendedGoal, setRecommendedGoal] = useState<string | null>(null);
 
@@ -384,15 +528,29 @@ const GoalSettingScreen: React.FC<GoalSettingScreenProps> = ({ onNext }) => {
 
   return (
     <div className="max-w-3xl mx-auto p-6">
-      <h2 className="text-3xl font-bold text-gray-900 mb-2">
+      <h2
+        className={`text-3xl font-bold mb-2 ${
+          isDarkMode ? "text-slate-50" : "text-gray-900"
+        }`}
+      >
         1. Set Your Practice Goal
       </h2>
-      <p className="text-gray-500 mb-2">
+      <p
+        className={`mb-2 ${
+          isDarkMode ? "text-slate-400" : "text-gray-500"
+        }`}
+      >
         Tell us what you're working on today to get targeted feedback.
       </p>
 
       {/* Short description under the goal options */}
-      <div className="mb-6 rounded-lg bg-gray-50 border border-gray-200 px-4 py-3 text-sm text-gray-700 leading-relaxed">
+      <div
+        className={`mb-6 rounded-lg px-4 py-3 text-sm leading-relaxed border ${
+          isDarkMode
+            ? "bg-slate-900 border-slate-700 text-slate-200"
+            : "bg-gray-50 border-gray-200 text-gray-700"
+        }`}
+      >
         Each session type customizes your AI feedback style and focus. Choose
         the option that best matches your real-world speaking scenario—whether
         that’s interviews, presentations, networking situations, or improving
@@ -401,7 +559,13 @@ const GoalSettingScreen: React.FC<GoalSettingScreenProps> = ({ onNext }) => {
 
       {/* Recommended banner based on previous session */}
       {recommendedGoal && (
-        <div className="mb-6 rounded-lg bg-indigo-50 border border-indigo-100 px-4 py-3 text-sm text-indigo-800">
+        <div
+          className={`mb-6 rounded-lg px-4 py-3 text-sm border ${
+            isDarkMode
+              ? "bg-indigo-950/40 border-indigo-800 text-indigo-200"
+              : "bg-indigo-50 border-indigo-100 text-indigo-800"
+          }`}
+        >
           Recommended based on your last session:
           <span className="font-semibold ml-1">{recommendedGoal}</span>
         </div>
@@ -414,13 +578,21 @@ const GoalSettingScreen: React.FC<GoalSettingScreenProps> = ({ onNext }) => {
             onClick={() => handleSelectGoal(goal.name)}
             className={`p-5 rounded-xl border-2 cursor-pointer transition duration-200 ${
               selectedGoal === goal.name
-                ? "border-indigo-600 bg-indigo-50 shadow-md"
-                : "border-gray-200 hover:border-indigo-300 bg-white"
+                ? isDarkMode
+                  ? "border-indigo-500 bg-indigo-950/40 shadow-md"
+                  : "border-indigo-600 bg-indigo-50 shadow-md"
+                : isDarkMode
+                ? "border-slate-700 bg-slate-900 hover:border-indigo-500"
+                : "border-gray-200 bg-white hover:border-indigo-300"
             }`}
             title={goal.hoverText} // native browser tooltip on hover
           >
             <div className="flex justify-between items-center">
-              <p className="text-lg font-semibold text-gray-800 flex items-center gap-2">
+              <p
+                className={`text-lg font-semibold flex items-center gap-2 ${
+                  isDarkMode ? "text-slate-50" : "text-gray-800"
+                }`}
+              >
                 {goal.name}
                 {recommendedGoal === goal.name && (
                   <span className="text-xs px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-700 font-semibold">
@@ -441,7 +613,13 @@ const GoalSettingScreen: React.FC<GoalSettingScreenProps> = ({ onNext }) => {
             </div>
 
             {/* Short description already present under each card */}
-            <p className="text-sm text-gray-500 mt-1">{goal.description}</p>
+            <p
+              className={`text-sm mt-1 ${
+                isDarkMode ? "text-slate-400" : "text-gray-500"
+              }`}
+            >
+              {goal.description}
+            </p>
           </div>
         ))}
       </div>
@@ -459,9 +637,15 @@ const GoalSettingScreen: React.FC<GoalSettingScreenProps> = ({ onNext }) => {
 
 /* ---------- Upload / Analysis Screen ---------- */
 
-type UploadScreenProps = { onAnalysisComplete: () => void };
+type UploadScreenProps = {
+  onAnalysisComplete: () => void;
+  isDarkMode: boolean;
+};
 
-const UploadScreen: React.FC<UploadScreenProps> = ({ onAnalysisComplete }) => {
+const UploadScreen: React.FC<UploadScreenProps> = ({
+  onAnalysisComplete,
+  isDarkMode,
+}) => {
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const [progress, setProgress] = useState<number>(0);
   const [annotatedUrl, setAnnotatedUrl] = useState<string>("");
@@ -528,10 +712,18 @@ const UploadScreen: React.FC<UploadScreenProps> = ({ onAnalysisComplete }) => {
 
   return (
     <div className="max-w-2xl mx-auto p-6 text-center">
-      <h2 className="text-3xl font-bold text-gray-900 mb-2">
+      <h2
+        className={`text-3xl font-bold mb-2 ${
+          isDarkMode ? "text-slate-50" : "text-gray-900"
+        }`}
+      >
         2. Upload Your Practice Video
       </h2>
-      <p className="text-gray-500 mb-8">
+      <p
+        className={`mb-8 ${
+          isDarkMode ? "text-slate-400" : "text-gray-500"
+        }`}
+      >
         Record your speech or mock interview on your phone, then upload the file
         here for AI analysis.
       </p>
@@ -539,15 +731,31 @@ const UploadScreen: React.FC<UploadScreenProps> = ({ onAnalysisComplete }) => {
       <div
         className={`border-4 border-dashed rounded-2xl p-12 mb-8 transition duration-300 ${
           isUploading
-            ? "border-indigo-400 bg-indigo-50"
+            ? isDarkMode
+              ? "border-indigo-400 bg-slate-900"
+              : "border-indigo-400 bg-indigo-50"
+            : isDarkMode
+            ? "border-slate-700 hover:border-indigo-500 hover:bg-slate-900"
             : "border-gray-300 hover:border-indigo-500 hover:bg-gray-50"
         }`}
       >
-        <Upload className="w-12 h-12 mx-auto text-indigo-500 mb-3 animate-pulse" />
-        <p className="text-gray-600 font-medium">
+        <Upload
+          className={`w-12 h-12 mx-auto mb-3 animate-pulse ${
+            isDarkMode ? "text-indigo-300" : "text-indigo-500"
+          }`}
+        />
+        <p
+          className={`font-medium ${
+            isDarkMode ? "text-slate-100" : "text-gray-600"
+          }`}
+        >
           Drag & drop your video here, or click to select file.
         </p>
-        <p className="text-sm text-gray-400 mt-1">
+        <p
+          className={`text-sm mt-1 ${
+            isDarkMode ? "text-slate-400" : "text-gray-400"
+          }`}
+        >
           MP4 or MOV files under 500MB recommended.
         </p>
       </div>
@@ -572,23 +780,39 @@ const UploadScreen: React.FC<UploadScreenProps> = ({ onAnalysisComplete }) => {
 
       {isUploading && (
         <div className="mt-8 space-y-2">
-          <p className="text-lg font-medium text-gray-700">
+          <p
+            className={`text-lg font-medium ${
+              isDarkMode ? "text-slate-100" : "text-gray-700"
+            }`}
+          >
             Uploading & analyzing your video...{" "}
             <span className="font-semibold">{progress}%</span>
           </p>
 
           {estimatedTime !== null && estimatedTime > 0 && (
-            <p className="text-sm text-gray-500">
+            <p
+              className={`text-sm ${
+                isDarkMode ? "text-slate-400" : "text-gray-500"
+              }`}
+            >
               ⏳ Estimated time remaining: ~{estimatedTime}s
             </p>
           )}
 
-          <div className="flex items-center justify-between text-xs text-gray-500 mt-1 mb-1">
+          <div
+            className={`flex items-center justify-between text-xs mt-1 mb-1 ${
+              isDarkMode ? "text-slate-400" : "text-gray-500"
+            }`}
+          >
             <span>Progress</span>
             <span>{progress}%</span>
           </div>
 
-          <div className="w-full bg-gray-200 rounded-full h-3">
+          <div
+            className={`w-full rounded-full h-3 ${
+              isDarkMode ? "bg-slate-800" : "bg-gray-200"
+            }`}
+          >
             <div
               className="bg-indigo-600 h-3 rounded-full transition-all duration-500 ease-out"
               style={{ width: `${progress}%` }}
@@ -597,23 +821,35 @@ const UploadScreen: React.FC<UploadScreenProps> = ({ onAnalysisComplete }) => {
         </div>
       )}
 
-      {!!error && <p className="text-red-600 mt-3 font-semibold">{error}</p>}
+      {!!error && (
+        <p className="text-red-500 mt-3 font-semibold">{error}</p>
+      )}
 
       {annotatedUrl && (
         <div className="mt-8 space-y-4">
-          <p className="text-green-700 font-semibold">
+          <p
+            className={`font-semibold ${
+              isDarkMode ? "text-emerald-300" : "text-green-700"
+            }`}
+          >
             Analysis complete! Your annotated video is ready.
           </p>
 
           {/* Full-screen / zoom option via HTML5 video player */}
           <video
             controls
-            className="w-full max-h-96 rounded-xl shadow-lg border border-gray-200"
+            className={`w-full max-h-96 rounded-xl shadow-lg border ${
+              isDarkMode ? "border-slate-700" : "border-gray-200"
+            }`}
           >
             <source src={annotatedUrl} type="video/mp4" />
             Your browser does not support the video tag.
           </video>
-          <p className="text-xs text-gray-500">
+          <p
+            className={`text-xs ${
+              isDarkMode ? "text-slate-400" : "text-gray-500"
+            }`}
+          >
             Tip: use the full-screen icon in the player to zoom in while you
             review your delivery.
           </p>
@@ -641,9 +877,9 @@ const UploadScreen: React.FC<UploadScreenProps> = ({ onAnalysisComplete }) => {
 
 /* ---------- Review Screen (Session feedback) ---------- */
 
-type ReviewScreenProps = { onNext: () => void };
+type ReviewScreenProps = { onNext: () => void; isDarkMode: boolean };
 
-const ReviewScreen: React.FC<ReviewScreenProps> = ({ onNext }) => {
+const ReviewScreen: React.FC<ReviewScreenProps> = ({ onNext, isDarkMode }) => {
   const [order, setOrder] = useState([
     "handMovements",
     "legMovements",
@@ -705,15 +941,29 @@ const ReviewScreen: React.FC<ReviewScreenProps> = ({ onNext }) => {
 
   return (
     <div className="max-w-5xl mx-auto p-6">
-      <h2 className="text-3xl font-bold text-gray-900 mb-2">
+      <h2
+        className={`text-3xl font-bold mb-2 ${
+          isDarkMode ? "text-slate-50" : "text-gray-900"
+        }`}
+      >
         3. Session Review
       </h2>
-      <p className="text-indigo-600 font-semibold mb-6">
+      <p
+        className={`font-semibold mb-6 ${
+          isDarkMode ? "text-indigo-300" : "text-indigo-600"
+        }`}
+      >
         AI Analysis Complete! Score: 78/100
       </p>
 
       {/* WPM explanation */}
-      <div className="mb-6 text-sm text-gray-600 bg-indigo-50 p-4 rounded-lg flex items-start gap-2">
+      <div
+        className={`mb-6 text-sm p-4 rounded-lg flex items-start gap-2 ${
+          isDarkMode
+            ? "bg-indigo-950/40 text-slate-200"
+            : "bg-indigo-50 text-gray-600"
+        }`}
+      >
         <span className="mt-[2px]">ℹ️</span>
         <p>
           <strong>WPM</strong> stands for <strong>Words Per Minute</strong> and
@@ -722,7 +972,11 @@ const ReviewScreen: React.FC<ReviewScreenProps> = ({ onNext }) => {
         </p>
       </div>
 
-      <p className="mb-4 text-sm text-gray-500">
+      <p
+        className={`mb-4 text-sm ${
+          isDarkMode ? "text-slate-400" : "text-gray-500"
+        }`}
+      >
         🔁 Use the “Prioritize” arrows to customize the order of your feedback
         sections. Click any card to see detailed insights and timestamps where
         key issues appeared.
@@ -735,7 +989,11 @@ const ReviewScreen: React.FC<ReviewScreenProps> = ({ onNext }) => {
           return (
             <div
               key={key}
-              className="bg-white p-5 rounded-xl border shadow hover:shadow-lg cursor-pointer transition transform hover:-translate-y-[1px]"
+              className={`p-5 rounded-xl border shadow cursor-pointer transition transform hover:-translate-y-[1px] hover:shadow-lg ${
+                isDarkMode
+                  ? "bg-slate-900 border-slate-800"
+                  : "bg-white border-gray-100"
+              }`}
               onClick={() => setExpanded(expanded === key ? null : key)}
             >
               <div className="flex justify-between items-center">
@@ -744,7 +1002,13 @@ const ReviewScreen: React.FC<ReviewScreenProps> = ({ onNext }) => {
                     className={`text-${metric.color}-600`}
                     size={22}
                   />
-                  <h3 className="text-lg font-semibold">{metric.title}</h3>
+                  <h3
+                    className={`text-lg font-semibold ${
+                      isDarkMode ? "text-slate-50" : "text-gray-900"
+                    }`}
+                  >
+                    {metric.title}
+                  </h3>
                 </div>
 
                 <button
@@ -758,18 +1022,38 @@ const ReviewScreen: React.FC<ReviewScreenProps> = ({ onNext }) => {
                 </button>
               </div>
 
-              <p className="text-2xl font-bold mt-2">{metric.value}</p>
-              <p className="text-gray-500 text-sm">{metric.desc}</p>
+              <p
+                className={`text-2xl font-bold mt-2 ${
+                  isDarkMode ? "text-slate-50" : "text-gray-900"
+                }`}
+              >
+                {metric.value}
+              </p>
+              <p
+                className={`text-sm ${
+                  isDarkMode ? "text-slate-400" : "text-gray-500"
+                }`}
+              >
+                {metric.desc}
+              </p>
 
               {expanded === key && (
-                <div className="mt-4 bg-gray-50 p-4 rounded-lg text-sm animate-fade-in">
-                  <p>
+                <div className="mt-4 bg-gray-50 dark:bg-slate-800 p-4 rounded-lg text-sm">
+                  <p
+                    className={
+                      isDarkMode ? "text-slate-200" : "text-gray-700"
+                    }
+                  >
                     <strong>Detailed Insight:</strong> {metric.detail}
                   </p>
                   <p className="mt-2 text-indigo-600">
                     ⏱ Error occurred at: {metric.timestamp}
                   </p>
-                  <p className="mt-1 text-xs text-gray-500">
+                  <p
+                    className={`mt-1 text-xs ${
+                      isDarkMode ? "text-slate-400" : "text-gray-500"
+                    }`}
+                  >
                     Tip: revisit these timestamps in your annotated video to see
                     exactly what happened.
                   </p>
@@ -794,9 +1078,12 @@ const ReviewScreen: React.FC<ReviewScreenProps> = ({ onNext }) => {
 
 /* ---------- Analytics / Progress Tracking Screen ---------- */
 
-type AnalyticsScreenProps = { onNext: (s: Step) => void };
+type AnalyticsScreenProps = { onNext: (s: Step) => void; isDarkMode: boolean };
 
-const AnalyticsScreen: React.FC<AnalyticsScreenProps> = ({ onNext }) => {
+const AnalyticsScreen: React.FC<AnalyticsScreenProps> = ({
+  onNext,
+  isDarkMode,
+}) => {
   type SessionMetric = {
     label: string;
     score: number; // 0–100
@@ -877,27 +1164,53 @@ const AnalyticsScreen: React.FC<AnalyticsScreenProps> = ({ onNext }) => {
 
   return (
     <div className="max-w-5xl mx-auto p-6">
-      <h2 className="text-3xl font-bold text-gray-900 mb-2">
+      <h2
+        className={`text-3xl font-bold mb-2 ${
+          isDarkMode ? "text-slate-50" : "text-gray-900"
+        }`}
+      >
         4. Progress Dashboard
       </h2>
-      <p className="text-gray-600 mb-6">
+      <p
+        className={`mb-6 ${
+          isDarkMode ? "text-slate-400" : "text-gray-600"
+        }`}
+      >
         Tap on any bar in the graphs below to see detailed feedback from that
         session. ✨
       </p>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Hand Movement Graph */}
-        <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-50">
-          <h3 className="text-xl font-semibold text-gray-800 mb-2 flex items-center gap-2">
+        <div
+          className={`p-6 rounded-xl shadow-lg border ${
+            isDarkMode
+              ? "bg-slate-900 border-slate-800"
+              : "bg-white border-gray-50"
+          }`}
+        >
+          <h3
+            className={`text-xl font-semibold mb-2 flex items-center gap-2 ${
+              isDarkMode ? "text-slate-50" : "text-gray-800"
+            }`}
+          >
             <Hand size={20} className="text-indigo-600" />
             <span>Hand Movement Control</span>
             <span className="text-lg">👋</span>
           </h3>
-          <p className="text-xs text-gray-500 mb-3">
+          <p
+            className={`text-xs mb-3 ${
+              isDarkMode ? "text-slate-400" : "text-gray-500"
+            }`}
+          >
             Click a bar to see what your AI coach said that week.
           </p>
 
-          <div className="h-44 bg-gray-100 rounded-lg flex items-end p-3 text-xs text-gray-500 relative overflow-hidden">
+          <div
+            className={`h-44 rounded-lg flex items-end p-3 text-xs relative overflow-hidden ${
+              isDarkMode ? "bg-slate-800 text-slate-400" : "bg-gray-100 text-gray-500"
+            }`}
+          >
             {handHistory.map((session, idx) => {
               const isActive = idx === selectedHandIndex;
               const heightPct = 20 + (session.score / 100) * 70; // min 20%, max 90%
@@ -920,33 +1233,57 @@ const AnalyticsScreen: React.FC<AnalyticsScreenProps> = ({ onNext }) => {
               );
             })}
 
-            <p className="absolute bottom-2 left-3 text-[10px] text-gray-500">
+            <p className="absolute bottom-2 left-3 text-[10px]">
               Progress over last 4 sessions
             </p>
           </div>
 
           {/* Hand details */}
-          <div className="mt-4 rounded-lg bg-indigo-50 border border-indigo-100 p-4 text-sm">
-            <p className="font-semibold text-indigo-800 flex items-center gap-2">
+          <div
+            className={`mt-4 rounded-lg border p-4 text-sm ${
+              isDarkMode
+                ? "bg-indigo-950/40 border-indigo-900 text-slate-100"
+                : "bg-indigo-50 border-indigo-100 text-gray-700"
+            }`}
+          >
+            <p className="font-semibold flex items-center gap-2">
               {selectedHand.emoji} {selectedHand.label} — Score{" "}
               {selectedHand.score}/100
             </p>
-            <p className="mt-1 text-gray-700">{selectedHand.feedback}</p>
+            <p className="mt-1">{selectedHand.feedback}</p>
           </div>
         </div>
 
         {/* Leg Movement Graph */}
-        <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-50">
-          <h3 className="text-xl font-semibold text-gray-800 mb-2 flex items-center gap-2">
+        <div
+          className={`p-6 rounded-xl shadow-lg border ${
+            isDarkMode
+              ? "bg-slate-900 border-slate-800"
+              : "bg-white border-gray-50"
+          }`}
+        >
+          <h3
+            className={`text-xl font-semibold mb-2 flex items-center gap-2 ${
+              isDarkMode ? "text-slate-50" : "text-gray-800"
+            }`}
+          >
             <Move size={20} className="text-indigo-600" />
             <span>Leg Movement Stillness</span>
             <span className="text-lg">🦵</span>
           </h3>
-          <p className="text-xs text-gray-500 mb-3">
+          <p
+            className={`text-xs mb-3 ${
+              isDarkMode ? "text-slate-400" : "text-gray-500"
+            }`}
+          >
             Click a bar to see how your stability has changed week to week.
           </p>
 
-          <div className="h-44 bg-gray-100 rounded-lg flex items-end p-3 text-xs text-gray-500 relative overflow-hidden">
+          <div
+            className={`h-44 rounded-lg flex items-end p-3 text-xs relative overflow-hidden ${
+              isDarkMode ? "bg-slate-800 text-slate-400" : "bg-gray-100 text-gray-500"
+            }`}
+          >
             {legHistory.map((session, idx) => {
               const isActive = idx === selectedLegIndex;
               const heightPct = 20 + (session.score / 100) * 70;
@@ -969,24 +1306,34 @@ const AnalyticsScreen: React.FC<AnalyticsScreenProps> = ({ onNext }) => {
               );
             })}
 
-            <p className="absolute bottom-2 left-3 text-[10px] text-gray-500">
+            <p className="absolute bottom-2 left-3 text-[10px]">
               Higher bars = more still and grounded ✅
             </p>
           </div>
 
           {/* Leg details */}
-          <div className="mt-4 rounded-lg bg-emerald-50 border border-emerald-100 p-4 text-sm">
-            <p className="font-semibold text-emerald-800 flex items-center gap-2">
+          <div
+            className={`mt-4 rounded-lg border p-4 text-sm ${
+              isDarkMode
+                ? "bg-emerald-950/40 border-emerald-900 text-slate-100"
+                : "bg-emerald-50 border-emerald-100 text-gray-700"
+            }`}
+          >
+            <p className="font-semibold flex items-center gap-2">
               {selectedLeg.emoji} {selectedLeg.label} — Score{" "}
               {selectedLeg.score}/100
             </p>
-            <p className="mt-1 text-gray-700">{selectedLeg.feedback}</p>
+            <p className="mt-1">{selectedLeg.feedback}</p>
           </div>
         </div>
       </div>
 
       <div className="mt-10 text-center">
-        <p className="text-lg text-gray-700 font-medium mb-2">
+        <p
+          className={`text-lg font-medium mb-2 ${
+            isDarkMode ? "text-slate-100" : "text-gray-700"
+          }`}
+        >
           🎯 Ready for your next practice?
         </p>
         <button
@@ -1016,17 +1363,34 @@ const App: React.FC = () => {
   const renderContent = () => {
     switch (step) {
       case 1:
-        return <WelcomeScreen onStart={() => navigateTo(2)} />;
+        return (
+          <WelcomeScreen
+            onStart={() => navigateTo(2)}
+            isDarkMode={isDarkMode}
+          />
+        );
       case 2:
-        return <GoalSettingScreen onNext={() => navigateTo(3)} />;
+        return (
+          <GoalSettingScreen onNext={() => navigateTo(3)} isDarkMode={isDarkMode} />
+        );
       case 3:
-        return <UploadScreen onAnalysisComplete={() => navigateTo(4)} />;
+        return (
+          <UploadScreen
+            onAnalysisComplete={() => navigateTo(4)}
+            isDarkMode={isDarkMode}
+          />
+        );
       case 4:
-        return <ReviewScreen onNext={() => navigateTo(5)} />;
+        return <ReviewScreen onNext={() => navigateTo(5)} isDarkMode={isDarkMode} />;
       case 5:
-        return <AnalyticsScreen onNext={navigateTo} />;
+        return <AnalyticsScreen onNext={navigateTo} isDarkMode={isDarkMode} />;
       default:
-        return <WelcomeScreen onStart={() => navigateTo(2)} />;
+        return (
+          <WelcomeScreen
+            onStart={() => navigateTo(2)}
+            isDarkMode={isDarkMode}
+          />
+        );
     }
   };
 
@@ -1047,8 +1411,11 @@ const App: React.FC = () => {
       <main className="flex-1 py-10 pb-24">
         <div className="mx-auto px-4 sm:px-6 lg:px-8 h-full">
           <div
-            className="bg-white p-8 sm:p-12 rounded-2xl shadow-2xl
-                       min-h-[calc(100dvh-128px)] flex items-center justify-center"
+            className={`p-8 sm:p-12 rounded-2xl shadow-2xl min-h-[calc(100dvh-128px)] flex items-center justify-center border transition-colors duration-300 ${
+              isDarkMode
+                ? "bg-slate-900 border-slate-800"
+                : "bg-white border-gray-100"
+            }`}
           >
             {renderContent()}
           </div>
