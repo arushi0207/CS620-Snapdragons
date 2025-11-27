@@ -1091,6 +1091,7 @@ const AnalyticsScreen: React.FC<AnalyticsScreenProps> = ({
     emoji: string;
   };
 
+  // Hand movements over time
   const handHistory: SessionMetric[] = [
     {
       label: "Week 1",
@@ -1122,6 +1123,7 @@ const AnalyticsScreen: React.FC<AnalyticsScreenProps> = ({
     },
   ];
 
+  // Leg movement / stillness over time
   const legHistory: SessionMetric[] = [
     {
       label: "Week 1",
@@ -1152,15 +1154,88 @@ const AnalyticsScreen: React.FC<AnalyticsScreenProps> = ({
     },
   ];
 
-  const [selectedHandIndex, setSelectedHandIndex] = useState<number>(
+  // Eye gaze consistency over time
+  const eyeHistory: SessionMetric[] = [
+    {
+      label: "Week 1",
+      score: 70,
+      feedback:
+        "Eye contact was good but dropped whenever you glanced at notes.",
+      emoji: "👀",
+    },
+    {
+      label: "Week 2",
+      score: 78,
+      feedback:
+        "More consistent eye contact, with fewer long breaks away from camera.",
+      emoji: "😊",
+    },
+    {
+      label: "Week 3",
+      score: 86,
+      feedback:
+        "Strong eye contact most of the session, only brief downward glances.",
+      emoji: "✨",
+    },
+    {
+      label: "Week 4",
+      score: 92,
+      feedback:
+        "Excellent eye contact across the whole session—felt very engaging.",
+      emoji: "💫",
+    },
+  ];
+
+  // Posture quality over time
+  const postureHistory: SessionMetric[] = [
+    {
+      label: "Week 1",
+      score: 40,
+      feedback:
+        "Frequent slouching and leaning forward, especially when you were unsure.",
+      emoji: "😬",
+    },
+    {
+      label: "Week 2",
+      score: 55,
+      feedback:
+        "Posture improved during the start, but dipped as the session went on.",
+      emoji: "🙂",
+    },
+    {
+      label: "Week 3",
+      score: 68,
+      feedback:
+        "Mostly open posture with only a few moments of rounding the shoulders.",
+      emoji: "👍",
+    },
+    {
+      label: "Week 4",
+      score: 80,
+      feedback:
+        "Confident, upright posture through most of the session—big improvement.",
+      emoji: "🏅",
+    },
+  ];
+
+  // which bar is selected in each graph
+  const [selectedHandIndex, setSelectedHandIndex] = useState(
     handHistory.length - 1
   );
-  const [selectedLegIndex, setSelectedLegIndex] = useState<number>(
+  const [selectedLegIndex, setSelectedLegIndex] = useState(
     legHistory.length - 1
+  );
+  const [selectedEyeIndex, setSelectedEyeIndex] = useState(
+    eyeHistory.length - 1
+  );
+  const [selectedPostureIndex, setSelectedPostureIndex] = useState(
+    postureHistory.length - 1
   );
 
   const selectedHand = handHistory[selectedHandIndex];
   const selectedLeg = legHistory[selectedLegIndex];
+  const selectedEye = eyeHistory[selectedEyeIndex];
+  const selectedPosture = postureHistory[selectedPostureIndex];
 
   return (
     <div className="max-w-5xl mx-auto p-6">
@@ -1176,10 +1251,11 @@ const AnalyticsScreen: React.FC<AnalyticsScreenProps> = ({
           isDarkMode ? "text-slate-400" : "text-gray-600"
         }`}
       >
-        Tap on any bar in the graphs below to see detailed feedback from that
-        session. ✨
+        Track how your body language and delivery have improved across sessions.
+        Tap any bar to see specific feedback from that week. ✨
       </p>
 
+      {/* 4 graphs = one for each Review feature */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Hand Movement Graph */}
         <div
@@ -1208,12 +1284,14 @@ const AnalyticsScreen: React.FC<AnalyticsScreenProps> = ({
 
           <div
             className={`h-44 rounded-lg flex items-end p-3 text-xs relative overflow-hidden ${
-              isDarkMode ? "bg-slate-800 text-slate-400" : "bg-gray-100 text-gray-500"
+              isDarkMode
+                ? "bg-slate-800 text-slate-400"
+                : "bg-gray-100 text-gray-500"
             }`}
           >
             {handHistory.map((session, idx) => {
               const isActive = idx === selectedHandIndex;
-              const heightPct = 20 + (session.score / 100) * 70; // min 20%, max 90%
+              const heightPct = 20 + (session.score / 100) * 70;
 
               return (
                 <button
@@ -1238,7 +1316,6 @@ const AnalyticsScreen: React.FC<AnalyticsScreenProps> = ({
             </p>
           </div>
 
-          {/* Hand details */}
           <div
             className={`mt-4 rounded-lg border p-4 text-sm ${
               isDarkMode
@@ -1281,7 +1358,9 @@ const AnalyticsScreen: React.FC<AnalyticsScreenProps> = ({
 
           <div
             className={`h-44 rounded-lg flex items-end p-3 text-xs relative overflow-hidden ${
-              isDarkMode ? "bg-slate-800 text-slate-400" : "bg-gray-100 text-gray-500"
+              isDarkMode
+                ? "bg-slate-800 text-slate-400"
+                : "bg-gray-100 text-gray-500"
             }`}
           >
             {legHistory.map((session, idx) => {
@@ -1311,7 +1390,6 @@ const AnalyticsScreen: React.FC<AnalyticsScreenProps> = ({
             </p>
           </div>
 
-          {/* Leg details */}
           <div
             className={`mt-4 rounded-lg border p-4 text-sm ${
               isDarkMode
@@ -1326,8 +1404,158 @@ const AnalyticsScreen: React.FC<AnalyticsScreenProps> = ({
             <p className="mt-1">{selectedLeg.feedback}</p>
           </div>
         </div>
+
+        {/* Eye Gaze Graph */}
+        <div
+          className={`p-6 rounded-xl shadow-lg border ${
+            isDarkMode
+              ? "bg-slate-900 border-slate-800"
+              : "bg-white border-gray-50"
+          }`}
+        >
+          <h3
+            className={`text-xl font-semibold mb-2 flex items-center gap-2 ${
+              isDarkMode ? "text-slate-50" : "text-gray-800"
+            }`}
+          >
+            <Eye size={20} className="text-indigo-600" />
+            <span>Eye Gaze Consistency</span>
+            <span className="text-lg">👁️</span>
+          </h3>
+          <p
+            className={`text-xs mb-3 ${
+              isDarkMode ? "text-slate-400" : "text-gray-500"
+            }`}
+          >
+            Higher scores mean more consistent, engaging eye contact.
+          </p>
+
+          <div
+            className={`h-44 rounded-lg flex items-end p-3 text-xs relative overflow-hidden ${
+              isDarkMode
+                ? "bg-slate-800 text-slate-400"
+                : "bg-gray-100 text-gray-500"
+            }`}
+          >
+            {eyeHistory.map((session, idx) => {
+              const isActive = idx === selectedEyeIndex;
+              const heightPct = 20 + (session.score / 100) * 70;
+
+              return (
+                <button
+                  key={session.label}
+                  type="button"
+                  onClick={() => setSelectedEyeIndex(idx)}
+                  className={`flex-1 mx-1 rounded-t-md focus:outline-none transition-transform duration-300 ${
+                    isActive
+                      ? "bg-sky-500 scale-105 shadow-lg"
+                      : "bg-sky-200 hover:bg-sky-300 hover:scale-105"
+                  }`}
+                  style={{ height: `${heightPct}%` }}
+                  title={`Click to view feedback for ${session.label}`}
+                >
+                  <span className="sr-only">{session.label}</span>
+                </button>
+              );
+            })}
+
+            <p className="absolute bottom-2 left-3 text-[10px]">
+              Higher bars = more consistent eye contact ✅
+            </p>
+          </div>
+
+          <div
+            className={`mt-4 rounded-lg border p-4 text-sm ${
+              isDarkMode
+                ? "bg-sky-950/40 border-sky-900 text-slate-100"
+                : "bg-sky-50 border-sky-100 text-gray-700"
+            }`}
+          >
+            <p className="font-semibold flex items-center gap-2">
+              {selectedEye.emoji} {selectedEye.label} — Score{" "}
+              {selectedEye.score}/100
+            </p>
+            <p className="mt-1">{selectedEye.feedback}</p>
+          </div>
+        </div>
+
+        {/* Posture Graph */}
+        <div
+          className={`p-6 rounded-xl shadow-lg border ${
+            isDarkMode
+              ? "bg-slate-900 border-slate-800"
+              : "bg-white border-gray-50"
+          }`}
+        >
+          <h3
+            className={`text-xl font-semibold mb-2 flex items-center gap-2 ${
+              isDarkMode ? "text-slate-50" : "text-gray-800"
+            }`}
+          >
+            <PersonStanding size={20} className="text-indigo-600" />
+            <span>Posture Confidence</span>
+            <span className="text-lg">🧍‍♀️</span>
+          </h3>
+          <p
+            className={`text-xs mb-3 ${
+              isDarkMode ? "text-slate-400" : "text-gray-500"
+            }`}
+          >
+            These scores capture how open, upright, and confident your posture
+            appeared.
+          </p>
+
+          <div
+            className={`h-44 rounded-lg flex items-end p-3 text-xs relative overflow-hidden ${
+              isDarkMode
+                ? "bg-slate-800 text-slate-400"
+                : "bg-gray-100 text-gray-500"
+            }`}
+          >
+            {postureHistory.map((session, idx) => {
+              const isActive = idx === selectedPostureIndex;
+              const heightPct = 20 + (session.score / 100) * 70;
+
+              return (
+                <button
+                  key={session.label}
+                  type="button"
+                  onClick={() => setSelectedPostureIndex(idx)}
+                  className={`flex-1 mx-1 rounded-t-md focus:outline-none transition-transform duration-300 ${
+                    isActive
+                      ? "bg-rose-500 scale-105 shadow-lg"
+                      : "bg-rose-200 hover:bg-rose-300 hover:scale-105"
+                  }`}
+                  style={{ height: `${heightPct}%` }}
+                  title={`Click to view feedback for ${session.label}`}
+                >
+                  <span className="sr-only">{session.label}</span>
+                </button>
+              );
+            })}
+
+            <p className="absolute bottom-2 left-3 text-[10px]">
+              Higher bars = more confident, upright posture ✅
+            </p>
+          </div>
+
+          <div
+            className={`mt-4 rounded-lg border p-4 text-sm ${
+              isDarkMode
+                ? "bg-rose-950/40 border-rose-900 text-slate-100"
+                : "bg-rose-50 border-rose-100 text-gray-700"
+            }`}
+          >
+            <p className="font-semibold flex items-center gap-2">
+              {selectedPosture.emoji} {selectedPosture.label} — Score{" "}
+              {selectedPosture.score}/100
+            </p>
+            <p className="mt-1">{selectedPosture.feedback}</p>
+          </div>
+        </div>
       </div>
 
+      {/* CTA */}
       <div className="mt-10 text-center">
         <p
           className={`text-lg font-medium mb-2 ${
@@ -1347,6 +1575,7 @@ const AnalyticsScreen: React.FC<AnalyticsScreenProps> = ({
     </div>
   );
 };
+
 
 /* ---------- Main App ---------- */
 
