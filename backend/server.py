@@ -1,9 +1,11 @@
-# backend/server.py
-
-from fastapi import FastAPI, UploadFile, File
+from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from uuid import uuid4
 from typing import Any, Dict
+from pathlib import Path
+import shutil
+import subprocess
+import json
 
 app = FastAPI()
 
@@ -15,26 +17,79 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+RUNS_DIR = Path("runs")
+RUNS_DIR.mkdir(exist_ok=True)
+
 
 @app.post("/api/analyze")
 async def analyze_video(file: UploadFile = File(...)) -> Dict[str, Any]:
     """
-    Stub endpoint for frontend integration.
-    - Accepts a video file upload.
-    - Ignores the file for now.
-    - Returns a hardcoded response that matches our contract.
+    Endpoint for frontend integration.
+    - Saves the uploaded video to runs/<job_id>/
+    - Calls scripts.llm_eval_dummy to generate evaluation_llava.json
+    - Returns a response matching the frontend contract.
     """
 
-    # For now, we just generate a fake job_id and ignore the file contents.
     job_id = uuid4().hex
+    job_dir = RUNS_DIR / job_id
+    job_dir.mkdir(parents=True, exist_ok=True)
 
-    response = {
+    video_path = job_dir / file.filename
+    with video_path.open("wb") as f:
+        shutil.copyfileobj(file.file, f)
+
+    output_json_name = "evaluation_llava.json"
+    output_json_path = job_dir / output_json_name
+
+    cmd = [
+        "python",
+        "-m",
+        "scripts.llm_eval_dummy",
+        "--video",
+        str(video_path),
+        "--out",
+        str(job_dir),
+        "--output-json",
+        output_json_name,
+    ]
+
+    try:
+        completed = subprocess.run(
+            cmd,
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+
+    except subprocess.CalledProcessError as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Dummy evaluator failed: {e.stderr or e.stdout}",
+        )
+
+    if not output_json_path.exists():
+        raise HTTPException(
+            status_code=500,
+            detail="Dummy evaluator did not produce evaluation_llava.json",
+        )
+
+    try:
+        with output_json_path.open("r", encoding="utf-8") as f:
+            eval_json = json.load(f)
+    except json.JSONDecodeError:
+        raise HTTPException(
+            status_code=500,
+            detail="Could not parse evaluation_llava.json",
+        )
+
+
+    summary_text = eval_json.get("summary", "")
+    notes = eval_json.get("notes", [])
+
+    response: Dict[str, Any] = {
         "status": "ok",
         "job_id": job_id,
-        "summary": (
-            "You maintain solid eye contact and a clear, steady delivery. "
-            "Posture is generally good but a bit rigid, and hand gestures are underused."
-        ),
+        "summary": summary_text,
         "scores": {
             "overall": 75,
             "posture": 0.7,
@@ -45,23 +100,12 @@ async def analyze_video(file: UploadFile = File(...)) -> Dict[str, Any]:
         "strengths": [
             "Maintains strong eye contact with the camera.",
             "Background is clean and not distracting.",
-            "Voice and pacing are steady and easy to follow.",
         ],
         "opportunities": [
             "Posture can appear slightly rigid; adding small shifts can feel more natural.",
             "Increase hand gestures to emphasize key points.",
-            "Use more varied facial expressions to match your message.",
         ],
-        "neighbors": [
-            {
-                "total_points": 72,
-                "description": "Rigid posture, strong gaze, minimal gestures, calm delivery.",
-            },
-            {
-                "total_points": 68,
-                "description": "Good clarity, low movement, limited expressiveness.",
-            },
-        ],
+        "neighbors": [],
         "artifacts": {
             "annotated_video_path": None,
             "features_path": None,
@@ -69,7 +113,8 @@ async def analyze_video(file: UploadFile = File(...)) -> Dict[str, Any]:
         },
         "raw": {
             "context": None,
-            "eval": None,
+            "eval": eval_json,
+            "notes": notes,
         },
     }
 

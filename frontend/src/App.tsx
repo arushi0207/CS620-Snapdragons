@@ -21,11 +21,47 @@ import {
   Moon,
 } from "lucide-react";
 
+// ---------- API TYPES ----------
+
+type ApiScores = {
+  overall: number;
+  posture: number;
+  gaze: number;
+  gestures: number;
+  facial_expression: number;
+};
+
+type ApiNeighbor = {
+  total_points: number;
+  description: string;
+};
+
+type ApiArtifacts = {
+  annotated_video_path: string | null;
+  features_path: string | null;
+  context_path: string | null;
+};
+
+type ApiAnalysisResult = {
+  status: string;
+  job_id: string;
+  summary: string;
+  scores: ApiScores;
+  strengths: string[];
+  opportunities: string[];
+  neighbors: ApiNeighbor[];
+  artifacts: ApiArtifacts;
+  raw: {
+    context: any;
+    eval: any;
+  };
+};
+
+// ---------- EXISTING TYPES ----------
 
 type Step = 1 | 2 | 3 | 4 | 5;
 type TailwindBrand = "indigo" | "yellow" | "red" | "green";
 type FeedbackKey = "handMovements" | "legMovements" | "eyeGaze" | "posture";
-
 
 type HeaderProps = {
   onNavigate: (step: Step) => void;
@@ -94,7 +130,6 @@ const Header: React.FC<HeaderProps> = ({
     </nav>
 
     <div className="flex items-center gap-3">
-    
       <button
         type="button"
         onClick={onToggleTheme}
@@ -169,7 +204,6 @@ const MetricCard: React.FC<MetricCardProps> = ({
   highlight,
 }) => (
   <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-50 hover:shadow-xl transition duration-300 transform hover:scale-[1.02]">
-   
     <div className={`flex items-center space-x-4 mb-3 text-${color}-600`}>
       <Icon size={32} className={`bg-${color}-100 p-2 rounded-lg`} />
       <h3 className="text-lg font-semibold text-gray-800">{title}</h3>
@@ -185,13 +219,10 @@ const MetricCard: React.FC<MetricCardProps> = ({
   </div>
 );
 
-
-
 type WelcomeScreenProps = { onStart: () => void };
 
 const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onStart }) => (
   <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-[1.4fr,1fr] gap-10 items-center py-10">
-  
     <section className="space-y-6">
       <p className="text-xs font-semibold text-indigo-500 uppercase tracking-[0.2em]">
         SpeakEasy AI Coach
@@ -239,7 +270,6 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onStart }) => (
         </div>
       </div>
 
-   
       <div className="flex flex-wrap items-center gap-3 pt-2">
         <button
           onClick={onStart}
@@ -350,7 +380,6 @@ const GoalSettingScreen: React.FC<GoalSettingScreenProps> = ({ onNext }) => {
   const [selectedGoal, setSelectedGoal] = useState<string>(goals[0].name);
   const [recommendedGoal, setRecommendedGoal] = useState<string | null>(null);
 
-
   useEffect(() => {
     try {
       const lastGoal = localStorage.getItem(GOAL_STORAGE_KEY);
@@ -414,7 +443,7 @@ const GoalSettingScreen: React.FC<GoalSettingScreenProps> = ({ onNext }) => {
                 ? "border-indigo-600 bg-indigo-50 shadow-md"
                 : "border-gray-200 hover:border-indigo-300 bg-white"
             }`}
-            title={goal.hoverText} 
+            title={goal.hoverText}
           >
             <div className="flex justify-between items-center">
               <p className="text-lg font-semibold text-gray-800 flex items-center gap-2">
@@ -429,7 +458,7 @@ const GoalSettingScreen: React.FC<GoalSettingScreenProps> = ({ onNext }) => {
               <button
                 type="button"
                 className="p-1 rounded-full border border-indigo-100 text-indigo-400 hover:bg-indigo-50 hover:text-indigo-700"
-                onClick={(e) => e.stopPropagation()} 
+                onClick={(e) => e.stopPropagation()}
                 title={goal.hoverText}
               >
                 <Info size={14} />
@@ -452,65 +481,61 @@ const GoalSettingScreen: React.FC<GoalSettingScreenProps> = ({ onNext }) => {
   );
 };
 
+// ---------- UPLOAD SCREEN (WIRED TO /api/analyze) ----------
 
-type UploadScreenProps = { onAnalysisComplete: () => void };
+type UploadScreenProps = { onAnalysisComplete: (result: ApiAnalysisResult) => void };
 
 const UploadScreen: React.FC<UploadScreenProps> = ({ onAnalysisComplete }) => {
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const [progress, setProgress] = useState<number>(0);
-  const [annotatedUrl, setAnnotatedUrl] = useState<string>("");
   const [error, setError] = useState<string>("");
-
-
   const [estimatedTime, setEstimatedTime] = useState<number | null>(null);
 
   const API_BASE =
     (import.meta as any).env?.VITE_API_BASE_URL || "http://localhost:8000";
 
-  const onFileSelected: React.ChangeEventHandler<HTMLInputElement> = async (
-    e
-  ) => {
+  const onFileSelected: React.ChangeEventHandler<HTMLInputElement> = async (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
     setIsUploading(true);
     setError("");
     setProgress(0);
-    setAnnotatedUrl("");
     setEstimatedTime(null);
 
     const uploadStart = Date.now();
 
     try {
       const form = new FormData();
-      form.append("video", file);
+      // IMPORTANT: field name must match backend param ("file")
+      form.append("file", file);
 
-      const resp = await axios.post(`${API_BASE}/process-video`, form, {
-        responseType: "blob",
-        headers: { "Content-Type": "multipart/form-data" },
-        onUploadProgress: (pe) => {
-          if (!pe.total) return;
+      const resp = await axios.post<ApiAnalysisResult>(
+        `${API_BASE}/api/analyze`,
+        form,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+          onUploadProgress: (pe) => {
+            if (!pe.total) return;
 
-          const percent = Math.round((pe.loaded / pe.total) * 100);
-          setProgress(percent);
+            const percent = Math.round((pe.loaded / pe.total) * 100);
+            setProgress(percent);
 
-       
-          const elapsed = (Date.now() - uploadStart) / 1000; 
-          const rate = pe.loaded / elapsed; 
-          const remainingBytes = pe.total - pe.loaded;
-          const remainingSeconds = Math.ceil(remainingBytes / rate);
-          if (Number.isFinite(remainingSeconds)) {
-            setEstimatedTime(remainingSeconds);
-          }
-        },
-      });
+            const elapsed = (Date.now() - uploadStart) / 1000;
+            const rate = pe.loaded / elapsed;
+            const remainingBytes = pe.total - pe.loaded;
+            const remainingSeconds = Math.ceil(remainingBytes / rate);
+            if (Number.isFinite(remainingSeconds)) {
+              setEstimatedTime(remainingSeconds);
+            }
+          },
+        }
+      );
 
-      const blob = new Blob([resp.data], { type: "video/mp4" });
-      const url = URL.createObjectURL(blob);
-      setAnnotatedUrl(url);
       setProgress(100);
       setEstimatedTime(0);
-      toast.success("Video processed!");
+      toast.success("Analysis complete!");
+      onAnalysisComplete(resp.data);
     } catch (err: any) {
       const msg = err?.message || "Upload failed";
       setError(msg);
@@ -593,51 +618,21 @@ const UploadScreen: React.FC<UploadScreenProps> = ({ onAnalysisComplete }) => {
 
       {!!error && <p className="text-red-600 mt-3 font-semibold">{error}</p>}
 
-      {annotatedUrl && (
-        <div className="mt-8 space-y-4">
-          <p className="text-green-700 font-semibold">
-            Analysis complete! Your annotated video is ready.
-          </p>
-
-          <video
-            controls
-            className="w-full max-h-96 rounded-xl shadow-lg border border-gray-200"
-          >
-            <source src={annotatedUrl} type="video/mp4" />
-            Your browser does not support the video tag.
-          </video>
-          <p className="text-xs text-gray-500">
-            Tip: use the full-screen icon in the player to zoom in while you
-            review your delivery.
-          </p>
-
-          <div className="flex items-center justify-center gap-3">
-            <a
-              href={annotatedUrl}
-              download="annotated.mp4"
-              className="px-5 py-3 bg-gray-900 text-white rounded-xl shadow hover:bg-gray-700"
-            >
-              Download MP4
-            </a>
-            <button
-              onClick={onAnalysisComplete}
-              className="px-5 py-3 bg-indigo-600 text-white rounded-xl shadow hover:bg-indigo-700"
-            >
-              Continue to Review
-            </button>
-          </div>
-        </div>
-      )}
+      <p className="mt-8 text-xs text-gray-500">
+        Once the analysis finishes, you&apos;ll be taken to your detailed review.
+      </p>
     </div>
   );
 };
 
+// ---------- REVIEW SCREEN (USES ANALYSIS) ----------
 
 type ReviewScreenProps = {
   onNext: () => void;
   isDarkMode: boolean;
   order: FeedbackKey[];
   onReorder: (order: FeedbackKey[]) => void;
+  analysis: ApiAnalysisResult | null;
 };
 
 const ReviewScreen: React.FC<ReviewScreenProps> = ({
@@ -645,8 +640,16 @@ const ReviewScreen: React.FC<ReviewScreenProps> = ({
   isDarkMode,
   order,
   onReorder,
+  analysis,
 }) => {
   const [expanded, setExpanded] = useState<string | null>(null);
+
+  // Handle both 0–1 and 0–100 scales, fallback to 78
+  const overallScore = analysis?.scores?.overall;
+  const overallDisplay =
+    typeof overallScore === "number" && !Number.isNaN(overallScore)
+      ? Math.round(overallScore > 1 ? overallScore : overallScore * 100)
+      : 78;
 
   const analysisData: Record<
     FeedbackKey,
@@ -720,12 +723,22 @@ const ReviewScreen: React.FC<ReviewScreenProps> = ({
         3. Session Review
       </h2>
       <p
-        className={`font-semibold mb-6 ${
+        className={`font-semibold mb-2 ${
           isDarkMode ? "text-indigo-300" : "text-indigo-600"
         }`}
       >
-        AI Analysis Complete! Score: 78/100
+        AI Analysis Complete! Score: {overallDisplay}/100
       </p>
+
+      {analysis?.summary && (
+        <p
+          className={`mb-4 text-sm ${
+            isDarkMode ? "text-slate-300" : "text-gray-700"
+          }`}
+        >
+          {analysis.summary}
+        </p>
+      )}
 
       <div
         className={`mb-6 text-sm p-4 rounded-lg flex items-start gap-2 ${
@@ -846,11 +859,13 @@ const ReviewScreen: React.FC<ReviewScreenProps> = ({
   );
 };
 
+// ---------- ANALYTICS SCREEN (STILL STATIC, ACCEPTS ANALYSIS FOR FUTURE) ----------
 
 type AnalyticsScreenProps = {
   onNext: (s: Step) => void;
   isDarkMode: boolean;
   order: FeedbackKey[];
+  analysis: ApiAnalysisResult | null;
 };
 
 const AnalyticsScreen: React.FC<AnalyticsScreenProps> = ({
@@ -860,12 +875,11 @@ const AnalyticsScreen: React.FC<AnalyticsScreenProps> = ({
 }) => {
   type SessionMetric = {
     label: string;
-    score: number; 
+    score: number;
     feedback: string;
     emoji: string;
   };
 
-  
   const handHistory: SessionMetric[] = [
     {
       label: "Week 1",
@@ -989,7 +1003,6 @@ const AnalyticsScreen: React.FC<AnalyticsScreenProps> = ({
     },
   ];
 
-
   const [selectedHandIndex, setSelectedHandIndex] = useState(
     handHistory.length - 1
   );
@@ -1019,6 +1032,7 @@ const AnalyticsScreen: React.FC<AnalyticsScreenProps> = ({
       {children}
     </div>
   );
+
   const renderGraphCard = (key: FeedbackKey) => {
     switch (key) {
       case "handMovements":
@@ -1040,8 +1054,7 @@ const AnalyticsScreen: React.FC<AnalyticsScreenProps> = ({
             >
               Click a bar to see what your AI coach said that week.
             </p>
-  
-     
+
             <div
               className={`h-44 rounded-lg flex items-end p-3 text-xs overflow-hidden ${
                 isDarkMode
@@ -1052,7 +1065,7 @@ const AnalyticsScreen: React.FC<AnalyticsScreenProps> = ({
               {handHistory.map((session, idx) => {
                 const isActive = idx === selectedHandIndex;
                 const heightPct = 20 + (session.score / 100) * 70;
-  
+
                 return (
                   <button
                     key={session.label}
@@ -1071,8 +1084,7 @@ const AnalyticsScreen: React.FC<AnalyticsScreenProps> = ({
                 );
               })}
             </div>
-  
-            
+
             <p
               className={`mt-2 text-[10px] ${
                 isDarkMode ? "text-slate-400" : "text-gray-500"
@@ -1080,7 +1092,7 @@ const AnalyticsScreen: React.FC<AnalyticsScreenProps> = ({
             >
               Progress over last 4 sessions
             </p>
-  
+
             <div
               className={`mt-4 rounded-lg border p-4 text-sm ${
                 isDarkMode
@@ -1096,7 +1108,7 @@ const AnalyticsScreen: React.FC<AnalyticsScreenProps> = ({
             </div>
           </>
         );
-  
+
       case "legMovements":
         return cardShell(
           <>
@@ -1116,7 +1128,7 @@ const AnalyticsScreen: React.FC<AnalyticsScreenProps> = ({
             >
               Click a bar to see how your stability has changed week to week.
             </p>
-  
+
             <div
               className={`h-44 rounded-lg flex items-end p-3 text-xs overflow-hidden ${
                 isDarkMode
@@ -1127,7 +1139,7 @@ const AnalyticsScreen: React.FC<AnalyticsScreenProps> = ({
               {legHistory.map((session, idx) => {
                 const isActive = idx === selectedLegIndex;
                 const heightPct = 20 + (session.score / 100) * 70;
-  
+
                 return (
                   <button
                     key={session.label}
@@ -1146,7 +1158,7 @@ const AnalyticsScreen: React.FC<AnalyticsScreenProps> = ({
                 );
               })}
             </div>
-  
+
             <p
               className={`mt-2 text-[10px] ${
                 isDarkMode ? "text-slate-400" : "text-gray-500"
@@ -1154,7 +1166,7 @@ const AnalyticsScreen: React.FC<AnalyticsScreenProps> = ({
             >
               Higher bars = more still and grounded ✅
             </p>
-  
+
             <div
               className={`mt-4 rounded-lg border p-4 text-sm ${
                 isDarkMode
@@ -1170,7 +1182,7 @@ const AnalyticsScreen: React.FC<AnalyticsScreenProps> = ({
             </div>
           </>
         );
-  
+
       case "eyeGaze":
         return cardShell(
           <>
@@ -1190,7 +1202,7 @@ const AnalyticsScreen: React.FC<AnalyticsScreenProps> = ({
             >
               Higher scores mean more consistent, engaging eye contact.
             </p>
-  
+
             <div
               className={`h-44 rounded-lg flex items-end p-3 text-xs overflow-hidden ${
                 isDarkMode
@@ -1201,7 +1213,7 @@ const AnalyticsScreen: React.FC<AnalyticsScreenProps> = ({
               {eyeHistory.map((session, idx) => {
                 const isActive = idx === selectedEyeIndex;
                 const heightPct = 20 + (session.score / 100) * 70;
-  
+
                 return (
                   <button
                     key={session.label}
@@ -1220,7 +1232,7 @@ const AnalyticsScreen: React.FC<AnalyticsScreenProps> = ({
                 );
               })}
             </div>
-  
+
             <p
               className={`mt-2 text-[10px] ${
                 isDarkMode ? "text-slate-400" : "text-gray-500"
@@ -1228,7 +1240,7 @@ const AnalyticsScreen: React.FC<AnalyticsScreenProps> = ({
             >
               Higher bars = more consistent eye contact ✅
             </p>
-  
+
             <div
               className={`mt-4 rounded-lg border p-4 text-sm ${
                 isDarkMode
@@ -1244,7 +1256,7 @@ const AnalyticsScreen: React.FC<AnalyticsScreenProps> = ({
             </div>
           </>
         );
-  
+
       case "posture":
       default:
         return cardShell(
@@ -1266,7 +1278,7 @@ const AnalyticsScreen: React.FC<AnalyticsScreenProps> = ({
               These scores capture how open, upright, and confident your posture
               appeared.
             </p>
-  
+
             <div
               className={`h-44 rounded-lg flex items-end p-3 text-xs overflow-hidden ${
                 isDarkMode
@@ -1277,7 +1289,7 @@ const AnalyticsScreen: React.FC<AnalyticsScreenProps> = ({
               {postureHistory.map((session, idx) => {
                 const isActive = idx === selectedPostureIndex;
                 const heightPct = 20 + (session.score / 100) * 70;
-  
+
                 return (
                   <button
                     key={session.label}
@@ -1296,7 +1308,7 @@ const AnalyticsScreen: React.FC<AnalyticsScreenProps> = ({
                 );
               })}
             </div>
-  
+
             <p
               className={`mt-2 text-[10px] ${
                 isDarkMode ? "text-slate-400" : "text-gray-500"
@@ -1304,7 +1316,7 @@ const AnalyticsScreen: React.FC<AnalyticsScreenProps> = ({
             >
               Higher bars = more confident, upright posture ✅
             </p>
-  
+
             <div
               className={`mt-4 rounded-lg border p-4 text-sm ${
                 isDarkMode
@@ -1322,7 +1334,7 @@ const AnalyticsScreen: React.FC<AnalyticsScreenProps> = ({
         );
     }
   };
-  
+
   return (
     <div className="max-w-5xl mx-auto p-6">
       <h2
@@ -1367,19 +1379,19 @@ const AnalyticsScreen: React.FC<AnalyticsScreenProps> = ({
   );
 };
 
-
+// ---------- ROOT APP ----------
 
 const App: React.FC = () => {
   const [step, setStep] = useState<Step>(1);
   const [isDarkMode, setIsDarkMode] = useState(false);
-
-  
   const [feedbackOrder, setFeedbackOrder] = useState<FeedbackKey[]>([
     "handMovements",
     "legMovements",
     "eyeGaze",
     "posture",
   ]);
+
+  const [analysis, setAnalysis] = useState<ApiAnalysisResult | null>(null);
 
   const navigateTo = (newStep: Step) => {
     if (newStep === 4 && step < 3) return;
@@ -1394,7 +1406,14 @@ const App: React.FC = () => {
       case 2:
         return <GoalSettingScreen onNext={() => navigateTo(3)} />;
       case 3:
-        return <UploadScreen onAnalysisComplete={() => navigateTo(4)} />;
+        return (
+          <UploadScreen
+            onAnalysisComplete={(result) => {
+              setAnalysis(result);
+              navigateTo(4);
+            }}
+          />
+        );
       case 4:
         return (
           <ReviewScreen
@@ -1402,6 +1421,7 @@ const App: React.FC = () => {
             isDarkMode={isDarkMode}
             order={feedbackOrder}
             onReorder={setFeedbackOrder}
+            analysis={analysis}
           />
         );
       case 5:
@@ -1410,6 +1430,7 @@ const App: React.FC = () => {
             onNext={navigateTo}
             isDarkMode={isDarkMode}
             order={feedbackOrder}
+            analysis={analysis}
           />
         );
       default:
