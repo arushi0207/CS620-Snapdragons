@@ -1,0 +1,7 @@
+torch
+transformers>=4.43.0
+sentencepiece
+accelerate
+protobuf
+faiss-cpu
+pandas
