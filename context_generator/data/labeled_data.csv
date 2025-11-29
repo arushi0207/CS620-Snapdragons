@@ -1,0 +1,573 @@
+frame,timestamp,skipped,person_id,detection_confidence,bbox_x,bbox_y,bbox_width,bbox_height,posture_label,posture_points,posture_confidence,gaze_label,gaze_points,gaze_confidence,hand_movement_label,hand_movement_points,hand_movement_confidence,facial_expression_label,facial_expression_points,facial_expression_confidence,total_points
+frame_00000.png,0.0,True,,,,,,,,,,,,,,,,,,,
+frame_00001.png,0.317,True,,,,,,,,,,,,,,,,,,,
+frame_00002.png,0.634,True,,,,,,,,,,,,,,,,,,,
+frame_00003.png,0.951,True,,,,,,,,,,,,,,,,,,,
+frame_00004.png,1.268,True,,,,,,,,,,,,,,,,,,,
+frame_00005.png,1.585,True,,,,,,,,,,,,,,,,,,,
+frame_00006.png,1.902,True,,,,,,,,,,,,,,,,,,,
+frame_00007.png,2.219,True,,,,,,,,,,,,,,,,,,,
+frame_00008.png,2.536,True,,,,,,,,,,,,,,,,,,,
+frame_00009.png,2.853,True,,,,,,,,,,,,,,,,,,,
+frame_00010.png,3.17,True,,,,,,,,,,,,,,,,,,,
+frame_00011.png,3.487,True,,,,,,,,,,,,,,,,,,,
+frame_00012.png,3.804,True,,,,,,,,,,,,,,,,,,,
+frame_00013.png,4.121,True,,,,,,,,,,,,,,,,,,,
+frame_00014.png,4.438,True,,,,,,,,,,,,,,,,,,,
+frame_00015.png,4.755,True,,,,,,,,,,,,,,,,,,,
+frame_00016.png,5.072,True,,,,,,,,,,,,,,,,,,,
+frame_00017.png,5.389,True,,,,,,,,,,,,,,,,,,,
+frame_00018.png,5.706,True,,,,,,,,,,,,,,,,,,,
+frame_00019_person.png,6.023,False,0,0.511,804,209,616,871,"Upright, Centered",25,0.608,Eye Contact (Camera) 50-80%,20,0.539,"Used gestures (e.g., open_palm)",25,0.515,"Engaged (e.g., smile, neutral)",20,0.845,90
+frame_00020_person.png,6.34,False,0,0.527,793,214,599,866,"Upright, Centered",25,0.608,Looking Down (Notes) > 20%,5,0.409,"Used gestures (e.g., open_palm)",25,0.629,"Engaged (e.g., smile, neutral)",20,0.9,75
+frame_00021_person.png,6.657,False,0,0.548,789,217,589,863,"Upright, Centered",25,0.565,Eye Contact (Camera) 50-80%,20,0.487,"Used gestures (e.g., open_palm)",25,0.579,"Engaged (e.g., smile, neutral)",20,0.853,90
+frame_00022_person.png,6.974,False,0,0.566,780,214,601,866,"Upright, Centered",25,0.568,Eye Contact (Camera) 50-80%,20,0.53,"Used gestures (e.g., open_palm)",25,0.506,"Engaged (e.g., smile, neutral)",20,0.839,90
+frame_00023_person.png,7.291,False,0,0.582,776,216,611,864,"Upright, Centered",25,0.543,Eye Contact (Camera) 50-80%,20,0.662,"No gestures (e.g., hands in pockets)",10,0.522,"Engaged (e.g., smile, neutral)",20,0.755,75
+frame_00024_person.png,7.608,False,0,0.595,775,217,604,863,"Upright, Centered",25,0.596,Eye Contact (Camera) 50-80%,20,0.664,"No gestures (e.g., hands in pockets)",10,0.588,"Engaged (e.g., smile, neutral)",20,0.646,75
+frame_00025_person.png,7.925,False,0,0.609,771,216,599,864,"Upright, Centered",25,0.505,Eye Contact (Camera) 50-80%,20,0.607,"No gestures (e.g., hands in pockets)",10,0.7,"Disengaged (e.g., frown)",5,0.55,60
+frame_00026_person.png,8.242,False,0,0.623,768,216,584,864,"Upright, Centered",25,0.529,Looking Down (Notes) > 20%,5,0.41,"Used gestures (e.g., open_palm)",25,0.89,"Engaged (e.g., smile, neutral)",20,0.715,75
+frame_00027_person.png,8.559,False,0,0.632,758,216,609,864,"Upright, Centered",25,0.492,Eye Contact (Camera) 50-80%,20,0.542,"Used gestures (e.g., open_palm)",25,0.735,"Engaged (e.g., smile, neutral)",20,0.834,90
+frame_00028_person.png,8.876,False,0,0.643,755,217,606,863,Leaning (Left/Right),15,0.447,Eye Contact (Camera) 50-80%,20,0.446,"Used gestures (e.g., open_palm)",25,0.628,"Engaged (e.g., smile, neutral)",20,0.843,80
+frame_00029_person.png,9.193,False,0,0.653,748,217,607,863,"Upright, Centered",25,0.505,Eye Contact (Camera) 50-80%,20,0.517,"Used gestures (e.g., open_palm)",25,0.574,"Engaged (e.g., smile, neutral)",20,0.774,90
+frame_00030_person.png,9.51,False,0,0.663,744,210,609,870,"Upright, Centered",25,0.497,Looking Down (Notes) > 20%,5,0.513,"Used gestures (e.g., open_palm)",25,0.58,"Engaged (e.g., smile, neutral)",20,0.79,75
+frame_00031_person.png,9.826,False,0,0.672,743,205,608,875,Leaning (Left/Right),15,0.431,Looking Down (Notes) > 20%,5,0.509,"Used gestures (e.g., open_palm)",25,0.543,"Engaged (e.g., smile, neutral)",20,0.699,65
+frame_00032_person.png,10.143,False,0,0.681,742,205,608,875,Leaning (Left/Right),15,0.458,Looking Down (Notes) > 20%,5,0.55,"Used gestures (e.g., open_palm)",25,0.514,"Engaged (e.g., smile, neutral)",20,0.782,65
+frame_00033_person.png,10.46,False,0,0.69,743,207,606,873,"Upright, Centered",25,0.506,Looking Down (Notes) > 20%,5,0.421,"Used gestures (e.g., open_palm)",25,0.572,"Engaged (e.g., smile, neutral)",20,0.877,75
+frame_00034_person.png,10.777,False,0,0.698,743,207,631,873,"Upright, Centered",25,0.58,Looking Down (Notes) > 20%,5,0.494,"Used gestures (e.g., open_palm)",25,0.777,"Engaged (e.g., smile, neutral)",20,0.948,75
+frame_00035_person.png,11.094,False,0,0.704,742,207,702,873,Leaning (Left/Right),15,0.542,Eye Contact (Camera) 50-80%,20,0.521,"Used gestures (e.g., open_palm)",25,0.979,"Engaged (e.g., smile, neutral)",20,0.705,80
+frame_00036_person.png,11.411,False,0,0.709,742,215,727,865,"Upright, Centered",25,0.552,Looking Down (Notes) > 20%,5,0.457,"Used gestures (e.g., open_palm)",25,0.976,"Engaged (e.g., smile, neutral)",20,0.811,75
+frame_00037_person.png,11.728,False,0,0.713,742,215,690,865,"Upright, Centered",25,0.533,Looking Down (Notes) > 20%,5,0.435,"Used gestures (e.g., open_palm)",25,0.903,"Engaged (e.g., smile, neutral)",20,0.916,75
+frame_00038_person.png,12.045,False,0,0.716,749,216,656,864,Leaning (Left/Right),15,0.472,Eye Contact (Camera) 50-80%,20,0.71,"Used gestures (e.g., open_palm)",25,0.556,"Engaged (e.g., smile, neutral)",20,0.563,80
+frame_00039_person.png,12.362,False,0,0.717,754,217,637,863,"Upright, Centered",25,0.477,Eye Contact (Camera) 50-80%,20,0.661,"No gestures (e.g., hands in pockets)",10,0.628,"Disengaged (e.g., frown)",5,0.527,60
+frame_00040_person.png,12.679,False,0,0.717,758,217,601,863,"Upright, Centered",25,0.583,Eye Contact (Camera) 50-80%,20,0.481,"No gestures (e.g., hands in pockets)",10,0.507,"Engaged (e.g., smile, neutral)",20,0.846,75
+frame_00041_person.png,12.996,False,0,0.719,757,220,596,860,Leaning (Left/Right),15,0.476,Eye Contact (Camera) 50-80%,20,0.491,"No gestures (e.g., hands in pockets)",10,0.644,"Engaged (e.g., smile, neutral)",20,0.679,65
+frame_00042_person.png,13.313,False,0,0.665,651,392,423,688,Leaning (Left/Right),15,0.731,Eye Contact (Camera) 50-80%,20,0.773,"No gestures (e.g., hands in pockets)",10,0.961,"Disengaged (e.g., frown)",5,0.828,50
+frame_00043_person.png,13.63,False,0,0.606,589,845,389,235,Leaning (Left/Right),15,0.594,Eye Contact (Camera) 50-80%,20,0.467,"No gestures (e.g., hands in pockets)",10,0.837,"Engaged (e.g., smile, neutral)",20,0.536,65
+frame_00044_person.png,13.947,False,0,0.573,611,624,354,456,Leaning (Left/Right),15,0.836,Eye Contact (Camera) 50-80%,20,0.792,"No gestures (e.g., hands in pockets)",10,0.803,"Disengaged (e.g., frown)",5,0.792,50
+frame_00045_person.png,14.264,False,0,0.554,329,792,447,288,Slouched,10,0.447,Looking Down (Notes) > 20%,5,0.719,"No gestures (e.g., hands in pockets)",10,0.811,"Disengaged (e.g., frown)",5,0.658,30
+frame_00046_person.png,14.581,False,0,0.53,376,901,366,179,Leaning (Left/Right),15,0.494,Looking Down (Notes) > 20%,5,0.781,"No gestures (e.g., hands in pockets)",10,0.977,"Engaged (e.g., smile, neutral)",20,0.63,50
+frame_00047_person.png,14.898,False,0,0.518,248,802,381,278,Leaning (Left/Right),15,0.439,Eye Contact (Camera) 50-80%,20,0.518,"No gestures (e.g., hands in pockets)",10,0.885,"Engaged (e.g., smile, neutral)",20,0.584,65
+frame_00048_person.png,15.215,False,0,0.515,169,793,423,287,Leaning (Left/Right),15,0.386,Eye Contact (Camera) 50-80%,20,0.701,"Used gestures (e.g., open_palm)",25,0.544,"Engaged (e.g., smile, neutral)",20,0.657,80
+frame_00049_person.png,15.532,False,0,0.506,211,778,404,302,Slouched,10,0.353,Eye Contact (Camera) 50-80%,20,0.497,"No gestures (e.g., hands in pockets)",10,0.566,"Engaged (e.g., smile, neutral)",20,0.613,60
+frame_00050.png,15.849,True,,,,,,,,,,,,,,,,,,,
+frame_00051.png,16.166,True,,,,,,,,,,,,,,,,,,,
+frame_00052.png,16.483,True,,,,,,,,,,,,,,,,,,,
+frame_00053_person.png,16.8,False,0,0.521,442,218,1065,862,"Upright, Centered",25,0.639,Looking Down (Notes) > 20%,5,0.614,"No gestures (e.g., hands in pockets)",10,0.565,"Engaged (e.g., smile, neutral)",20,0.935,60
+frame_00054_person.png,17.117,False,0,0.546,447,213,1127,867,"Upright, Centered",25,0.689,Looking Down (Notes) > 20%,5,0.54,"Used gestures (e.g., open_palm)",25,0.596,"Engaged (e.g., smile, neutral)",20,0.962,75
+frame_00055_person.png,17.434,False,0,0.568,450,215,1124,865,"Upright, Centered",25,0.684,Looking Down (Notes) > 20%,5,0.53,"Used gestures (e.g., open_palm)",25,0.554,"Engaged (e.g., smile, neutral)",20,0.935,75
+frame_00056_person.png,17.751,False,0,0.586,635,211,788,869,"Upright, Centered",25,0.574,Looking Down (Notes) > 20%,5,0.603,"Used gestures (e.g., open_palm)",25,0.975,"Engaged (e.g., smile, neutral)",20,0.911,75
+frame_00057_person.png,18.068,False,0,0.604,731,218,665,862,"Upright, Centered",25,0.614,Eye Contact (Camera) 50-80%,20,0.448,"Used gestures (e.g., open_palm)",25,0.921,"Engaged (e.g., smile, neutral)",20,0.914,90
+frame_00058_person.png,18.385,False,0,0.62,719,217,694,863,"Upright, Centered",25,0.586,Eye Contact (Camera) 50-80%,20,0.47,"Used gestures (e.g., open_palm)",25,0.824,"Engaged (e.g., smile, neutral)",20,0.962,90
+frame_00059_person.png,18.702,False,0,0.634,742,219,716,861,"Upright, Centered",25,0.489,Eye Contact (Camera) 50-80%,20,0.42,"Used gestures (e.g., open_palm)",25,0.938,"Engaged (e.g., smile, neutral)",20,0.88,90
+frame_00060_person.png,19.019,False,0,0.646,742,220,707,860,"Upright, Centered",25,0.553,Looking Down (Notes) > 20%,5,0.43,"Used gestures (e.g., open_palm)",25,0.884,"Engaged (e.g., smile, neutral)",20,0.931,75
+frame_00061_person.png,19.336,False,0,0.657,743,222,699,858,"Upright, Centered",25,0.515,Eye Contact (Camera) 50-80%,20,0.402,"Used gestures (e.g., open_palm)",25,0.943,"Engaged (e.g., smile, neutral)",20,0.938,90
+frame_00062_person.png,19.653,False,0,0.667,512,220,1107,860,"Upright, Centered",25,0.725,Looking Down (Notes) > 20%,5,0.42,"Used gestures (e.g., open_palm)",25,0.683,"Engaged (e.g., smile, neutral)",20,0.963,75
+frame_00063_person.png,19.97,False,0,0.65,904,232,427,848,Leaning (Left/Right),15,0.824,Eye Contact (Camera) 50-80%,20,0.622,"No gestures (e.g., hands in pockets)",10,0.831,"Engaged (e.g., smile, neutral)",20,0.586,65
+frame_00064_person.png,20.287,False,0,0.63,711,551,340,529,Leaning (Left/Right),15,0.667,Eye Contact (Camera) > 80%,30,0.506,"Used gestures (e.g., open_palm)",25,0.656,"Engaged (e.g., smile, neutral)",20,0.91,90
+frame_00065_person.png,20.604,False,0,0.615,550,580,421,500,Leaning (Left/Right),15,0.757,Eye Contact (Camera) 50-80%,20,0.494,"No gestures (e.g., hands in pockets)",10,0.918,"Engaged (e.g., smile, neutral)",20,0.925,65
+frame_00066_person.png,20.921,False,0,0.629,690,231,607,849,Leaning (Left/Right),15,0.444,Looking Down (Notes) > 20%,5,0.549,"Used gestures (e.g., open_palm)",25,0.901,"Engaged (e.g., smile, neutral)",20,0.747,65
+frame_00067_person.png,21.238,False,0,0.64,705,213,623,867,Leaning (Left/Right),15,0.516,Eye Contact (Camera) 50-80%,20,0.583,"No gestures (e.g., hands in pockets)",10,0.703,"Disengaged (e.g., frown)",5,0.547,50
+frame_00068_person.png,21.555,False,0,0.646,707,212,590,868,Leaning (Left/Right),15,0.471,Eye Contact (Camera) 50-80%,20,0.582,"No gestures (e.g., hands in pockets)",10,0.559,"Engaged (e.g., smile, neutral)",20,0.634,65
+frame_00069_person.png,21.872,False,0,0.647,708,214,578,866,Leaning (Left/Right),15,0.446,Eye Contact (Camera) 50-80%,20,0.509,"Used gestures (e.g., open_palm)",25,0.615,"Engaged (e.g., smile, neutral)",20,0.748,80
+frame_00070_person.png,22.189,False,0,0.642,711,212,557,868,Leaning (Left/Right),15,0.54,Looking Down (Notes) > 20%,5,0.452,"Used gestures (e.g., open_palm)",25,0.967,"Engaged (e.g., smile, neutral)",20,0.856,65
+frame_00071_person.png,22.506,False,0,0.65,721,208,582,872,Leaning (Left/Right),15,0.637,Looking Down (Notes) > 20%,5,0.478,"Used gestures (e.g., open_palm)",25,0.954,"Engaged (e.g., smile, neutral)",20,0.815,65
+frame_00072_person.png,22.823,False,0,0.658,761,212,602,868,"Upright, Centered",25,0.459,Looking Down (Notes) > 20%,5,0.621,"Used gestures (e.g., open_palm)",25,0.926,"Engaged (e.g., smile, neutral)",20,0.842,75
+frame_00073_person.png,23.14,False,0,0.665,835,211,627,869,Leaning (Left/Right),15,0.455,Looking Down (Notes) > 20%,5,0.436,"Used gestures (e.g., open_palm)",25,0.867,"Engaged (e.g., smile, neutral)",20,0.862,65
+frame_00074_person.png,23.457,False,0,0.672,838,208,749,872,Leaning (Left/Right),15,0.511,Eye Contact (Camera) 50-80%,20,0.533,"Used gestures (e.g., open_palm)",25,0.862,"Engaged (e.g., smile, neutral)",20,0.677,80
+frame_00075_person.png,23.774,False,0,0.676,828,155,781,925,"Upright, Centered",25,0.462,Looking Down (Notes) > 20%,5,0.466,"Used gestures (e.g., open_palm)",25,0.912,"Engaged (e.g., smile, neutral)",20,0.707,75
+frame_00076_person.png,24.091,False,0,0.682,817,194,767,886,"Upright, Centered",25,0.492,Looking Down (Notes) > 20%,5,0.65,"Used gestures (e.g., open_palm)",25,0.972,"Engaged (e.g., smile, neutral)",20,0.77,75
+frame_00077_person.png,24.408,False,0,0.688,778,206,750,874,"Upright, Centered",25,0.55,Looking Down (Notes) > 20%,5,0.607,"Used gestures (e.g., open_palm)",25,0.968,"Engaged (e.g., smile, neutral)",20,0.861,75
+frame_00078_person.png,24.725,False,0,0.695,770,217,619,863,"Upright, Centered",25,0.497,Looking Down (Notes) > 20%,5,0.436,"Used gestures (e.g., open_palm)",25,0.881,"Engaged (e.g., smile, neutral)",20,0.951,75
+frame_00079_person.png,25.042,False,0,0.697,747,217,616,863,"Upright, Centered",25,0.539,Looking Down (Notes) > 20%,5,0.601,"Used gestures (e.g., open_palm)",25,0.928,"Engaged (e.g., smile, neutral)",20,0.956,75
+frame_00080_person.png,25.359,False,0,0.702,726,218,490,862,Leaning (Left/Right),15,0.511,Eye Contact (Camera) 50-80%,20,0.707,"No gestures (e.g., hands in pockets)",10,0.725,"Disengaged (e.g., frown)",5,0.585,50
+frame_00081_person.png,25.676,False,0,0.698,696,219,494,861,Leaning (Left/Right),15,0.53,Eye Contact (Camera) 50-80%,20,0.54,"No gestures (e.g., hands in pockets)",10,0.62,"Engaged (e.g., smile, neutral)",20,0.538,65
+frame_00082_person.png,25.993,False,0,0.702,675,216,547,864,Leaning (Left/Right),15,0.496,Eye Contact (Camera) 50-80%,20,0.515,"No gestures (e.g., hands in pockets)",10,0.563,"Engaged (e.g., smile, neutral)",20,0.608,65
+frame_00083_person.png,26.31,False,0,0.695,660,214,490,866,Leaning (Left/Right),15,0.477,Eye Contact (Camera) 50-80%,20,0.727,"No gestures (e.g., hands in pockets)",10,0.612,"Disengaged (e.g., frown)",5,0.53,50
+frame_00084_person.png,26.627,False,0,0.683,664,212,428,868,Leaning (Left/Right),15,0.604,Eye Contact (Camera) 50-80%,20,0.519,"No gestures (e.g., hands in pockets)",10,0.591,"Disengaged (e.g., frown)",5,0.513,50
+frame_00085_person.png,26.944,False,0,0.673,669,206,418,874,Leaning (Left/Right),15,0.611,Eye Contact (Camera) 50-80%,20,0.811,"No gestures (e.g., hands in pockets)",10,0.86,"Disengaged (e.g., frown)",5,0.702,50
+frame_00086_person.png,27.261,False,0,0.678,648,200,514,880,Leaning (Left/Right),15,0.563,Eye Contact (Camera) 50-80%,20,0.507,"Used gestures (e.g., open_palm)",25,0.707,"Engaged (e.g., smile, neutral)",20,0.53,80
+frame_00087_person.png,27.578,False,0,0.681,638,195,572,885,Leaning (Left/Right),15,0.5,Looking Down (Notes) > 20%,5,0.52,"Used gestures (e.g., open_palm)",25,0.89,"Engaged (e.g., smile, neutral)",20,0.753,65
+frame_00088_person.png,27.895,False,0,0.682,639,191,614,889,Leaning (Left/Right),15,0.442,Looking Down (Notes) > 20%,5,0.445,"Used gestures (e.g., open_palm)",25,0.743,"Engaged (e.g., smile, neutral)",20,0.703,65
+frame_00089_person.png,28.212,False,0,0.677,641,187,520,893,Leaning (Left/Right),15,0.538,Eye Contact (Camera) 50-80%,20,0.616,"Used gestures (e.g., open_palm)",25,0.651,"Disengaged (e.g., frown)",5,0.589,65
+frame_00090_person.png,28.529,False,0,0.67,638,189,437,891,Leaning (Left/Right),15,0.59,Eye Contact (Camera) 50-80%,20,0.559,"No gestures (e.g., hands in pockets)",10,0.555,"Engaged (e.g., smile, neutral)",20,0.584,65
+frame_00091_person.png,28.845,False,0,0.666,641,191,461,889,Leaning (Left/Right),15,0.581,Eye Contact (Camera) 50-80%,20,0.644,"Used gestures (e.g., open_palm)",25,0.649,"Engaged (e.g., smile, neutral)",20,0.577,80
+frame_00092_person.png,29.162,False,0,0.66,692,194,432,886,Leaning (Left/Right),15,0.587,Eye Contact (Camera) 50-80%,20,0.657,"No gestures (e.g., hands in pockets)",10,0.606,"Disengaged (e.g., frown)",5,0.58,50
+frame_00093_person.png,29.479,False,0,0.668,711,197,472,883,Leaning (Left/Right),15,0.537,Eye Contact (Camera) 50-80%,20,0.669,"Used gestures (e.g., open_palm)",25,0.566,"Engaged (e.g., smile, neutral)",20,0.581,80
+frame_00094_person.png,29.796,False,0,0.675,711,197,540,883,Leaning (Left/Right),15,0.638,Looking Down (Notes) > 20%,5,0.57,"Used gestures (e.g., open_palm)",25,0.871,"Engaged (e.g., smile, neutral)",20,0.862,65
+frame_00095_person.png,30.113,False,0,0.684,721,201,547,879,Leaning (Left/Right),15,0.549,Looking Down (Notes) > 20%,5,0.579,"Used gestures (e.g., open_palm)",25,0.857,"Engaged (e.g., smile, neutral)",20,0.855,65
+frame_00096_person.png,30.43,False,0,0.689,721,206,550,874,Leaning (Left/Right),15,0.451,Looking Down (Notes) > 20%,5,0.416,"Used gestures (e.g., open_palm)",25,0.553,"Engaged (e.g., smile, neutral)",20,0.735,65
+frame_00097_person.png,30.747,False,0,0.69,718,205,521,875,Leaning (Left/Right),15,0.597,Eye Contact (Camera) 50-80%,20,0.512,"Used gestures (e.g., open_palm)",25,0.655,"Engaged (e.g., smile, neutral)",20,0.708,80
+frame_00098_person.png,31.064,False,0,0.697,716,203,659,877,"Upright, Centered",25,0.511,Looking Down (Notes) > 20%,5,0.479,"Used gestures (e.g., open_palm)",25,0.858,"Engaged (e.g., smile, neutral)",20,0.883,75
+frame_00099_person.png,31.381,False,0,0.702,722,202,681,878,"Upright, Centered",25,0.451,Looking Down (Notes) > 20%,5,0.608,"Used gestures (e.g., open_palm)",25,0.893,"Engaged (e.g., smile, neutral)",20,0.904,75
+frame_00100_person.png,31.698,False,0,0.706,725,204,657,876,Leaning (Left/Right),15,0.477,Looking Down (Notes) > 20%,5,0.623,"Used gestures (e.g., open_palm)",25,0.875,"Engaged (e.g., smile, neutral)",20,0.908,65
+frame_00101_person.png,32.015,False,0,0.711,732,204,636,876,"Upright, Centered",25,0.468,Looking Down (Notes) > 20%,5,0.486,"Used gestures (e.g., open_palm)",25,0.927,"Engaged (e.g., smile, neutral)",20,0.935,75
+frame_00102_person.png,32.332,False,0,0.715,730,204,701,876,Leaning (Left/Right),15,0.452,Looking Down (Notes) > 20%,5,0.596,"Used gestures (e.g., open_palm)",25,0.848,"Engaged (e.g., smile, neutral)",20,0.843,65
+frame_00103_person.png,32.649,False,0,0.718,726,206,743,874,"Upright, Centered",25,0.453,Looking Down (Notes) > 20%,5,0.624,"Used gestures (e.g., open_palm)",25,0.907,"Engaged (e.g., smile, neutral)",20,0.905,75
+frame_00104_person.png,32.966,False,0,0.721,741,208,709,872,Leaning (Left/Right),15,0.51,Looking Down (Notes) > 20%,5,0.534,"Used gestures (e.g., open_palm)",25,0.77,"Engaged (e.g., smile, neutral)",20,0.755,65
+frame_00105_person.png,33.283,False,0,0.722,780,211,568,869,Leaning (Left/Right),15,0.499,Looking Down (Notes) > 20%,5,0.657,"Used gestures (e.g., open_palm)",25,0.949,"Engaged (e.g., smile, neutral)",20,0.909,65
+frame_00106_person.png,33.6,False,0,0.724,770,212,579,868,Leaning (Left/Right),15,0.477,Looking Down (Notes) > 20%,5,0.504,"Used gestures (e.g., open_palm)",25,0.604,"Engaged (e.g., smile, neutral)",20,0.763,65
+frame_00107_person.png,33.917,False,0,0.722,763,213,544,867,Leaning (Left/Right),15,0.503,Looking Down (Notes) > 20%,5,0.509,"Used gestures (e.g., open_palm)",25,0.644,"Engaged (e.g., smile, neutral)",20,0.734,65
+frame_00108_person.png,34.234,False,0,0.722,760,213,539,867,Leaning (Left/Right),15,0.483,Eye Contact (Camera) 50-80%,20,0.44,"No gestures (e.g., hands in pockets)",10,0.594,"Engaged (e.g., smile, neutral)",20,0.647,65
+frame_00109_person.png,34.551,False,0,0.722,760,212,529,868,Leaning (Left/Right),15,0.483,Eye Contact (Camera) 50-80%,20,0.507,"Used gestures (e.g., open_palm)",25,0.584,"Engaged (e.g., smile, neutral)",20,0.725,80
+frame_00110_person.png,34.868,False,0,0.723,762,209,526,871,Leaning (Left/Right),15,0.516,Eye Contact (Camera) 50-80%,20,0.548,"No gestures (e.g., hands in pockets)",10,0.573,"Engaged (e.g., smile, neutral)",20,0.58,65
+frame_00111_person.png,35.185,False,0,0.726,778,202,529,878,Leaning (Left/Right),15,0.579,Looking Down (Notes) > 20%,5,0.629,"Used gestures (e.g., open_palm)",25,0.872,"Engaged (e.g., smile, neutral)",20,0.819,65
+frame_00112_person.png,35.502,False,0,0.729,760,199,605,881,Leaning (Left/Right),15,0.691,Looking Down (Notes) > 20%,5,0.682,"Used gestures (e.g., open_palm)",25,0.628,"Engaged (e.g., smile, neutral)",20,0.514,65
+frame_00113_person.png,35.819,False,0,0.733,681,198,647,882,Leaning (Left/Right),15,0.451,Looking Down (Notes) > 20%,5,0.586,"Used gestures (e.g., open_palm)",25,0.587,"Engaged (e.g., smile, neutral)",20,0.699,65
+frame_00114_person.png,36.136,False,0,0.735,667,192,594,888,Leaning (Left/Right),15,0.626,Looking Down (Notes) > 20%,5,0.506,"Used gestures (e.g., open_palm)",25,0.839,"Engaged (e.g., smile, neutral)",20,0.742,65
+frame_00115_person.png,36.453,False,0,0.732,717,190,483,890,Leaning (Left/Right),15,0.678,Eye Contact (Camera) 50-80%,20,0.399,"Used gestures (e.g., open_palm)",25,0.926,"Engaged (e.g., smile, neutral)",20,0.796,80
+frame_00116_person.png,36.77,False,0,0.732,667,191,622,889,Leaning (Left/Right),15,0.552,Looking Down (Notes) > 20%,5,0.571,"Used gestures (e.g., open_palm)",25,0.66,"Engaged (e.g., smile, neutral)",20,0.648,65
+frame_00117_person.png,37.087,False,0,0.735,683,191,631,889,Leaning (Left/Right),15,0.497,Looking Down (Notes) > 20%,5,0.595,"Used gestures (e.g., open_palm)",25,0.746,"Engaged (e.g., smile, neutral)",20,0.806,65
+frame_00118_person.png,37.404,False,0,0.735,712,196,642,884,"Upright, Centered",25,0.529,Looking Down (Notes) > 20%,5,0.485,"Used gestures (e.g., open_palm)",25,0.763,"Engaged (e.g., smile, neutral)",20,0.866,75
+frame_00119_person.png,37.721,False,0,0.735,585,196,615,884,Leaning (Left/Right),15,0.573,Eye Contact (Camera) 50-80%,20,0.642,"Used gestures (e.g., open_palm)",25,0.869,"Engaged (e.g., smile, neutral)",20,0.547,80
+frame_00120_person.png,38.038,False,0,0.726,597,196,563,884,Leaning (Left/Right),15,0.486,Eye Contact (Camera) 50-80%,20,0.545,"Used gestures (e.g., open_palm)",25,0.549,"Engaged (e.g., smile, neutral)",20,0.624,80
+frame_00121_person.png,38.355,False,0,0.727,656,204,530,876,Leaning (Left/Right),15,0.558,Eye Contact (Camera) 50-80%,20,0.523,"Used gestures (e.g., open_palm)",25,0.556,"Engaged (e.g., smile, neutral)",20,0.544,80
+frame_00122_person.png,38.672,False,0,0.729,688,204,552,876,Leaning (Left/Right),15,0.496,Eye Contact (Camera) 50-80%,20,0.489,"Used gestures (e.g., open_palm)",25,0.577,"Engaged (e.g., smile, neutral)",20,0.574,80
+frame_00123_person.png,38.989,False,0,0.731,674,202,609,878,"Upright, Centered",25,0.555,Looking Down (Notes) > 20%,5,0.414,"Used gestures (e.g., open_palm)",25,0.768,"Engaged (e.g., smile, neutral)",20,0.643,75
+frame_00124_person.png,39.306,False,0,0.734,435,199,1083,881,Leaning (Left/Right),15,0.419,Looking Down (Notes) > 20%,5,0.504,"Used gestures (e.g., open_palm)",25,0.512,"Disengaged (e.g., frown)",5,0.621,50
+frame_00125_person.png,39.623,False,0,0.737,247,196,1329,884,"Upright, Centered",25,0.56,Looking Down (Notes) > 20%,5,0.503,"Used gestures (e.g., open_palm)",25,0.506,"Engaged (e.g., smile, neutral)",20,0.644,75
+frame_00126_person.png,39.94,False,0,0.737,303,196,896,884,Leaning (Left/Right),15,0.451,Looking Down (Notes) > 20%,5,0.519,"Used gestures (e.g., open_palm)",25,0.565,"Engaged (e.g., smile, neutral)",20,0.772,65
+frame_00127_person.png,40.257,False,0,0.737,603,196,618,884,"Upright, Centered",25,0.478,Eye Contact (Camera) 50-80%,20,0.467,"Used gestures (e.g., open_palm)",25,0.513,"Engaged (e.g., smile, neutral)",20,0.584,90
+frame_00128_person.png,40.574,False,0,0.738,689,196,541,884,Leaning (Left/Right),15,0.516,Eye Contact (Camera) 50-80%,20,0.53,"Used gestures (e.g., open_palm)",25,0.706,"Engaged (e.g., smile, neutral)",20,0.697,80
+frame_00129_person.png,40.891,False,0,0.74,697,196,535,884,Leaning (Left/Right),15,0.592,Looking Down (Notes) > 20%,5,0.539,"Used gestures (e.g., open_palm)",25,0.776,"Engaged (e.g., smile, neutral)",20,0.815,65
+frame_00130_person.png,41.208,False,0,0.74,696,198,540,882,Leaning (Left/Right),15,0.51,Looking Down (Notes) > 20%,5,0.482,"Used gestures (e.g., open_palm)",25,0.584,"Engaged (e.g., smile, neutral)",20,0.673,65
+frame_00131_person.png,41.525,False,0,0.739,696,206,587,874,Leaning (Left/Right),15,0.439,Eye Contact (Camera) 50-80%,20,0.585,"No gestures (e.g., hands in pockets)",10,0.629,"Engaged (e.g., smile, neutral)",20,0.569,65
+frame_00132_person.png,41.842,False,0,0.739,701,209,580,871,Leaning (Left/Right),15,0.491,Eye Contact (Camera) 50-80%,20,0.599,"No gestures (e.g., hands in pockets)",10,0.683,"Engaged (e.g., smile, neutral)",20,0.659,65
+frame_00133_person.png,42.159,False,0,0.738,708,212,567,868,Leaning (Left/Right),15,0.554,Eye Contact (Camera) 50-80%,20,0.598,"No gestures (e.g., hands in pockets)",10,0.58,"Engaged (e.g., smile, neutral)",20,0.657,65
+frame_00134_person.png,42.476,False,0,0.738,710,212,560,868,Leaning (Left/Right),15,0.511,Eye Contact (Camera) 50-80%,20,0.656,"No gestures (e.g., hands in pockets)",10,0.57,"Engaged (e.g., smile, neutral)",20,0.614,65
+frame_00135_person.png,42.793,False,0,0.738,699,203,547,877,Leaning (Left/Right),15,0.517,Looking Down (Notes) > 20%,5,0.661,"Used gestures (e.g., open_palm)",25,0.784,"Engaged (e.g., smile, neutral)",20,0.591,65
+frame_00136_person.png,43.11,False,0,0.733,679,202,560,878,"Upright, Centered",25,0.496,Looking Down (Notes) > 20%,5,0.497,"Used gestures (e.g., open_palm)",25,0.813,"Engaged (e.g., smile, neutral)",20,0.705,75
+frame_00137_person.png,43.427,False,0,0.731,704,202,537,878,Leaning (Left/Right),15,0.543,Eye Contact (Camera) 50-80%,20,0.597,"Used gestures (e.g., open_palm)",25,0.594,"Engaged (e.g., smile, neutral)",20,0.583,80
+frame_00138_person.png,43.744,False,0,0.733,715,201,524,879,Leaning (Left/Right),15,0.49,Eye Contact (Camera) 50-80%,20,0.447,"Used gestures (e.g., open_palm)",25,0.773,"Engaged (e.g., smile, neutral)",20,0.722,80
+frame_00139_person.png,44.061,False,0,0.735,720,201,519,879,Leaning (Left/Right),15,0.568,Eye Contact (Camera) 50-80%,20,0.458,"Used gestures (e.g., open_palm)",25,0.651,"Engaged (e.g., smile, neutral)",20,0.624,80
+frame_00140_person.png,44.378,False,0,0.736,723,201,517,879,Leaning (Left/Right),15,0.526,Looking Down (Notes) > 20%,5,0.43,"Used gestures (e.g., open_palm)",25,0.796,"Engaged (e.g., smile, neutral)",20,0.74,65
+frame_00141_person.png,44.695,False,0,0.738,702,200,539,880,Leaning (Left/Right),15,0.663,Eye Contact (Camera) 50-80%,20,0.52,"Used gestures (e.g., open_palm)",25,0.894,"Engaged (e.g., smile, neutral)",20,0.561,80
+frame_00142_person.png,45.012,False,0,0.737,699,199,522,881,Leaning (Left/Right),15,0.613,Looking Down (Notes) > 20%,5,0.523,"Used gestures (e.g., open_palm)",25,0.82,"Engaged (e.g., smile, neutral)",20,0.762,65
+frame_00143_person.png,45.329,False,0,0.738,699,199,609,881,Leaning (Left/Right),15,0.539,Looking Down (Notes) > 20%,5,0.601,"Used gestures (e.g., open_palm)",25,0.92,"Engaged (e.g., smile, neutral)",20,0.866,65
+frame_00144_person.png,45.646,False,0,0.736,716,199,606,881,Leaning (Left/Right),15,0.598,Eye Contact (Camera) 50-80%,20,0.447,"Used gestures (e.g., open_palm)",25,0.854,"Engaged (e.g., smile, neutral)",20,0.762,80
+frame_00145_person.png,45.963,False,0,0.738,808,206,576,874,Leaning (Left/Right),15,0.601,Looking Down (Notes) > 20%,5,0.532,"Used gestures (e.g., open_palm)",25,0.873,"Disengaged (e.g., frown)",5,0.601,50
+frame_00146_person.png,46.28,False,0,0.737,836,210,593,870,"Upright, Centered",25,0.587,Looking Down (Notes) > 20%,5,0.456,"Used gestures (e.g., open_palm)",25,0.974,"Engaged (e.g., smile, neutral)",20,0.942,75
+frame_00147_person.png,46.597,False,0,0.739,829,210,663,870,"Upright, Centered",25,0.526,Looking Down (Notes) > 20%,5,0.495,"Used gestures (e.g., open_palm)",25,0.917,"Engaged (e.g., smile, neutral)",20,0.902,75
+frame_00148_person.png,46.914,False,0,0.739,879,208,669,872,"Upright, Centered",25,0.458,Eye Contact (Camera) 50-80%,20,0.433,"Used gestures (e.g., open_palm)",25,0.852,"Engaged (e.g., smile, neutral)",20,0.921,90
+frame_00149_person.png,47.231,False,0,0.736,907,211,582,869,"Upright, Centered",25,0.496,Eye Contact (Camera) 50-80%,20,0.425,"Used gestures (e.g., open_palm)",25,0.762,"Engaged (e.g., smile, neutral)",20,0.532,90
+frame_00150_person.png,47.547,False,0,0.732,895,214,559,866,"Upright, Centered",25,0.47,Looking Down (Notes) > 20%,5,0.494,"Used gestures (e.g., open_palm)",25,0.859,"Engaged (e.g., smile, neutral)",20,0.531,75
+frame_00151_person.png,47.864,False,0,0.73,873,214,559,866,"Upright, Centered",25,0.477,Looking Down (Notes) > 20%,5,0.437,"Used gestures (e.g., open_palm)",25,0.942,"Engaged (e.g., smile, neutral)",20,0.591,75
+frame_00152_person.png,48.181,False,0,0.726,809,214,515,866,Leaning (Left/Right),15,0.553,Looking Down (Notes) > 20%,5,0.503,"Used gestures (e.g., open_palm)",25,0.851,"Engaged (e.g., smile, neutral)",20,0.811,65
+frame_00153_person.png,48.498,False,0,0.721,787,211,522,869,Leaning (Left/Right),15,0.608,Looking Down (Notes) > 20%,5,0.519,"Used gestures (e.g., open_palm)",25,0.884,"Engaged (e.g., smile, neutral)",20,0.767,65
+frame_00154_person.png,48.815,False,0,0.722,769,211,542,869,Leaning (Left/Right),15,0.478,Eye Contact (Camera) 50-80%,20,0.476,"Used gestures (e.g., open_palm)",25,0.507,"Engaged (e.g., smile, neutral)",20,0.579,80
+frame_00155_person.png,49.132,False,0,0.719,732,212,564,868,Leaning (Left/Right),15,0.479,Looking Down (Notes) > 20%,5,0.462,"Used gestures (e.g., open_palm)",25,0.905,"Engaged (e.g., smile, neutral)",20,0.824,65
+frame_00156_person.png,49.449,False,0,0.722,793,213,574,867,Leaning (Left/Right),15,0.658,Looking Down (Notes) > 20%,5,0.417,"Used gestures (e.g., open_palm)",25,0.903,"Engaged (e.g., smile, neutral)",20,0.683,65
+frame_00157_person.png,49.766,False,0,0.722,839,216,624,864,"Upright, Centered",25,0.485,Looking Down (Notes) > 20%,5,0.388,"Used gestures (e.g., open_palm)",25,0.966,"Engaged (e.g., smile, neutral)",20,0.919,75
+frame_00158_person.png,50.083,False,0,0.725,853,221,785,859,Leaning (Left/Right),15,0.448,Looking Down (Notes) > 20%,5,0.559,"Used gestures (e.g., open_palm)",25,0.792,"Disengaged (e.g., frown)",5,0.547,50
+frame_00159_person.png,50.4,False,0,0.726,901,224,679,856,Leaning (Left/Right),15,0.453,Looking Down (Notes) > 20%,5,0.563,"Used gestures (e.g., open_palm)",25,0.821,"Engaged (e.g., smile, neutral)",20,0.842,65
+frame_00160_person.png,50.717,False,0,0.728,882,222,614,858,Leaning (Left/Right),15,0.493,Looking Down (Notes) > 20%,5,0.521,"Used gestures (e.g., open_palm)",25,0.862,"Engaged (e.g., smile, neutral)",20,0.796,65
+frame_00161_person.png,51.034,False,0,0.73,869,213,554,867,Leaning (Left/Right),15,0.53,Looking Down (Notes) > 20%,5,0.487,"Used gestures (e.g., open_palm)",25,0.919,"Engaged (e.g., smile, neutral)",20,0.667,65
+frame_00162_person.png,51.351,False,0,0.732,864,211,620,869,Leaning (Left/Right),15,0.5,Looking Down (Notes) > 20%,5,0.435,"Used gestures (e.g., open_palm)",25,0.911,"Engaged (e.g., smile, neutral)",20,0.863,65
+frame_00163_person.png,51.668,False,0,0.733,861,213,669,867,Leaning (Left/Right),15,0.468,Looking Down (Notes) > 20%,5,0.48,"Used gestures (e.g., open_palm)",25,0.978,"Engaged (e.g., smile, neutral)",20,0.669,65
+frame_00164_person.png,51.985,False,0,0.735,871,214,647,866,"Upright, Centered",25,0.442,Eye Contact (Camera) 50-80%,20,0.474,"Used gestures (e.g., open_palm)",25,0.668,"Engaged (e.g., smile, neutral)",20,0.696,90
+frame_00165_person.png,52.302,False,0,0.734,869,224,620,856,Leaning (Left/Right),15,0.477,Eye Contact (Camera) 50-80%,20,0.673,"Used gestures (e.g., open_palm)",25,0.539,"Disengaged (e.g., frown)",5,0.51,65
+frame_00166_person.png,52.619,False,0,0.734,872,233,591,847,"Upright, Centered",25,0.446,Eye Contact (Camera) 50-80%,20,0.562,"No gestures (e.g., hands in pockets)",10,0.647,"Engaged (e.g., smile, neutral)",20,0.666,75
+frame_00167_person.png,52.936,False,0,0.733,874,234,563,846,Leaning (Left/Right),15,0.499,Eye Contact (Camera) 50-80%,20,0.481,"No gestures (e.g., hands in pockets)",10,0.525,"Engaged (e.g., smile, neutral)",20,0.657,65
+frame_00168_person.png,53.253,False,0,0.731,871,234,556,846,"Upright, Centered",25,0.467,Eye Contact (Camera) 50-80%,20,0.547,"No gestures (e.g., hands in pockets)",10,0.502,"Engaged (e.g., smile, neutral)",20,0.631,75
+frame_00169_person.png,53.57,False,0,0.732,870,230,528,850,Leaning (Left/Right),15,0.608,Looking Down (Notes) > 20%,5,0.505,"Used gestures (e.g., open_palm)",25,0.743,"Engaged (e.g., smile, neutral)",20,0.749,65
+frame_00170_person.png,53.887,False,0,0.729,871,229,504,851,Leaning (Left/Right),15,0.55,Eye Contact (Camera) 50-80%,20,0.485,"No gestures (e.g., hands in pockets)",10,0.612,"Engaged (e.g., smile, neutral)",20,0.511,65
+frame_00171_person.png,54.204,False,0,0.724,893,227,489,853,Leaning (Left/Right),15,0.532,Eye Contact (Camera) 50-80%,20,0.547,"Used gestures (e.g., open_palm)",25,0.719,"Engaged (e.g., smile, neutral)",20,0.668,80
+frame_00172_person.png,54.521,False,0,0.725,887,227,519,853,"Upright, Centered",25,0.49,Eye Contact (Camera) 50-80%,20,0.647,"No gestures (e.g., hands in pockets)",10,0.527,"Engaged (e.g., smile, neutral)",20,0.509,75
+frame_00173_person.png,54.838,False,0,0.727,887,223,519,857,Leaning (Left/Right),15,0.581,Looking Down (Notes) > 20%,5,0.517,"Used gestures (e.g., open_palm)",25,0.589,"Engaged (e.g., smile, neutral)",20,0.724,65
+frame_00174_person.png,55.155,False,0,0.73,830,223,580,857,Leaning (Left/Right),15,0.532,Looking Down (Notes) > 20%,5,0.556,"Used gestures (e.g., open_palm)",25,0.773,"Engaged (e.g., smile, neutral)",20,0.672,65
+frame_00175_person.png,55.472,False,0,0.732,858,223,560,857,Leaning (Left/Right),15,0.663,Eye Contact (Camera) 50-80%,20,0.5,"Used gestures (e.g., open_palm)",25,0.75,"Disengaged (e.g., frown)",5,0.599,65
+frame_00176_person.png,55.789,False,0,0.734,814,214,606,866,Leaning (Left/Right),15,0.469,Looking Down (Notes) > 20%,5,0.537,"Used gestures (e.g., open_palm)",25,0.941,"Engaged (e.g., smile, neutral)",20,0.914,65
+frame_00177_person.png,56.106,False,0,0.735,812,223,610,857,Leaning (Left/Right),15,0.53,Looking Down (Notes) > 20%,5,0.579,"Used gestures (e.g., open_palm)",25,0.881,"Engaged (e.g., smile, neutral)",20,0.797,65
+frame_00178_person.png,56.423,False,0,0.737,819,224,603,856,Leaning (Left/Right),15,0.535,Looking Down (Notes) > 20%,5,0.445,"Used gestures (e.g., open_palm)",25,0.968,"Engaged (e.g., smile, neutral)",20,0.849,65
+frame_00179_person.png,56.74,False,0,0.738,804,225,611,855,Leaning (Left/Right),15,0.497,Looking Down (Notes) > 20%,5,0.427,"Used gestures (e.g., open_palm)",25,0.878,"Engaged (e.g., smile, neutral)",20,0.733,65
+frame_00180_person.png,57.057,False,0,0.739,803,227,618,853,"Upright, Centered",25,0.48,Eye Contact (Camera) 50-80%,20,0.475,"Used gestures (e.g., open_palm)",25,0.621,"Engaged (e.g., smile, neutral)",20,0.894,90
+frame_00181_person.png,57.374,False,0,0.739,808,229,596,851,Leaning (Left/Right),15,0.505,Eye Contact (Camera) 50-80%,20,0.578,"No gestures (e.g., hands in pockets)",10,0.562,"Engaged (e.g., smile, neutral)",20,0.587,65
+frame_00182_person.png,57.691,False,0,0.738,825,230,580,850,Leaning (Left/Right),15,0.51,Eye Contact (Camera) 50-80%,20,0.611,"No gestures (e.g., hands in pockets)",10,0.501,"Disengaged (e.g., frown)",5,0.532,50
+frame_00183_person.png,58.008,False,0,0.739,834,230,572,850,"Upright, Centered",25,0.451,Eye Contact (Camera) 50-80%,20,0.616,"Used gestures (e.g., open_palm)",25,0.602,"Engaged (e.g., smile, neutral)",20,0.586,90
+frame_00184_person.png,58.325,False,0,0.74,849,230,567,850,Leaning (Left/Right),15,0.418,Eye Contact (Camera) 50-80%,20,0.613,"No gestures (e.g., hands in pockets)",10,0.573,"Engaged (e.g., smile, neutral)",20,0.606,65
+frame_00185_person.png,58.642,False,0,0.741,857,231,565,849,Leaning (Left/Right),15,0.441,Eye Contact (Camera) 50-80%,20,0.547,"No gestures (e.g., hands in pockets)",10,0.753,"Engaged (e.g., smile, neutral)",20,0.601,65
+frame_00186_person.png,58.959,False,0,0.744,854,233,565,847,Leaning (Left/Right),15,0.579,Looking Down (Notes) > 20%,5,0.492,"No gestures (e.g., hands in pockets)",10,0.533,"Disengaged (e.g., frown)",5,0.513,35
+frame_00187_person.png,59.276,False,0,0.746,801,234,568,846,Leaning (Left/Right),15,0.441,Eye Contact (Camera) 50-80%,20,0.588,"Used gestures (e.g., open_palm)",25,0.53,"Engaged (e.g., smile, neutral)",20,0.514,80
+frame_00188_person.png,59.593,False,0,0.746,784,234,571,846,"Upright, Centered",25,0.479,Eye Contact (Camera) 50-80%,20,0.434,"Used gestures (e.g., open_palm)",25,0.537,"Engaged (e.g., smile, neutral)",20,0.684,90
+frame_00189_person.png,59.91,False,0,0.748,793,234,542,846,Leaning (Left/Right),15,0.585,Eye Contact (Camera) 50-80%,20,0.566,"Used gestures (e.g., open_palm)",25,0.54,"Engaged (e.g., smile, neutral)",20,0.578,80
+frame_00190_person.png,60.227,False,0,0.749,792,234,545,846,Leaning (Left/Right),15,0.506,Looking Down (Notes) > 20%,5,0.55,"Used gestures (e.g., open_palm)",25,0.64,"Engaged (e.g., smile, neutral)",20,0.634,65
+frame_00191_person.png,60.544,False,0,0.747,810,234,520,846,Leaning (Left/Right),15,0.537,Eye Contact (Camera) 50-80%,20,0.537,"Used gestures (e.g., open_palm)",25,0.873,"Engaged (e.g., smile, neutral)",20,0.693,80
+frame_00192_person.png,60.861,False,0,0.748,789,236,550,844,Leaning (Left/Right),15,0.523,Eye Contact (Camera) 50-80%,20,0.434,"Used gestures (e.g., open_palm)",25,0.965,"Engaged (e.g., smile, neutral)",20,0.75,80
+frame_00193_person.png,61.178,False,0,0.714,736,479,254,601,Leaning (Left/Right),15,0.909,Eye Contact (Camera) 50-80%,20,0.417,"Used gestures (e.g., open_palm)",25,0.708,"Disengaged (e.g., frown)",5,0.632,65
+frame_00194_person.png,61.495,False,0,0.686,601,488,293,592,Leaning (Left/Right),15,0.924,Eye Contact (Camera) > 80%,30,0.739,"No gestures (e.g., hands in pockets)",10,0.789,"Engaged (e.g., smile, neutral)",20,0.822,75
+frame_00195_person.png,61.812,False,0,0.658,447,477,466,603,Leaning (Left/Right),15,0.815,Eye Contact (Camera) > 80%,30,0.523,"No gestures (e.g., hands in pockets)",10,0.783,"Disengaged (e.g., frown)",5,0.511,60
+frame_00196_person.png,62.129,False,0,0.633,417,460,497,620,Leaning (Left/Right),15,0.835,Eye Contact (Camera) > 80%,30,0.5,"No gestures (e.g., hands in pockets)",10,0.875,"Disengaged (e.g., frown)",5,0.535,60
+frame_00197_person.png,62.446,False,0,0.615,367,466,558,614,Leaning (Left/Right),15,0.705,Eye Contact (Camera) > 80%,30,0.473,"No gestures (e.g., hands in pockets)",10,0.736,"Disengaged (e.g., frown)",5,0.643,60
+frame_00198_person.png,62.763,False,0,0.6,326,467,622,613,Leaning (Left/Right),15,0.684,Eye Contact (Camera) > 80%,30,0.42,"No gestures (e.g., hands in pockets)",10,0.857,"Disengaged (e.g., frown)",5,0.522,60
+frame_00199_person.png,63.08,False,0,0.583,400,463,562,617,Leaning (Left/Right),15,0.866,Eye Contact (Camera) > 80%,30,0.442,"No gestures (e.g., hands in pockets)",10,0.838,"Disengaged (e.g., frown)",5,0.624,60
+frame_00200_person.png,63.397,False,0,0.566,449,463,519,617,Leaning (Left/Right),15,0.821,Eye Contact (Camera) > 80%,30,0.482,"No gestures (e.g., hands in pockets)",10,0.778,"Engaged (e.g., smile, neutral)",20,0.508,75
+frame_00201_person.png,63.714,False,0,0.551,355,461,610,619,Leaning (Left/Right),15,0.607,Eye Contact (Camera) > 80%,30,0.492,"No gestures (e.g., hands in pockets)",10,0.773,"Engaged (e.g., smile, neutral)",20,0.577,75
+frame_00202_person.png,64.031,False,0,0.537,375,461,568,619,Leaning (Left/Right),15,0.659,Eye Contact (Camera) > 80%,30,0.541,"No gestures (e.g., hands in pockets)",10,0.749,"Engaged (e.g., smile, neutral)",20,0.526,75
+frame_00203_person.png,64.348,False,0,0.525,332,463,601,617,Leaning (Left/Right),15,0.774,Eye Contact (Camera) 50-80%,20,0.508,"No gestures (e.g., hands in pockets)",10,0.897,"Disengaged (e.g., frown)",5,0.56,50
+frame_00204_person.png,64.665,False,0,0.516,360,465,649,615,Leaning (Left/Right),15,0.79,Eye Contact (Camera) > 80%,30,0.424,"No gestures (e.g., hands in pockets)",10,0.807,"Disengaged (e.g., frown)",5,0.659,60
+frame_00205_person.png,64.982,False,0,0.505,378,461,628,619,Leaning (Left/Right),15,0.801,Eye Contact (Camera) > 80%,30,0.384,"No gestures (e.g., hands in pockets)",10,0.765,"Engaged (e.g., smile, neutral)",20,0.513,75
+frame_00206.png,65.299,True,,,,,,,,,,,,,,,,,,,
+frame_00207.png,65.616,True,,,,,,,,,,,,,,,,,,,
+frame_00208.png,65.933,True,,,,,,,,,,,,,,,,,,,
+frame_00209.png,66.25,True,,,,,,,,,,,,,,,,,,,
+frame_00210.png,66.567,True,,,,,,,,,,,,,,,,,,,
+frame_00211.png,66.883,True,,,,,,,,,,,,,,,,,,,
+frame_00212.png,67.2,True,,,,,,,,,,,,,,,,,,,
+frame_00213.png,67.517,True,,,,,,,,,,,,,,,,,,,
+frame_00214.png,67.834,True,,,,,,,,,,,,,,,,,,,
+frame_00215.png,68.151,True,,,,,,,,,,,,,,,,,,,
+frame_00216.png,68.468,True,,,,,,,,,,,,,,,,,,,
+frame_00217.png,68.785,True,,,,,,,,,,,,,,,,,,,
+frame_00218.png,69.102,True,,,,,,,,,,,,,,,,,,,
+frame_00219.png,69.419,True,,,,,,,,,,,,,,,,,,,
+frame_00220.png,69.736,True,,,,,,,,,,,,,,,,,,,
+frame_00221.png,70.053,True,,,,,,,,,,,,,,,,,,,
+frame_00222.png,70.37,True,,,,,,,,,,,,,,,,,,,
+frame_00223.png,70.687,True,,,,,,,,,,,,,,,,,,,
+frame_00224.png,71.004,True,,,,,,,,,,,,,,,,,,,
+frame_00225.png,71.321,True,,,,,,,,,,,,,,,,,,,
+frame_00226.png,71.638,True,,,,,,,,,,,,,,,,,,,
+frame_00227.png,71.955,True,,,,,,,,,,,,,,,,,,,
+frame_00228.png,72.272,True,,,,,,,,,,,,,,,,,,,
+frame_00229.png,72.589,True,,,,,,,,,,,,,,,,,,,
+frame_00230.png,72.906,True,,,,,,,,,,,,,,,,,,,
+frame_00231.png,73.223,True,,,,,,,,,,,,,,,,,,,
+frame_00232.png,73.54,True,,,,,,,,,,,,,,,,,,,
+frame_00233.png,73.857,True,,,,,,,,,,,,,,,,,,,
+frame_00234.png,74.174,True,,,,,,,,,,,,,,,,,,,
+frame_00235.png,74.491,True,,,,,,,,,,,,,,,,,,,
+frame_00236.png,74.808,True,,,,,,,,,,,,,,,,,,,
+frame_00237.png,75.125,True,,,,,,,,,,,,,,,,,,,
+frame_00238.png,75.442,True,,,,,,,,,,,,,,,,,,,
+frame_00239.png,75.759,True,,,,,,,,,,,,,,,,,,,
+frame_00240.png,76.076,True,,,,,,,,,,,,,,,,,,,
+frame_00241.png,76.393,True,,,,,,,,,,,,,,,,,,,
+frame_00242.png,76.71,True,,,,,,,,,,,,,,,,,,,
+frame_00243.png,77.027,True,,,,,,,,,,,,,,,,,,,
+frame_00244.png,77.344,True,,,,,,,,,,,,,,,,,,,
+frame_00245.png,77.661,True,,,,,,,,,,,,,,,,,,,
+frame_00246.png,77.978,True,,,,,,,,,,,,,,,,,,,
+frame_00247.png,78.295,True,,,,,,,,,,,,,,,,,,,
+frame_00248.png,78.612,True,,,,,,,,,,,,,,,,,,,
+frame_00249.png,78.929,True,,,,,,,,,,,,,,,,,,,
+frame_00250.png,79.246,True,,,,,,,,,,,,,,,,,,,
+frame_00251.png,79.563,True,,,,,,,,,,,,,,,,,,,
+frame_00252.png,79.88,True,,,,,,,,,,,,,,,,,,,
+frame_00253.png,80.197,True,,,,,,,,,,,,,,,,,,,
+frame_00254.png,80.514,True,,,,,,,,,,,,,,,,,,,
+frame_00255.png,80.831,True,,,,,,,,,,,,,,,,,,,
+frame_00256.png,81.148,True,,,,,,,,,,,,,,,,,,,
+frame_00257.png,81.465,True,,,,,,,,,,,,,,,,,,,
+frame_00258.png,81.782,True,,,,,,,,,,,,,,,,,,,
+frame_00259.png,82.099,True,,,,,,,,,,,,,,,,,,,
+frame_00260.png,82.416,True,,,,,,,,,,,,,,,,,,,
+frame_00261.png,82.733,True,,,,,,,,,,,,,,,,,,,
+frame_00262.png,83.05,True,,,,,,,,,,,,,,,,,,,
+frame_00263.png,83.367,True,,,,,,,,,,,,,,,,,,,
+frame_00264.png,83.684,True,,,,,,,,,,,,,,,,,,,
+frame_00265.png,84.001,True,,,,,,,,,,,,,,,,,,,
+frame_00266.png,84.318,True,,,,,,,,,,,,,,,,,,,
+frame_00267.png,84.635,True,,,,,,,,,,,,,,,,,,,
+frame_00268_person.png,84.952,False,0,0.504,604,264,600,816,"Upright, Centered",25,0.449,Eye Contact (Camera) 50-80%,20,0.482,"Used gestures (e.g., open_palm)",25,0.726,"Engaged (e.g., smile, neutral)",20,0.86,90
+frame_00269_person.png,85.269,False,0,0.508,595,280,595,800,Leaning (Left/Right),15,0.598,Eye Contact (Camera) 50-80%,20,0.472,"Used gestures (e.g., open_palm)",25,0.702,"Engaged (e.g., smile, neutral)",20,0.505,80
+frame_00270_person.png,85.585,False,0,0.514,591,278,575,802,Leaning (Left/Right),15,0.55,Eye Contact (Camera) 50-80%,20,0.413,"Used gestures (e.g., open_palm)",25,0.914,"Engaged (e.g., smile, neutral)",20,0.767,80
+frame_00271_person.png,85.902,False,0,0.534,521,254,581,826,Leaning (Left/Right),15,0.638,Looking Down (Notes) > 20%,5,0.419,"Used gestures (e.g., open_palm)",25,0.893,"Engaged (e.g., smile, neutral)",20,0.862,65
+frame_00272_person.png,86.219,False,0,0.546,518,239,513,841,Leaning (Left/Right),15,0.708,Eye Contact (Camera) 50-80%,20,0.645,"Used gestures (e.g., open_palm)",25,0.722,"Engaged (e.g., smile, neutral)",20,0.541,80
+frame_00273_person.png,86.536,False,0,0.558,570,236,460,844,Leaning (Left/Right),15,0.658,Eye Contact (Camera) 50-80%,20,0.581,"Used gestures (e.g., open_palm)",25,0.885,"Engaged (e.g., smile, neutral)",20,0.573,80
+frame_00274_person.png,86.853,False,0,0.563,613,236,435,844,Leaning (Left/Right),15,0.621,Eye Contact (Camera) 50-80%,20,0.59,"Used gestures (e.g., open_palm)",25,0.876,"Engaged (e.g., smile, neutral)",20,0.588,80
+frame_00275_person.png,87.17,False,0,0.566,629,219,451,861,Leaning (Left/Right),15,0.755,Eye Contact (Camera) 50-80%,20,0.652,"No gestures (e.g., hands in pockets)",10,0.51,"Disengaged (e.g., frown)",5,0.638,50
+frame_00276_person.png,87.487,False,0,0.577,548,213,559,867,Leaning (Left/Right),15,0.466,Eye Contact (Camera) 50-80%,20,0.446,"Used gestures (e.g., open_palm)",25,0.748,"Engaged (e.g., smile, neutral)",20,0.638,80
+frame_00277_person.png,87.804,False,0,0.591,660,206,504,874,Leaning (Left/Right),15,0.659,Eye Contact (Camera) 50-80%,20,0.557,"Used gestures (e.g., open_palm)",25,0.922,"Engaged (e.g., smile, neutral)",20,0.654,80
+frame_00278_person.png,88.121,False,0,0.606,643,213,573,867,"Upright, Centered",25,0.523,Eye Contact (Camera) 50-80%,20,0.414,"Used gestures (e.g., open_palm)",25,0.898,"Engaged (e.g., smile, neutral)",20,0.815,90
+frame_00279_person.png,88.438,False,0,0.613,706,215,567,865,"Upright, Centered",25,0.521,Eye Contact (Camera) 50-80%,20,0.457,"Used gestures (e.g., open_palm)",25,0.829,"Engaged (e.g., smile, neutral)",20,0.704,90
+frame_00280_person.png,88.755,False,0,0.615,873,215,416,865,Leaning (Left/Right),15,0.562,Eye Contact (Camera) 50-80%,20,0.648,"Used gestures (e.g., open_palm)",25,0.704,"Disengaged (e.g., frown)",5,0.607,65
+frame_00281_person.png,89.072,False,0,0.629,806,218,618,862,"Upright, Centered",25,0.567,Looking Down (Notes) > 20%,5,0.384,"Used gestures (e.g., open_palm)",25,0.907,"Engaged (e.g., smile, neutral)",20,0.937,75
+frame_00282_person.png,89.389,False,0,0.626,862,219,486,861,Leaning (Left/Right),15,0.528,Looking Down (Notes) > 20%,5,0.459,"Used gestures (e.g., open_palm)",25,0.691,"Engaged (e.g., smile, neutral)",20,0.775,65
+frame_00283_person.png,89.706,False,0,0.632,834,220,528,860,Leaning (Left/Right),15,0.515,Looking Down (Notes) > 20%,5,0.578,"Used gestures (e.g., open_palm)",25,0.798,"Engaged (e.g., smile, neutral)",20,0.624,65
+frame_00284_person.png,90.023,False,0,0.636,812,221,558,859,"Upright, Centered",25,0.46,Looking Down (Notes) > 20%,5,0.491,"Used gestures (e.g., open_palm)",25,0.856,"Engaged (e.g., smile, neutral)",20,0.835,75
+frame_00285_person.png,90.34,False,0,0.633,811,219,531,861,Leaning (Left/Right),15,0.537,Eye Contact (Camera) 50-80%,20,0.486,"Used gestures (e.g., open_palm)",25,0.83,"Engaged (e.g., smile, neutral)",20,0.573,80
+frame_00286_person.png,90.657,False,0,0.64,864,218,444,862,Leaning (Left/Right),15,0.539,Looking Down (Notes) > 20%,5,0.557,"Used gestures (e.g., open_palm)",25,0.957,"Engaged (e.g., smile, neutral)",20,0.782,65
+frame_00287_person.png,90.974,False,0,0.649,886,219,441,861,Leaning (Left/Right),15,0.584,Eye Contact (Camera) 50-80%,20,0.532,"Used gestures (e.g., open_palm)",25,0.786,"Engaged (e.g., smile, neutral)",20,0.586,80
+frame_00288_person.png,91.291,False,0,0.659,798,219,547,861,Leaning (Left/Right),15,0.572,Looking Down (Notes) > 20%,5,0.446,"Used gestures (e.g., open_palm)",25,0.938,"Engaged (e.g., smile, neutral)",20,0.62,65
+frame_00289_person.png,91.608,False,0,0.668,750,217,576,863,Leaning (Left/Right),15,0.466,Looking Down (Notes) > 20%,5,0.649,"Used gestures (e.g., open_palm)",25,0.95,"Engaged (e.g., smile, neutral)",20,0.746,65
+frame_00290_person.png,91.925,False,0,0.677,738,213,636,867,Leaning (Left/Right),15,0.545,Looking Down (Notes) > 20%,5,0.564,"Used gestures (e.g., open_palm)",25,0.816,"Engaged (e.g., smile, neutral)",20,0.716,65
+frame_00291_person.png,92.242,False,0,0.684,773,210,591,870,Leaning (Left/Right),15,0.464,Looking Down (Notes) > 20%,5,0.45,"Used gestures (e.g., open_palm)",25,0.892,"Engaged (e.g., smile, neutral)",20,0.757,65
+frame_00292_person.png,92.559,False,0,0.687,794,207,554,873,Leaning (Left/Right),15,0.675,Looking Down (Notes) > 20%,5,0.522,"Used gestures (e.g., open_palm)",25,0.931,"Engaged (e.g., smile, neutral)",20,0.746,65
+frame_00293_person.png,92.876,False,0,0.693,775,211,544,869,Leaning (Left/Right),15,0.488,Looking Down (Notes) > 20%,5,0.586,"Used gestures (e.g., open_palm)",25,0.952,"Engaged (e.g., smile, neutral)",20,0.816,65
+frame_00294_person.png,93.193,False,0,0.7,725,221,591,859,Leaning (Left/Right),15,0.494,Looking Down (Notes) > 20%,5,0.513,"Used gestures (e.g., open_palm)",25,0.908,"Engaged (e.g., smile, neutral)",20,0.806,65
+frame_00295_person.png,93.51,False,0,0.704,733,228,582,852,Leaning (Left/Right),15,0.55,Eye Contact (Camera) 50-80%,20,0.438,"Used gestures (e.g., open_palm)",25,0.54,"Engaged (e.g., smile, neutral)",20,0.59,80
+frame_00296_person.png,93.827,False,0,0.707,740,228,579,852,Leaning (Left/Right),15,0.512,Eye Contact (Camera) 50-80%,20,0.508,"Used gestures (e.g., open_palm)",25,0.613,"Engaged (e.g., smile, neutral)",20,0.514,80
+frame_00297_person.png,94.144,False,0,0.711,740,228,575,852,Leaning (Left/Right),15,0.496,Looking Down (Notes) > 20%,5,0.398,"Used gestures (e.g., open_palm)",25,0.747,"Engaged (e.g., smile, neutral)",20,0.697,65
+frame_00298_person.png,94.461,False,0,0.714,736,216,535,864,Leaning (Left/Right),15,0.461,Looking Down (Notes) > 20%,5,0.555,"Used gestures (e.g., open_palm)",25,0.955,"Engaged (e.g., smile, neutral)",20,0.805,65
+frame_00299_person.png,94.778,False,0,0.717,739,212,591,868,"Upright, Centered",25,0.527,Looking Down (Notes) > 20%,5,0.652,"Used gestures (e.g., open_palm)",25,0.933,"Engaged (e.g., smile, neutral)",20,0.919,75
+frame_00300_person.png,95.095,False,0,0.719,740,210,602,870,Leaning (Left/Right),15,0.544,Looking Down (Notes) > 20%,5,0.707,"Used gestures (e.g., open_palm)",25,0.94,"Engaged (e.g., smile, neutral)",20,0.817,65
+frame_00301_person.png,95.412,False,0,0.721,740,210,591,870,Leaning (Left/Right),15,0.502,Looking Down (Notes) > 20%,5,0.699,"Used gestures (e.g., open_palm)",25,0.922,"Engaged (e.g., smile, neutral)",20,0.882,65
+frame_00302_person.png,95.729,False,0,0.721,712,206,611,874,"Upright, Centered",25,0.45,Looking Down (Notes) > 20%,5,0.589,"Used gestures (e.g., open_palm)",25,0.945,"Engaged (e.g., smile, neutral)",20,0.841,75
+frame_00303_person.png,96.046,False,0,0.723,691,200,640,880,Leaning (Left/Right),15,0.542,Looking Down (Notes) > 20%,5,0.52,"Used gestures (e.g., open_palm)",25,0.773,"Engaged (e.g., smile, neutral)",20,0.732,65
+frame_00304_person.png,96.363,False,0,0.726,658,201,732,879,Leaning (Left/Right),15,0.496,Looking Down (Notes) > 20%,5,0.582,"Used gestures (e.g., open_palm)",25,0.899,"Engaged (e.g., smile, neutral)",20,0.876,65
+frame_00305_person.png,96.68,False,0,0.727,591,202,799,878,"Upright, Centered",25,0.431,Looking Down (Notes) > 20%,5,0.682,"Used gestures (e.g., open_palm)",25,0.942,"Engaged (e.g., smile, neutral)",20,0.904,75
+frame_00306_person.png,96.997,False,0,0.729,547,203,833,877,"Upright, Centered",25,0.643,Looking Down (Notes) > 20%,5,0.623,"Used gestures (e.g., open_palm)",25,0.885,"Engaged (e.g., smile, neutral)",20,0.812,75
+frame_00307_person.png,97.314,False,0,0.729,579,203,746,877,"Upright, Centered",25,0.582,Eye Contact (Camera) 50-80%,20,0.421,"Used gestures (e.g., open_palm)",25,0.89,"Engaged (e.g., smile, neutral)",20,0.765,90
+frame_00308_person.png,97.631,False,0,0.73,648,202,624,878,"Upright, Centered",25,0.49,Eye Contact (Camera) 50-80%,20,0.417,"Used gestures (e.g., open_palm)",25,0.806,"Engaged (e.g., smile, neutral)",20,0.786,90
+frame_00309_person.png,97.948,False,0,0.727,648,202,616,878,Leaning (Left/Right),15,0.51,Eye Contact (Camera) 50-80%,20,0.475,"Used gestures (e.g., open_palm)",25,0.508,"Engaged (e.g., smile, neutral)",20,0.709,80
+frame_00310_person.png,98.265,False,0,0.722,669,201,545,879,Leaning (Left/Right),15,0.571,Eye Contact (Camera) 50-80%,20,0.526,"Used gestures (e.g., open_palm)",25,0.803,"Engaged (e.g., smile, neutral)",20,0.736,80
+frame_00311_person.png,98.582,False,0,0.725,672,206,578,874,"Upright, Centered",25,0.62,Looking Down (Notes) > 20%,5,0.392,"Used gestures (e.g., open_palm)",25,0.987,"Engaged (e.g., smile, neutral)",20,0.791,75
+frame_00312_person.png,98.899,False,0,0.726,672,213,586,867,"Upright, Centered",25,0.646,Looking Down (Notes) > 20%,5,0.444,"Used gestures (e.g., open_palm)",25,0.982,"Engaged (e.g., smile, neutral)",20,0.743,75
+frame_00313_person.png,99.216,False,0,0.728,671,217,585,863,"Upright, Centered",25,0.652,Looking Down (Notes) > 20%,5,0.483,"Used gestures (e.g., open_palm)",25,0.981,"Engaged (e.g., smile, neutral)",20,0.675,75
+frame_00314_person.png,99.533,False,0,0.729,639,211,680,869,Leaning (Left/Right),15,0.445,Eye Contact (Camera) 50-80%,20,0.447,"Used gestures (e.g., open_palm)",25,0.979,"Engaged (e.g., smile, neutral)",20,0.695,80
+frame_00315_person.png,99.85,False,0,0.73,572,203,807,877,"Upright, Centered",25,0.492,Looking Down (Notes) > 20%,5,0.566,"Used gestures (e.g., open_palm)",25,0.878,"Engaged (e.g., smile, neutral)",20,0.724,75
+frame_00316_person.png,100.167,False,0,0.732,517,199,1038,881,"Upright, Centered",25,0.508,Eye Contact (Camera) 50-80%,20,0.532,"Used gestures (e.g., open_palm)",25,0.844,"Engaged (e.g., smile, neutral)",20,0.555,90
+frame_00317_person.png,100.484,False,0,0.735,387,200,1266,880,Leaning (Left/Right),15,0.452,Looking Down (Notes) > 20%,5,0.521,"Used gestures (e.g., open_palm)",25,0.712,"Engaged (e.g., smile, neutral)",20,0.56,65
+frame_00318_person.png,100.801,False,0,0.737,335,200,1334,880,"Upright, Centered",25,0.501,Looking Down (Notes) > 20%,5,0.641,"No gestures (e.g., hands in pockets)",10,0.611,"Engaged (e.g., smile, neutral)",20,0.521,60
+frame_00319_person.png,101.118,False,0,0.74,440,200,1131,880,"Upright, Centered",25,0.514,Looking Down (Notes) > 20%,5,0.709,"Used gestures (e.g., open_palm)",25,0.757,"Engaged (e.g., smile, neutral)",20,0.732,75
+frame_00320_person.png,101.435,False,0,0.74,678,204,569,876,"Upright, Centered",25,0.485,Eye Contact (Camera) 50-80%,20,0.51,"Used gestures (e.g., open_palm)",25,0.863,"Engaged (e.g., smile, neutral)",20,0.65,90
+frame_00321_person.png,101.752,False,0,0.739,697,213,580,867,Leaning (Left/Right),15,0.485,Looking Down (Notes) > 20%,5,0.413,"Used gestures (e.g., open_palm)",25,0.587,"Engaged (e.g., smile, neutral)",20,0.743,65
+frame_00322_person.png,102.069,False,0,0.738,699,216,571,864,Leaning (Left/Right),15,0.451,Looking Down (Notes) > 20%,5,0.446,"Used gestures (e.g., open_palm)",25,0.6,"Engaged (e.g., smile, neutral)",20,0.71,65
+frame_00323_person.png,102.386,False,0,0.736,701,217,568,863,"Upright, Centered",25,0.435,Eye Contact (Camera) 50-80%,20,0.424,"Used gestures (e.g., open_palm)",25,0.514,"Engaged (e.g., smile, neutral)",20,0.656,90
+frame_00324_person.png,102.703,False,0,0.737,702,213,558,867,"Upright, Centered",25,0.432,Looking Down (Notes) > 20%,5,0.493,"Used gestures (e.g., open_palm)",25,0.922,"Engaged (e.g., smile, neutral)",20,0.587,75
+frame_00325_person.png,103.02,False,0,0.738,698,201,567,879,"Upright, Centered",25,0.542,Looking Down (Notes) > 20%,5,0.562,"Used gestures (e.g., open_palm)",25,0.923,"Engaged (e.g., smile, neutral)",20,0.802,75
+frame_00326_person.png,103.337,False,0,0.738,711,197,579,883,"Upright, Centered",25,0.58,Looking Down (Notes) > 20%,5,0.531,"Used gestures (e.g., open_palm)",25,0.941,"Engaged (e.g., smile, neutral)",20,0.866,75
+frame_00327_person.png,103.654,False,0,0.739,684,196,650,884,"Upright, Centered",25,0.544,Looking Down (Notes) > 20%,5,0.546,"Used gestures (e.g., open_palm)",25,0.929,"Engaged (e.g., smile, neutral)",20,0.879,75
+frame_00328_person.png,103.971,False,0,0.74,671,196,675,884,"Upright, Centered",25,0.593,Looking Down (Notes) > 20%,5,0.499,"Used gestures (e.g., open_palm)",25,0.898,"Engaged (e.g., smile, neutral)",20,0.902,75
+frame_00329_person.png,104.288,False,0,0.741,607,197,733,883,"Upright, Centered",25,0.515,Looking Down (Notes) > 20%,5,0.424,"Used gestures (e.g., open_palm)",25,0.88,"Engaged (e.g., smile, neutral)",20,0.771,75
+frame_00330_person.png,104.605,False,0,0.743,561,200,777,880,"Upright, Centered",25,0.523,Looking Down (Notes) > 20%,5,0.501,"Used gestures (e.g., open_palm)",25,0.858,"Engaged (e.g., smile, neutral)",20,0.85,75
+frame_00331_person.png,104.921,False,0,0.744,591,201,619,879,"Upright, Centered",25,0.565,Looking Down (Notes) > 20%,5,0.472,"Used gestures (e.g., open_palm)",25,0.855,"Engaged (e.g., smile, neutral)",20,0.891,75
+frame_00332_person.png,105.238,False,0,0.745,402,202,718,878,"Upright, Centered",25,0.462,Eye Contact (Camera) 50-80%,20,0.453,"Used gestures (e.g., open_palm)",25,0.642,"Engaged (e.g., smile, neutral)",20,0.672,90
+frame_00333_person.png,105.555,False,0,0.747,329,212,850,868,"Upright, Centered",25,0.489,Looking Down (Notes) > 20%,5,0.655,"Used gestures (e.g., open_palm)",25,0.794,"Engaged (e.g., smile, neutral)",20,0.699,75
+frame_00334_person.png,105.872,False,0,0.749,352,219,841,861,"Upright, Centered",25,0.566,Looking Down (Notes) > 20%,5,0.566,"Used gestures (e.g., open_palm)",25,0.688,"Engaged (e.g., smile, neutral)",20,0.545,75
+frame_00335_person.png,106.189,False,0,0.751,408,219,801,861,"Upright, Centered",25,0.462,Looking Down (Notes) > 20%,5,0.767,"Used gestures (e.g., open_palm)",25,0.832,"Engaged (e.g., smile, neutral)",20,0.813,75
+frame_00336_person.png,106.506,False,0,0.751,455,223,722,857,Leaning (Left/Right),15,0.527,Looking Down (Notes) > 20%,5,0.585,"Used gestures (e.g., open_palm)",25,0.925,"Engaged (e.g., smile, neutral)",20,0.602,65
+frame_00337_person.png,106.823,False,0,0.75,475,223,658,857,Leaning (Left/Right),15,0.467,Looking Down (Notes) > 20%,5,0.514,"Used gestures (e.g., open_palm)",25,0.869,"Engaged (e.g., smile, neutral)",20,0.911,65
+frame_00338_person.png,107.14,False,0,0.742,700,223,518,857,Leaning (Left/Right),15,0.567,Looking Down (Notes) > 20%,5,0.483,"Used gestures (e.g., open_palm)",25,0.729,"Engaged (e.g., smile, neutral)",20,0.746,65
+frame_00339_person.png,107.457,False,0,0.739,817,224,466,856,Leaning (Left/Right),15,0.572,Eye Contact (Camera) 50-80%,20,0.715,"No gestures (e.g., hands in pockets)",10,0.756,"Disengaged (e.g., frown)",5,0.581,50
+frame_00340_person.png,107.774,False,0,0.74,831,215,503,865,Leaning (Left/Right),15,0.615,Eye Contact (Camera) 50-80%,20,0.501,"Used gestures (e.g., open_palm)",25,0.512,"Engaged (e.g., smile, neutral)",20,0.575,80
+frame_00341_person.png,108.091,False,0,0.741,747,210,586,870,Leaning (Left/Right),15,0.55,Looking Down (Notes) > 20%,5,0.686,"Used gestures (e.g., open_palm)",25,0.867,"Engaged (e.g., smile, neutral)",20,0.898,65
+frame_00342_person.png,108.408,False,0,0.743,634,205,678,875,"Upright, Centered",25,0.512,Looking Down (Notes) > 20%,5,0.451,"Used gestures (e.g., open_palm)",25,0.768,"Engaged (e.g., smile, neutral)",20,0.895,75
+frame_00343_person.png,108.725,False,0,0.742,795,206,534,874,Leaning (Left/Right),15,0.521,Eye Contact (Camera) 50-80%,20,0.427,"Used gestures (e.g., open_palm)",25,0.813,"Engaged (e.g., smile, neutral)",20,0.638,80
+frame_00344_person.png,109.042,False,0,0.742,783,211,528,869,Leaning (Left/Right),15,0.604,Eye Contact (Camera) 50-80%,20,0.473,"Used gestures (e.g., open_palm)",25,0.825,"Engaged (e.g., smile, neutral)",20,0.61,80
+frame_00345_person.png,109.359,False,0,0.741,785,219,517,861,Leaning (Left/Right),15,0.563,Eye Contact (Camera) 50-80%,20,0.469,"Used gestures (e.g., open_palm)",25,0.806,"Engaged (e.g., smile, neutral)",20,0.75,80
+frame_00346_person.png,109.676,False,0,0.741,771,222,531,858,Leaning (Left/Right),15,0.496,Looking Down (Notes) > 20%,5,0.412,"Used gestures (e.g., open_palm)",25,0.91,"Engaged (e.g., smile, neutral)",20,0.662,65
+frame_00347_person.png,109.993,False,0,0.743,754,213,593,867,"Upright, Centered",25,0.59,Eye Contact (Camera) 50-80%,20,0.4,"Used gestures (e.g., open_palm)",25,0.667,"Engaged (e.g., smile, neutral)",20,0.671,90
+frame_00348_person.png,110.31,False,0,0.74,801,203,542,877,Leaning (Left/Right),15,0.594,Eye Contact (Camera) 50-80%,20,0.565,"Used gestures (e.g., open_palm)",25,0.722,"Engaged (e.g., smile, neutral)",20,0.724,80
+frame_00349_person.png,110.627,False,0,0.73,802,204,530,876,Leaning (Left/Right),15,0.545,Looking Down (Notes) > 20%,5,0.619,"Used gestures (e.g., open_palm)",25,0.556,"Engaged (e.g., smile, neutral)",20,0.799,65
+frame_00350_person.png,110.944,False,0,0.73,778,207,544,873,"Upright, Centered",25,0.547,Looking Down (Notes) > 20%,5,0.666,"Used gestures (e.g., open_palm)",25,0.694,"Engaged (e.g., smile, neutral)",20,0.918,75
+frame_00351_person.png,111.261,False,0,0.732,709,209,601,871,"Upright, Centered",25,0.592,Looking Down (Notes) > 20%,5,0.672,"Used gestures (e.g., open_palm)",25,0.728,"Engaged (e.g., smile, neutral)",20,0.842,75
+frame_00352_person.png,111.578,False,0,0.734,630,207,679,873,"Upright, Centered",25,0.623,Looking Down (Notes) > 20%,5,0.566,"Used gestures (e.g., open_palm)",25,0.915,"Engaged (e.g., smile, neutral)",20,0.906,75
+frame_00353_person.png,111.895,False,0,0.736,657,207,641,873,"Upright, Centered",25,0.434,Looking Down (Notes) > 20%,5,0.492,"Used gestures (e.g., open_palm)",25,0.744,"Engaged (e.g., smile, neutral)",20,0.705,75
+frame_00354_person.png,112.212,False,0,0.739,707,213,588,867,"Upright, Centered",25,0.555,Looking Down (Notes) > 20%,5,0.453,"Used gestures (e.g., open_palm)",25,0.874,"Engaged (e.g., smile, neutral)",20,0.893,75
+frame_00355_person.png,112.529,False,0,0.742,702,216,591,864,"Upright, Centered",25,0.499,Looking Down (Notes) > 20%,5,0.448,"Used gestures (e.g., open_palm)",25,0.823,"Engaged (e.g., smile, neutral)",20,0.848,75
+frame_00356_person.png,112.846,False,0,0.743,609,218,681,862,Leaning (Left/Right),15,0.491,Looking Down (Notes) > 20%,5,0.48,"Used gestures (e.g., open_palm)",25,0.642,"Engaged (e.g., smile, neutral)",20,0.809,65
+frame_00357_person.png,113.163,False,0,0.746,692,219,616,861,Leaning (Left/Right),15,0.451,Looking Down (Notes) > 20%,5,0.523,"Used gestures (e.g., open_palm)",25,0.741,"Engaged (e.g., smile, neutral)",20,0.784,65
+frame_00358_person.png,113.48,False,0,0.745,784,220,536,860,"Upright, Centered",25,0.526,Eye Contact (Camera) 50-80%,20,0.528,"Used gestures (e.g., open_palm)",25,0.522,"Engaged (e.g., smile, neutral)",20,0.703,90
+frame_00359_person.png,113.797,False,0,0.745,787,220,540,860,"Upright, Centered",25,0.544,Eye Contact (Camera) 50-80%,20,0.511,"No gestures (e.g., hands in pockets)",10,0.637,"Engaged (e.g., smile, neutral)",20,0.633,75
+frame_00360_person.png,114.114,False,0,0.746,756,208,571,872,Leaning (Left/Right),15,0.47,Looking Down (Notes) > 20%,5,0.496,"Used gestures (e.g., open_palm)",25,0.825,"Engaged (e.g., smile, neutral)",20,0.712,65
+frame_00361_person.png,114.431,False,0,0.747,503,199,825,881,"Upright, Centered",25,0.561,Looking Down (Notes) > 20%,5,0.599,"Used gestures (e.g., open_palm)",25,0.888,"Engaged (e.g., smile, neutral)",20,0.873,75
+frame_00362_person.png,114.748,False,0,0.746,615,199,715,881,"Upright, Centered",25,0.639,Eye Contact (Camera) 50-80%,20,0.491,"Used gestures (e.g., open_palm)",25,0.908,"Engaged (e.g., smile, neutral)",20,0.921,90
+frame_00363_person.png,115.065,False,0,0.747,763,200,556,880,"Upright, Centered",25,0.543,Eye Contact (Camera) 50-80%,20,0.614,"Used gestures (e.g., open_palm)",25,0.545,"Engaged (e.g., smile, neutral)",20,0.723,90
+frame_00364_person.png,115.382,False,0,0.743,790,205,511,875,Leaning (Left/Right),15,0.494,Eye Contact (Camera) 50-80%,20,0.679,"No gestures (e.g., hands in pockets)",10,0.553,"Disengaged (e.g., frown)",5,0.612,50
+frame_00365_person.png,115.699,False,0,0.743,690,206,546,874,Leaning (Left/Right),15,0.507,Eye Contact (Camera) 50-80%,20,0.466,"Used gestures (e.g., open_palm)",25,0.695,"Engaged (e.g., smile, neutral)",20,0.709,80
+frame_00366_person.png,116.016,False,0,0.745,476,209,692,871,"Upright, Centered",25,0.424,Looking Down (Notes) > 20%,5,0.457,"Used gestures (e.g., open_palm)",25,0.779,"Engaged (e.g., smile, neutral)",20,0.899,75
+frame_00367_person.png,116.333,False,0,0.747,438,213,702,867,"Upright, Centered",25,0.438,Looking Down (Notes) > 20%,5,0.501,"Used gestures (e.g., open_palm)",25,0.862,"Engaged (e.g., smile, neutral)",20,0.863,75
+frame_00368_person.png,116.65,False,0,0.747,462,213,707,867,"Upright, Centered",25,0.549,Looking Down (Notes) > 20%,5,0.509,"Used gestures (e.g., open_palm)",25,0.774,"Engaged (e.g., smile, neutral)",20,0.857,75
+frame_00369_person.png,116.967,False,0,0.749,504,214,726,866,"Upright, Centered",25,0.48,Looking Down (Notes) > 20%,5,0.548,"Used gestures (e.g., open_palm)",25,0.777,"Engaged (e.g., smile, neutral)",20,0.727,75
+frame_00370_person.png,117.284,False,0,0.751,525,217,766,863,"Upright, Centered",25,0.515,Looking Down (Notes) > 20%,5,0.602,"Used gestures (e.g., open_palm)",25,0.726,"Engaged (e.g., smile, neutral)",20,0.797,75
+frame_00371_person.png,117.601,False,0,0.752,686,208,592,872,Leaning (Left/Right),15,0.637,Looking Down (Notes) > 20%,5,0.751,"Used gestures (e.g., open_palm)",25,0.856,"Engaged (e.g., smile, neutral)",20,0.769,65
+frame_00372_person.png,117.918,False,0,0.751,681,191,591,889,Leaning (Left/Right),15,0.468,Eye Contact (Camera) 50-80%,20,0.465,"Used gestures (e.g., open_palm)",25,0.894,"Engaged (e.g., smile, neutral)",20,0.678,80
+frame_00373_person.png,118.235,False,0,0.751,556,193,681,887,"Upright, Centered",25,0.505,Looking Down (Notes) > 20%,5,0.43,"Used gestures (e.g., open_palm)",25,0.764,"Engaged (e.g., smile, neutral)",20,0.897,75
+frame_00374_person.png,118.552,False,0,0.751,572,195,774,885,"Upright, Centered",25,0.594,Looking Down (Notes) > 20%,5,0.487,"Used gestures (e.g., open_palm)",25,0.871,"Engaged (e.g., smile, neutral)",20,0.837,75
+frame_00375_person.png,118.869,False,0,0.75,660,196,649,884,"Upright, Centered",25,0.457,Looking Down (Notes) > 20%,5,0.431,"Used gestures (e.g., open_palm)",25,0.97,"Engaged (e.g., smile, neutral)",20,0.815,75
+frame_00376_person.png,119.186,False,0,0.75,606,197,659,883,"Upright, Centered",25,0.565,Eye Contact (Camera) 50-80%,20,0.501,"Used gestures (e.g., open_palm)",25,0.975,"Engaged (e.g., smile, neutral)",20,0.543,90
+frame_00377_person.png,119.503,False,0,0.75,642,213,605,867,"Upright, Centered",25,0.531,Looking Down (Notes) > 20%,5,0.443,"Used gestures (e.g., open_palm)",25,0.981,"Engaged (e.g., smile, neutral)",20,0.712,75
+frame_00378_person.png,119.82,False,0,0.751,637,221,602,859,"Upright, Centered",25,0.626,Eye Contact (Camera) 50-80%,20,0.377,"Used gestures (e.g., open_palm)",25,0.991,"Engaged (e.g., smile, neutral)",20,0.931,90
+frame_00379_person.png,120.137,False,0,0.751,640,224,596,856,"Upright, Centered",25,0.592,Looking Down (Notes) > 20%,5,0.403,"Used gestures (e.g., open_palm)",25,0.986,"Engaged (e.g., smile, neutral)",20,0.858,75
+frame_00380_person.png,120.454,False,0,0.751,645,224,537,856,Leaning (Left/Right),15,0.436,Eye Contact (Camera) 50-80%,20,0.544,"Used gestures (e.g., open_palm)",25,0.775,"Disengaged (e.g., frown)",5,0.531,65
+frame_00381_person.png,120.771,False,0,0.751,670,221,567,859,"Upright, Centered",25,0.474,Looking Down (Notes) > 20%,5,0.591,"Used gestures (e.g., open_palm)",25,0.867,"Engaged (e.g., smile, neutral)",20,0.785,75
+frame_00382_person.png,121.088,False,0,0.751,670,217,735,863,"Upright, Centered",25,0.479,Eye Contact (Camera) 50-80%,20,0.534,"Used gestures (e.g., open_palm)",25,0.714,"Engaged (e.g., smile, neutral)",20,0.556,90
+frame_00383_person.png,121.405,False,0,0.752,677,218,733,862,"Upright, Centered",25,0.521,Looking Down (Notes) > 20%,5,0.509,"Used gestures (e.g., open_palm)",25,0.817,"Engaged (e.g., smile, neutral)",20,0.852,75
+frame_00384_person.png,121.722,False,0,0.753,638,216,738,864,"Upright, Centered",25,0.457,Looking Down (Notes) > 20%,5,0.52,"Used gestures (e.g., open_palm)",25,0.604,"Engaged (e.g., smile, neutral)",20,0.742,75
+frame_00385_person.png,122.039,False,0,0.754,505,216,844,864,"Upright, Centered",25,0.529,Looking Down (Notes) > 20%,5,0.642,"Used gestures (e.g., open_palm)",25,0.527,"Engaged (e.g., smile, neutral)",20,0.587,75
+frame_00386_person.png,122.356,False,0,0.756,497,220,831,860,"Upright, Centered",25,0.558,Looking Down (Notes) > 20%,5,0.649,"Used gestures (e.g., open_palm)",25,0.604,"Engaged (e.g., smile, neutral)",20,0.594,75
+frame_00387_person.png,122.673,False,0,0.758,492,220,838,860,"Upright, Centered",25,0.495,Looking Down (Notes) > 20%,5,0.619,"Used gestures (e.g., open_palm)",25,0.676,"Engaged (e.g., smile, neutral)",20,0.637,75
+frame_00388_person.png,122.99,False,0,0.757,556,209,768,871,"Upright, Centered",25,0.534,Looking Down (Notes) > 20%,5,0.51,"Used gestures (e.g., open_palm)",25,0.759,"Engaged (e.g., smile, neutral)",20,0.816,75
+frame_00389_person.png,123.307,False,0,0.758,526,205,746,875,"Upright, Centered",25,0.55,Looking Down (Notes) > 20%,5,0.489,"Used gestures (e.g., open_palm)",25,0.823,"Engaged (e.g., smile, neutral)",20,0.755,75
+frame_00390_person.png,123.624,False,0,0.757,526,206,744,874,"Upright, Centered",25,0.5,Looking Down (Notes) > 20%,5,0.494,"Used gestures (e.g., open_palm)",25,0.741,"Engaged (e.g., smile, neutral)",20,0.901,75
+frame_00391_person.png,123.94,False,0,0.757,543,203,793,877,"Upright, Centered",25,0.47,Eye Contact (Camera) 50-80%,20,0.53,"Used gestures (e.g., open_palm)",25,0.904,"Engaged (e.g., smile, neutral)",20,0.616,90
+frame_00392_person.png,124.257,False,0,0.757,408,203,1076,877,Leaning (Left/Right),15,0.488,Looking Down (Notes) > 20%,5,0.637,"Used gestures (e.g., open_palm)",25,0.693,"Engaged (e.g., smile, neutral)",20,0.5,65
+frame_00393_person.png,124.574,False,0,0.758,267,204,1324,876,"Upright, Centered",25,0.596,Looking Down (Notes) > 20%,5,0.477,"No gestures (e.g., hands in pockets)",10,0.57,"Disengaged (e.g., frown)",5,0.639,45
+frame_00394_person.png,124.891,False,0,0.759,309,204,1285,876,Leaning (Left/Right),15,0.529,Looking Down (Notes) > 20%,5,0.506,"Used gestures (e.g., open_palm)",25,0.506,"Engaged (e.g., smile, neutral)",20,0.811,65
+frame_00395_person.png,125.208,False,0,0.76,349,205,1246,875,Leaning (Left/Right),15,0.529,Looking Down (Notes) > 20%,5,0.556,"Used gestures (e.g., open_palm)",25,0.575,"Engaged (e.g., smile, neutral)",20,0.689,65
+frame_00396_person.png,125.525,False,0,0.759,471,200,1055,880,"Upright, Centered",25,0.455,Looking Down (Notes) > 20%,5,0.485,"Used gestures (e.g., open_palm)",25,0.818,"Engaged (e.g., smile, neutral)",20,0.605,75
+frame_00397_person.png,125.842,False,0,0.758,599,200,859,880,"Upright, Centered",25,0.545,Looking Down (Notes) > 20%,5,0.595,"Used gestures (e.g., open_palm)",25,0.953,"Engaged (e.g., smile, neutral)",20,0.689,75
+frame_00398_person.png,126.159,False,0,0.757,651,201,748,879,"Upright, Centered",25,0.588,Eye Contact (Camera) 50-80%,20,0.461,"Used gestures (e.g., open_palm)",25,0.851,"Engaged (e.g., smile, neutral)",20,0.806,90
+frame_00399_person.png,126.476,False,0,0.756,738,207,617,873,"Upright, Centered",25,0.463,Eye Contact (Camera) 50-80%,20,0.573,"Used gestures (e.g., open_palm)",25,0.658,"Engaged (e.g., smile, neutral)",20,0.863,90
+frame_00400_person.png,126.793,False,0,0.756,740,214,619,866,"Upright, Centered",25,0.477,Eye Contact (Camera) 50-80%,20,0.616,"Used gestures (e.g., open_palm)",25,0.504,"Engaged (e.g., smile, neutral)",20,0.582,90
+frame_00401_person.png,127.11,False,0,0.755,748,217,581,863,Leaning (Left/Right),15,0.459,Eye Contact (Camera) 50-80%,20,0.651,"No gestures (e.g., hands in pockets)",10,0.53,"Disengaged (e.g., frown)",5,0.589,50
+frame_00402_person.png,127.427,False,0,0.754,752,219,570,861,Leaning (Left/Right),15,0.459,Eye Contact (Camera) 50-80%,20,0.52,"Used gestures (e.g., open_palm)",25,0.507,"Engaged (e.g., smile, neutral)",20,0.579,80
+frame_00403_person.png,127.744,False,0,0.754,766,217,523,863,"Upright, Centered",25,0.464,Eye Contact (Camera) 50-80%,20,0.592,"Used gestures (e.g., open_palm)",25,0.523,"Engaged (e.g., smile, neutral)",20,0.618,90
+frame_00404_person.png,128.061,False,0,0.753,715,215,564,865,Leaning (Left/Right),15,0.52,Looking Down (Notes) > 20%,5,0.587,"Used gestures (e.g., open_palm)",25,0.931,"Engaged (e.g., smile, neutral)",20,0.915,65
+frame_00405_person.png,128.378,False,0,0.75,661,215,585,865,"Upright, Centered",25,0.458,Eye Contact (Camera) 50-80%,20,0.453,"Used gestures (e.g., open_palm)",25,0.647,"Engaged (e.g., smile, neutral)",20,0.757,90
+frame_00406_person.png,128.695,False,0,0.748,657,214,593,866,"Upright, Centered",25,0.446,Looking Down (Notes) > 20%,5,0.612,"Used gestures (e.g., open_palm)",25,0.842,"Engaged (e.g., smile, neutral)",20,0.811,75
+frame_00407_person.png,129.012,False,0,0.743,677,216,578,864,"Upright, Centered",25,0.443,Looking Down (Notes) > 20%,5,0.508,"Used gestures (e.g., open_palm)",25,0.774,"Engaged (e.g., smile, neutral)",20,0.793,75
+frame_00408_person.png,129.329,False,0,0.74,688,218,555,862,"Upright, Centered",25,0.476,Looking Down (Notes) > 20%,5,0.498,"Used gestures (e.g., open_palm)",25,0.782,"Engaged (e.g., smile, neutral)",20,0.691,75
+frame_00409_person.png,129.646,False,0,0.741,662,218,575,862,Leaning (Left/Right),15,0.512,Looking Down (Notes) > 20%,5,0.614,"Used gestures (e.g., open_palm)",25,0.74,"Engaged (e.g., smile, neutral)",20,0.766,65
+frame_00410_person.png,129.963,False,0,0.742,706,222,538,858,Leaning (Left/Right),15,0.659,Eye Contact (Camera) 50-80%,20,0.619,"Used gestures (e.g., open_palm)",25,0.586,"Engaged (e.g., smile, neutral)",20,0.53,80
+frame_00411_person.png,130.28,False,0,0.743,661,223,544,857,Leaning (Left/Right),15,0.669,Eye Contact (Camera) 50-80%,20,0.531,"Used gestures (e.g., open_palm)",25,0.56,"Engaged (e.g., smile, neutral)",20,0.602,80
+frame_00412_person.png,130.597,False,0,0.744,571,219,527,861,Leaning (Left/Right),15,0.776,Eye Contact (Camera) 50-80%,20,0.483,"Used gestures (e.g., open_palm)",25,0.547,"Engaged (e.g., smile, neutral)",20,0.585,80
+frame_00413_person.png,130.914,False,0,0.745,498,218,561,862,Leaning (Left/Right),15,0.571,Looking Down (Notes) > 20%,5,0.532,"Used gestures (e.g., open_palm)",25,0.933,"Engaged (e.g., smile, neutral)",20,0.924,65
+frame_00414_person.png,131.231,False,0,0.746,524,216,561,864,Leaning (Left/Right),15,0.641,Looking Down (Notes) > 20%,5,0.487,"Used gestures (e.g., open_palm)",25,0.93,"Engaged (e.g., smile, neutral)",20,0.876,65
+frame_00415_person.png,131.548,False,0,0.746,549,215,559,865,Leaning (Left/Right),15,0.515,Looking Down (Notes) > 20%,5,0.419,"Used gestures (e.g., open_palm)",25,0.806,"Engaged (e.g., smile, neutral)",20,0.808,65
+frame_00416_person.png,131.865,False,0,0.745,581,213,543,867,Leaning (Left/Right),15,0.511,Looking Down (Notes) > 20%,5,0.488,"Used gestures (e.g., open_palm)",25,0.666,"Engaged (e.g., smile, neutral)",20,0.704,65
+frame_00417_person.png,132.182,False,0,0.745,593,212,540,868,Leaning (Left/Right),15,0.526,Looking Down (Notes) > 20%,5,0.446,"Used gestures (e.g., open_palm)",25,0.721,"Engaged (e.g., smile, neutral)",20,0.755,65
+frame_00418_person.png,132.499,False,0,0.743,599,206,549,874,Leaning (Left/Right),15,0.601,Looking Down (Notes) > 20%,5,0.557,"Used gestures (e.g., open_palm)",25,0.743,"Engaged (e.g., smile, neutral)",20,0.746,65
+frame_00419_person.png,132.816,False,0,0.743,610,206,579,874,Leaning (Left/Right),15,0.459,Looking Down (Notes) > 20%,5,0.446,"Used gestures (e.g., open_palm)",25,0.829,"Engaged (e.g., smile, neutral)",20,0.698,65
+frame_00420_person.png,133.133,False,0,0.743,614,211,630,869,Leaning (Left/Right),15,0.519,Eye Contact (Camera) 50-80%,20,0.69,"No gestures (e.g., hands in pockets)",10,0.538,"Engaged (e.g., smile, neutral)",20,0.535,65
+frame_00421_person.png,133.45,False,0,0.743,633,217,596,863,"Upright, Centered",25,0.438,Eye Contact (Camera) 50-80%,20,0.543,"No gestures (e.g., hands in pockets)",10,0.574,"Engaged (e.g., smile, neutral)",20,0.58,75
+frame_00422_person.png,133.767,False,0,0.743,638,217,584,863,"Upright, Centered",25,0.491,Eye Contact (Camera) 50-80%,20,0.54,"No gestures (e.g., hands in pockets)",10,0.507,"Engaged (e.g., smile, neutral)",20,0.663,75
+frame_00423_person.png,134.084,False,0,0.744,641,217,577,863,"Upright, Centered",25,0.57,Eye Contact (Camera) 50-80%,20,0.575,"Used gestures (e.g., open_palm)",25,0.605,"Engaged (e.g., smile, neutral)",20,0.726,90
+frame_00424_person.png,134.401,False,0,0.744,638,214,557,866,Leaning (Left/Right),15,0.57,Looking Down (Notes) > 20%,5,0.558,"Used gestures (e.g., open_palm)",25,0.967,"Engaged (e.g., smile, neutral)",20,0.792,65
+frame_00425_person.png,134.718,False,0,0.741,634,213,581,867,"Upright, Centered",25,0.503,Looking Down (Notes) > 20%,5,0.429,"Used gestures (e.g., open_palm)",25,0.952,"Engaged (e.g., smile, neutral)",20,0.815,75
+frame_00426_person.png,135.035,False,0,0.729,635,211,537,869,Leaning (Left/Right),15,0.714,Looking Down (Notes) > 20%,5,0.451,"Used gestures (e.g., open_palm)",25,0.962,"Engaged (e.g., smile, neutral)",20,0.649,65
+frame_00427_person.png,135.352,False,0,0.718,673,208,506,872,Leaning (Left/Right),15,0.559,Eye Contact (Camera) 50-80%,20,0.412,"Used gestures (e.g., open_palm)",25,0.888,"Engaged (e.g., smile, neutral)",20,0.599,80
+frame_00428_person.png,135.669,False,0,0.71,753,205,502,875,Leaning (Left/Right),15,0.572,Looking Down (Notes) > 20%,5,0.422,"Used gestures (e.g., open_palm)",25,0.847,"Engaged (e.g., smile, neutral)",20,0.809,65
+frame_00429_person.png,135.986,False,0,0.711,780,200,542,880,Leaning (Left/Right),15,0.651,Looking Down (Notes) > 20%,5,0.58,"Used gestures (e.g., open_palm)",25,0.913,"Disengaged (e.g., frown)",5,0.558,50
+frame_00430_person.png,136.303,False,0,0.714,772,201,522,879,Leaning (Left/Right),15,0.685,Looking Down (Notes) > 20%,5,0.627,"Used gestures (e.g., open_palm)",25,0.913,"Engaged (e.g., smile, neutral)",20,0.776,65
+frame_00431_person.png,136.62,False,0,0.7,750,203,510,877,Leaning (Left/Right),15,0.664,Looking Down (Notes) > 20%,5,0.627,"Used gestures (e.g., open_palm)",25,0.875,"Engaged (e.g., smile, neutral)",20,0.659,65
+frame_00432_person.png,136.937,False,0,0.684,745,204,505,876,Leaning (Left/Right),15,0.677,Looking Down (Notes) > 20%,5,0.63,"Used gestures (e.g., open_palm)",25,0.839,"Engaged (e.g., smile, neutral)",20,0.667,65
+frame_00433_person.png,137.254,False,0,0.689,703,201,534,879,Leaning (Left/Right),15,0.597,Looking Down (Notes) > 20%,5,0.617,"Used gestures (e.g., open_palm)",25,0.929,"Engaged (e.g., smile, neutral)",20,0.666,65
+frame_00434_person.png,137.571,False,0,0.685,698,200,534,880,Leaning (Left/Right),15,0.572,Looking Down (Notes) > 20%,5,0.497,"Used gestures (e.g., open_palm)",25,0.882,"Engaged (e.g., smile, neutral)",20,0.786,65
+frame_00435_person.png,137.888,False,0,0.692,760,200,550,880,Leaning (Left/Right),15,0.487,Looking Down (Notes) > 20%,5,0.41,"Used gestures (e.g., open_palm)",25,0.887,"Engaged (e.g., smile, neutral)",20,0.823,65
+frame_00436_person.png,138.205,False,0,0.697,793,200,675,880,Leaning (Left/Right),15,0.455,Looking Down (Notes) > 20%,5,0.542,"Used gestures (e.g., open_palm)",25,0.862,"Engaged (e.g., smile, neutral)",20,0.927,65
+frame_00437_person.png,138.522,False,0,0.698,775,200,665,880,"Upright, Centered",25,0.455,Looking Down (Notes) > 20%,5,0.571,"Used gestures (e.g., open_palm)",25,0.806,"Engaged (e.g., smile, neutral)",20,0.873,75
+frame_00438_person.png,138.839,False,0,0.703,769,189,602,891,Leaning (Left/Right),15,0.599,Looking Down (Notes) > 20%,5,0.618,"Used gestures (e.g., open_palm)",25,0.969,"Engaged (e.g., smile, neutral)",20,0.895,65
+frame_00439_person.png,139.156,False,0,0.708,756,190,724,890,Leaning (Left/Right),15,0.528,Looking Down (Notes) > 20%,5,0.497,"Used gestures (e.g., open_palm)",25,0.858,"Engaged (e.g., smile, neutral)",20,0.866,65
+frame_00440_person.png,139.473,False,0,0.714,753,191,726,889,Leaning (Left/Right),15,0.461,Looking Down (Notes) > 20%,5,0.637,"Used gestures (e.g., open_palm)",25,0.804,"Engaged (e.g., smile, neutral)",20,0.879,65
+frame_00441_person.png,139.79,False,0,0.719,691,195,789,885,"Upright, Centered",25,0.486,Eye Contact (Camera) 50-80%,20,0.473,"Used gestures (e.g., open_palm)",25,0.706,"Engaged (e.g., smile, neutral)",20,0.673,90
+frame_00442_person.png,140.107,False,0,0.724,679,202,791,878,"Upright, Centered",25,0.548,Looking Down (Notes) > 20%,5,0.58,"Used gestures (e.g., open_palm)",25,0.623,"Engaged (e.g., smile, neutral)",20,0.753,75
+frame_00443_person.png,140.424,False,0,0.725,789,202,510,878,Leaning (Left/Right),15,0.634,Looking Down (Notes) > 20%,5,0.557,"Used gestures (e.g., open_palm)",25,0.898,"Engaged (e.g., smile, neutral)",20,0.755,65
+frame_00444_person.png,140.741,False,0,0.727,777,202,465,878,Leaning (Left/Right),15,0.558,Looking Down (Notes) > 20%,5,0.484,"Used gestures (e.g., open_palm)",25,0.975,"Engaged (e.g., smile, neutral)",20,0.713,65
+frame_00445_person.png,141.058,False,0,0.729,768,202,483,878,Leaning (Left/Right),15,0.618,Looking Down (Notes) > 20%,5,0.482,"Used gestures (e.g., open_palm)",25,0.944,"Engaged (e.g., smile, neutral)",20,0.748,65
+frame_00446_person.png,141.375,False,0,0.732,756,205,499,875,Leaning (Left/Right),15,0.468,Looking Down (Notes) > 20%,5,0.612,"Used gestures (e.g., open_palm)",25,0.948,"Engaged (e.g., smile, neutral)",20,0.721,65
+frame_00447_person.png,141.692,False,0,0.733,743,202,566,878,Leaning (Left/Right),15,0.583,Looking Down (Notes) > 20%,5,0.661,"Used gestures (e.g., open_palm)",25,0.889,"Engaged (e.g., smile, neutral)",20,0.836,65
+frame_00448_person.png,142.009,False,0,0.736,746,206,644,874,"Upright, Centered",25,0.437,Looking Down (Notes) > 20%,5,0.548,"Used gestures (e.g., open_palm)",25,0.927,"Engaged (e.g., smile, neutral)",20,0.875,75
+frame_00449_person.png,142.326,False,0,0.739,773,210,692,870,Leaning (Left/Right),15,0.475,Looking Down (Notes) > 20%,5,0.52,"Used gestures (e.g., open_palm)",25,0.864,"Engaged (e.g., smile, neutral)",20,0.757,65
+frame_00450_person.png,142.643,False,0,0.742,745,209,672,871,"Upright, Centered",25,0.458,Looking Down (Notes) > 20%,5,0.474,"Used gestures (e.g., open_palm)",25,0.831,"Engaged (e.g., smile, neutral)",20,0.86,75
+frame_00451_person.png,142.959,False,0,0.744,681,213,714,867,"Upright, Centered",25,0.437,Eye Contact (Camera) 50-80%,20,0.498,"Used gestures (e.g., open_palm)",25,0.812,"Engaged (e.g., smile, neutral)",20,0.706,90
+frame_00452_person.png,143.276,False,0,0.739,681,221,636,859,Leaning (Left/Right),15,0.501,Eye Contact (Camera) 50-80%,20,0.49,"Used gestures (e.g., open_palm)",25,0.836,"Engaged (e.g., smile, neutral)",20,0.716,80
+frame_00453_person.png,143.593,False,0,0.735,701,224,503,856,Leaning (Left/Right),15,0.529,Looking Down (Notes) > 20%,5,0.458,"Used gestures (e.g., open_palm)",25,0.592,"Engaged (e.g., smile, neutral)",20,0.755,65
+frame_00454_person.png,143.91,False,0,0.727,730,228,508,852,Leaning (Left/Right),15,0.635,Looking Down (Notes) > 20%,5,0.45,"Used gestures (e.g., open_palm)",25,0.502,"Engaged (e.g., smile, neutral)",20,0.564,65
+frame_00455_person.png,144.227,False,0,0.726,722,227,515,853,Leaning (Left/Right),15,0.598,Eye Contact (Camera) 50-80%,20,0.65,"No gestures (e.g., hands in pockets)",10,0.584,"Engaged (e.g., smile, neutral)",20,0.56,65
+frame_00456_person.png,144.544,False,0,0.727,670,221,560,859,Leaning (Left/Right),15,0.499,Looking Down (Notes) > 20%,5,0.438,"Used gestures (e.g., open_palm)",25,0.626,"Engaged (e.g., smile, neutral)",20,0.714,65
+frame_00457_person.png,144.861,False,0,0.721,669,207,545,873,Leaning (Left/Right),15,0.62,Eye Contact (Camera) 50-80%,20,0.454,"Used gestures (e.g., open_palm)",25,0.728,"Engaged (e.g., smile, neutral)",20,0.755,80
+frame_00458_person.png,145.178,False,0,0.725,696,204,720,876,Leaning (Left/Right),15,0.409,Looking Down (Notes) > 20%,5,0.502,"Used gestures (e.g., open_palm)",25,0.837,"Engaged (e.g., smile, neutral)",20,0.712,65
+frame_00459_person.png,145.495,False,0,0.731,722,205,729,875,Leaning (Left/Right),15,0.483,Looking Down (Notes) > 20%,5,0.575,"Used gestures (e.g., open_palm)",25,0.851,"Engaged (e.g., smile, neutral)",20,0.618,65
+frame_00460_person.png,145.812,False,0,0.736,724,207,722,873,"Upright, Centered",25,0.424,Looking Down (Notes) > 20%,5,0.559,"Used gestures (e.g., open_palm)",25,0.826,"Engaged (e.g., smile, neutral)",20,0.74,75
+frame_00461_person.png,146.129,False,0,0.74,724,212,706,868,"Upright, Centered",25,0.435,Looking Down (Notes) > 20%,5,0.493,"Used gestures (e.g., open_palm)",25,0.854,"Engaged (e.g., smile, neutral)",20,0.869,75
+frame_00462_person.png,146.446,False,0,0.741,700,215,675,865,Leaning (Left/Right),15,0.443,Looking Down (Notes) > 20%,5,0.466,"Used gestures (e.g., open_palm)",25,0.912,"Engaged (e.g., smile, neutral)",20,0.92,65
+frame_00463_person.png,146.763,False,0,0.74,661,215,496,865,Leaning (Left/Right),15,0.522,Eye Contact (Camera) 50-80%,20,0.481,"Used gestures (e.g., open_palm)",25,0.843,"Engaged (e.g., smile, neutral)",20,0.699,80
+frame_00464_person.png,147.08,False,0,0.74,656,210,501,870,Leaning (Left/Right),15,0.593,Eye Contact (Camera) 50-80%,20,0.508,"Used gestures (e.g., open_palm)",25,0.801,"Engaged (e.g., smile, neutral)",20,0.673,80
+frame_00465_person.png,147.397,False,0,0.741,665,206,498,874,Leaning (Left/Right),15,0.686,Eye Contact (Camera) 50-80%,20,0.564,"Used gestures (e.g., open_palm)",25,0.67,"Engaged (e.g., smile, neutral)",20,0.609,80
+frame_00466_person.png,147.714,False,0,0.74,668,207,519,873,Leaning (Left/Right),15,0.64,Looking Down (Notes) > 20%,5,0.551,"Used gestures (e.g., open_palm)",25,0.635,"Engaged (e.g., smile, neutral)",20,0.794,65
+frame_00467_person.png,148.031,False,0,0.742,671,241,551,839,Leaning (Left/Right),15,0.535,Looking Down (Notes) > 20%,5,0.508,"Used gestures (e.g., open_palm)",25,0.851,"Engaged (e.g., smile, neutral)",20,0.597,65
+frame_00468_person.png,148.348,False,0,0.743,732,243,512,837,Leaning (Left/Right),15,0.461,Eye Contact (Camera) 50-80%,20,0.429,"Used gestures (e.g., open_palm)",25,0.942,"Engaged (e.g., smile, neutral)",20,0.53,80
+frame_00469_person.png,148.665,False,0,0.737,735,240,512,840,Leaning (Left/Right),15,0.552,Eye Contact (Camera) 50-80%,20,0.678,"Used gestures (e.g., open_palm)",25,0.853,"Disengaged (e.g., frown)",5,0.525,65
+frame_00470_person.png,148.982,False,0,0.732,737,238,512,842,Leaning (Left/Right),15,0.525,Eye Contact (Camera) 50-80%,20,0.451,"Used gestures (e.g., open_palm)",25,0.829,"Engaged (e.g., smile, neutral)",20,0.592,80
+frame_00471_person.png,149.299,False,0,0.727,738,238,506,842,Leaning (Left/Right),15,0.469,Eye Contact (Camera) 50-80%,20,0.392,"Used gestures (e.g., open_palm)",25,0.891,"Engaged (e.g., smile, neutral)",20,0.823,80
+frame_00472_person.png,149.616,False,0,0.726,740,237,486,843,Leaning (Left/Right),15,0.574,Eye Contact (Camera) 50-80%,20,0.428,"Used gestures (e.g., open_palm)",25,0.879,"Engaged (e.g., smile, neutral)",20,0.784,80
+frame_00473_person.png,149.933,False,0,0.725,681,212,503,868,Leaning (Left/Right),15,0.608,Looking Down (Notes) > 20%,5,0.457,"Used gestures (e.g., open_palm)",25,0.885,"Engaged (e.g., smile, neutral)",20,0.664,65
+frame_00474_person.png,150.25,False,0,0.726,654,203,541,877,Leaning (Left/Right),15,0.623,Eye Contact (Camera) 50-80%,20,0.438,"Used gestures (e.g., open_palm)",25,0.933,"Engaged (e.g., smile, neutral)",20,0.692,80
+frame_00475_person.png,150.567,False,0,0.729,638,199,569,881,Leaning (Left/Right),15,0.497,Looking Down (Notes) > 20%,5,0.487,"Used gestures (e.g., open_palm)",25,0.901,"Engaged (e.g., smile, neutral)",20,0.809,65
+frame_00476_person.png,150.884,False,0,0.732,648,200,617,880,Leaning (Left/Right),15,0.445,Looking Down (Notes) > 20%,5,0.626,"Used gestures (e.g., open_palm)",25,0.862,"Engaged (e.g., smile, neutral)",20,0.936,65
+frame_00477_person.png,151.201,False,0,0.728,654,201,502,879,Leaning (Left/Right),15,0.579,Eye Contact (Camera) 50-80%,20,0.514,"Used gestures (e.g., open_palm)",25,0.744,"Engaged (e.g., smile, neutral)",20,0.664,80
+frame_00478_person.png,151.518,False,0,0.729,660,196,543,884,"Upright, Centered",25,0.466,Looking Down (Notes) > 20%,5,0.493,"Used gestures (e.g., open_palm)",25,0.975,"Engaged (e.g., smile, neutral)",20,0.768,75
+frame_00479_person.png,151.835,False,0,0.73,652,195,580,885,"Upright, Centered",25,0.57,Looking Down (Notes) > 20%,5,0.57,"Used gestures (e.g., open_palm)",25,0.93,"Engaged (e.g., smile, neutral)",20,0.741,75
+frame_00480_person.png,152.152,False,0,0.732,598,195,634,885,"Upright, Centered",25,0.456,Looking Down (Notes) > 20%,5,0.614,"Used gestures (e.g., open_palm)",25,0.853,"Engaged (e.g., smile, neutral)",20,0.888,75
+frame_00481_person.png,152.469,False,0,0.732,630,196,603,884,"Upright, Centered",25,0.471,Looking Down (Notes) > 20%,5,0.619,"Used gestures (e.g., open_palm)",25,0.875,"Engaged (e.g., smile, neutral)",20,0.873,75
+frame_00482_person.png,152.786,False,0,0.734,676,206,553,874,Leaning (Left/Right),15,0.434,Eye Contact (Camera) 50-80%,20,0.59,"Used gestures (e.g., open_palm)",25,0.821,"Engaged (e.g., smile, neutral)",20,0.675,80
+frame_00483_person.png,153.103,False,0,0.736,674,213,571,867,"Upright, Centered",25,0.474,Looking Down (Notes) > 20%,5,0.403,"Used gestures (e.g., open_palm)",25,0.533,"Engaged (e.g., smile, neutral)",20,0.758,75
+frame_00484_person.png,153.42,False,0,0.736,675,218,564,862,Leaning (Left/Right),15,0.475,Eye Contact (Camera) 50-80%,20,0.489,"Used gestures (e.g., open_palm)",25,0.606,"Engaged (e.g., smile, neutral)",20,0.673,80
+frame_00485_person.png,153.737,False,0,0.736,675,220,561,860,Leaning (Left/Right),15,0.529,Eye Contact (Camera) 50-80%,20,0.526,"Used gestures (e.g., open_palm)",25,0.604,"Engaged (e.g., smile, neutral)",20,0.63,80
+frame_00486_person.png,154.054,False,0,0.736,677,220,556,860,Leaning (Left/Right),15,0.422,Eye Contact (Camera) 50-80%,20,0.473,"Used gestures (e.g., open_palm)",25,0.534,"Engaged (e.g., smile, neutral)",20,0.638,80
+frame_00487_person.png,154.371,False,0,0.738,708,219,517,861,Leaning (Left/Right),15,0.512,Looking Down (Notes) > 20%,5,0.577,"Used gestures (e.g., open_palm)",25,0.851,"Engaged (e.g., smile, neutral)",20,0.84,65
+frame_00488_person.png,154.688,False,0,0.74,705,219,527,861,Leaning (Left/Right),15,0.491,Eye Contact (Camera) 50-80%,20,0.462,"Used gestures (e.g., open_palm)",25,0.581,"Engaged (e.g., smile, neutral)",20,0.663,80
+frame_00489_person.png,155.005,False,0,0.74,701,218,552,862,"Upright, Centered",25,0.463,Looking Down (Notes) > 20%,5,0.479,"Used gestures (e.g., open_palm)",25,0.685,"Engaged (e.g., smile, neutral)",20,0.735,75
+frame_00490_person.png,155.322,False,0,0.739,701,218,548,862,Leaning (Left/Right),15,0.54,Looking Down (Notes) > 20%,5,0.478,"Used gestures (e.g., open_palm)",25,0.55,"Engaged (e.g., smile, neutral)",20,0.736,65
+frame_00491_person.png,155.639,False,0,0.739,698,213,554,867,Leaning (Left/Right),15,0.469,Looking Down (Notes) > 20%,5,0.507,"Used gestures (e.g., open_palm)",25,0.656,"Engaged (e.g., smile, neutral)",20,0.804,65
+frame_00492_person.png,155.956,False,0,0.74,696,208,557,872,"Upright, Centered",25,0.472,Looking Down (Notes) > 20%,5,0.49,"Used gestures (e.g., open_palm)",25,0.642,"Engaged (e.g., smile, neutral)",20,0.747,75
+frame_00493_person.png,156.273,False,0,0.74,695,209,560,871,"Upright, Centered",25,0.461,Looking Down (Notes) > 20%,5,0.51,"No gestures (e.g., hands in pockets)",10,0.542,"Engaged (e.g., smile, neutral)",20,0.672,60
+frame_00494_person.png,156.59,False,0,0.741,695,215,561,865,Leaning (Left/Right),15,0.446,Looking Down (Notes) > 20%,5,0.498,"Used gestures (e.g., open_palm)",25,0.523,"Engaged (e.g., smile, neutral)",20,0.724,65
+frame_00495_person.png,156.907,False,0,0.742,693,217,563,863,"Upright, Centered",25,0.545,Looking Down (Notes) > 20%,5,0.463,"Used gestures (e.g., open_palm)",25,0.683,"Engaged (e.g., smile, neutral)",20,0.798,75
+frame_00496_person.png,157.224,False,0,0.743,682,210,670,870,Leaning (Left/Right),15,0.485,Looking Down (Notes) > 20%,5,0.48,"Used gestures (e.g., open_palm)",25,0.933,"Engaged (e.g., smile, neutral)",20,0.815,65
+frame_00497_person.png,157.541,False,0,0.744,681,202,673,878,"Upright, Centered",25,0.471,Looking Down (Notes) > 20%,5,0.46,"Used gestures (e.g., open_palm)",25,0.932,"Engaged (e.g., smile, neutral)",20,0.863,75
+frame_00498_person.png,157.858,False,0,0.744,680,213,713,867,"Upright, Centered",25,0.638,Eye Contact (Camera) 50-80%,20,0.424,"Used gestures (e.g., open_palm)",25,0.91,"Engaged (e.g., smile, neutral)",20,0.931,90
+frame_00499_person.png,158.175,False,0,0.744,679,221,725,859,"Upright, Centered",25,0.708,Looking Down (Notes) > 20%,5,0.439,"Used gestures (e.g., open_palm)",25,0.927,"Engaged (e.g., smile, neutral)",20,0.968,75
+frame_00500_person.png,158.492,False,0,0.744,677,222,710,858,"Upright, Centered",25,0.656,Eye Contact (Camera) 50-80%,20,0.483,"Used gestures (e.g., open_palm)",25,0.78,"Engaged (e.g., smile, neutral)",20,0.942,90
+frame_00501_person.png,158.809,False,0,0.745,677,221,697,859,"Upright, Centered",25,0.66,Eye Contact (Camera) 50-80%,20,0.455,"Used gestures (e.g., open_palm)",25,0.943,"Engaged (e.g., smile, neutral)",20,0.964,90
+frame_00502_person.png,159.126,False,0,0.746,673,218,692,862,Leaning (Left/Right),15,0.514,Looking Down (Notes) > 20%,5,0.403,"Used gestures (e.g., open_palm)",25,0.992,"Engaged (e.g., smile, neutral)",20,0.936,65
+frame_00503_person.png,159.443,False,0,0.747,672,218,689,862,"Upright, Centered",25,0.561,Looking Down (Notes) > 20%,5,0.466,"Used gestures (e.g., open_palm)",25,0.952,"Engaged (e.g., smile, neutral)",20,0.966,75
+frame_00504_person.png,159.76,False,0,0.747,671,215,670,865,"Upright, Centered",25,0.616,Looking Down (Notes) > 20%,5,0.496,"Used gestures (e.g., open_palm)",25,0.957,"Engaged (e.g., smile, neutral)",20,0.973,75
+frame_00505_person.png,160.077,False,0,0.748,671,217,673,863,"Upright, Centered",25,0.54,Looking Down (Notes) > 20%,5,0.526,"Used gestures (e.g., open_palm)",25,0.969,"Engaged (e.g., smile, neutral)",20,0.912,75
+frame_00506_person.png,160.394,False,0,0.748,673,216,648,864,"Upright, Centered",25,0.669,Looking Down (Notes) > 20%,5,0.487,"Used gestures (e.g., open_palm)",25,0.93,"Engaged (e.g., smile, neutral)",20,0.951,75
+frame_00507_person.png,160.711,False,0,0.749,674,216,640,864,"Upright, Centered",25,0.605,Looking Down (Notes) > 20%,5,0.371,"Used gestures (e.g., open_palm)",25,0.98,"Engaged (e.g., smile, neutral)",20,0.959,75
+frame_00508_person.png,161.028,False,0,0.749,420,216,1117,864,"Upright, Centered",25,0.736,Looking Down (Notes) > 20%,5,0.437,"Used gestures (e.g., open_palm)",25,0.594,"Engaged (e.g., smile, neutral)",20,0.957,75
+frame_00509.png,161.345,True,,,,,,,,,,,,,,,,,,,
+frame_00510.png,161.661,True,,,,,,,,,,,,,,,,,,,
+frame_00511_person.png,161.978,False,0,0.748,168,668,255,353,Leaning (Left/Right),15,0.465,Eye Contact (Camera) 50-80%,20,0.896,"No gestures (e.g., hands in pockets)",10,0.946,"Disengaged (e.g., frown)",5,0.704,50
+frame_00512_person.png,162.295,False,0,0.74,170,572,225,449,Leaning (Left/Right),15,0.549,Eye Contact (Camera) 50-80%,20,0.833,"No gestures (e.g., hands in pockets)",10,0.943,"Disengaged (e.g., frown)",5,0.701,50
+frame_00513_person.png,162.612,False,0,0.732,174,558,233,463,Leaning (Left/Right),15,0.554,Eye Contact (Camera) 50-80%,20,0.784,"No gestures (e.g., hands in pockets)",10,0.955,"Disengaged (e.g., frown)",5,0.597,50
+frame_00514_person.png,162.929,False,0,0.717,174,559,235,456,Leaning (Left/Right),15,0.613,Eye Contact (Camera) 50-80%,20,0.752,"No gestures (e.g., hands in pockets)",10,0.854,"Disengaged (e.g., frown)",5,0.667,50
+frame_00515_person.png,163.246,False,0,0.703,173,556,243,459,Leaning (Left/Right),15,0.566,Eye Contact (Camera) 50-80%,20,0.878,"No gestures (e.g., hands in pockets)",10,0.909,"Disengaged (e.g., frown)",5,0.77,50
+frame_00516.png,163.563,True,,,,,,,,,,,,,,,,,,,
+frame_00517_person.png,163.88,False,0,0.708,544,194,637,886,"Upright, Centered",25,0.562,Looking Down (Notes) > 20%,5,0.482,"Used gestures (e.g., open_palm)",25,0.696,"Engaged (e.g., smile, neutral)",20,0.857,75
+frame_00518_person.png,164.197,False,0,0.713,500,183,843,897,Leaning (Left/Right),15,0.449,Looking Down (Notes) > 20%,5,0.533,"Used gestures (e.g., open_palm)",25,0.843,"Engaged (e.g., smile, neutral)",20,0.774,65
+frame_00519_person.png,164.514,False,0,0.719,568,186,757,894,"Upright, Centered",25,0.639,Looking Down (Notes) > 20%,5,0.41,"Used gestures (e.g., open_palm)",25,0.948,"Engaged (e.g., smile, neutral)",20,0.899,75
+frame_00520_person.png,164.831,False,0,0.722,688,192,552,888,"Upright, Centered",25,0.448,Looking Down (Notes) > 20%,5,0.448,"Used gestures (e.g., open_palm)",25,0.589,"Engaged (e.g., smile, neutral)",20,0.812,75
+frame_00521_person.png,165.148,False,0,0.725,713,193,606,887,"Upright, Centered",25,0.536,Looking Down (Notes) > 20%,5,0.465,"Used gestures (e.g., open_palm)",25,0.599,"Engaged (e.g., smile, neutral)",20,0.715,75
+frame_00522_person.png,165.465,False,0,0.728,748,193,570,887,Leaning (Left/Right),15,0.489,Looking Down (Notes) > 20%,5,0.486,"Used gestures (e.g., open_palm)",25,0.608,"Engaged (e.g., smile, neutral)",20,0.714,65
+frame_00523_person.png,165.782,False,0,0.73,766,194,527,886,Leaning (Left/Right),15,0.599,Looking Down (Notes) > 20%,5,0.44,"Used gestures (e.g., open_palm)",25,0.721,"Engaged (e.g., smile, neutral)",20,0.644,65
+frame_00524_person.png,166.099,False,0,0.734,810,200,569,880,Leaning (Left/Right),15,0.575,Looking Down (Notes) > 20%,5,0.721,"Used gestures (e.g., open_palm)",25,0.79,"Engaged (e.g., smile, neutral)",20,0.894,65
+frame_00525_person.png,166.416,False,0,0.735,795,206,513,874,Leaning (Left/Right),15,0.541,Eye Contact (Camera) 50-80%,20,0.487,"Used gestures (e.g., open_palm)",25,0.863,"Engaged (e.g., smile, neutral)",20,0.612,80
+frame_00526_person.png,166.733,False,0,0.734,801,212,539,868,"Upright, Centered",25,0.518,Eye Contact (Camera) 50-80%,20,0.606,"No gestures (e.g., hands in pockets)",10,0.585,"Engaged (e.g., smile, neutral)",20,0.714,75
+frame_00527_person.png,167.05,False,0,0.734,793,214,549,866,"Upright, Centered",25,0.497,Eye Contact (Camera) 50-80%,20,0.472,"No gestures (e.g., hands in pockets)",10,0.52,"Engaged (e.g., smile, neutral)",20,0.766,75
+frame_00528_person.png,167.367,False,0,0.736,780,211,562,869,"Upright, Centered",25,0.461,Eye Contact (Camera) 50-80%,20,0.488,"Used gestures (e.g., open_palm)",25,0.545,"Engaged (e.g., smile, neutral)",20,0.667,90
+frame_00529_person.png,167.684,False,0,0.737,773,211,571,869,Leaning (Left/Right),15,0.44,Looking Down (Notes) > 20%,5,0.501,"Used gestures (e.g., open_palm)",25,0.606,"Engaged (e.g., smile, neutral)",20,0.754,65
+frame_00530_person.png,168.001,False,0,0.738,770,211,528,869,Leaning (Left/Right),15,0.598,Looking Down (Notes) > 20%,5,0.487,"Used gestures (e.g., open_palm)",25,0.87,"Engaged (e.g., smile, neutral)",20,0.618,65
+frame_00531_person.png,168.318,False,0,0.74,767,210,520,870,"Upright, Centered",25,0.504,Looking Down (Notes) > 20%,5,0.446,"Used gestures (e.g., open_palm)",25,0.936,"Engaged (e.g., smile, neutral)",20,0.639,75
+frame_00532_person.png,168.635,False,0,0.741,771,209,513,871,"Upright, Centered",25,0.52,Eye Contact (Camera) 50-80%,20,0.497,"Used gestures (e.g., open_palm)",25,0.848,"Engaged (e.g., smile, neutral)",20,0.727,90
+frame_00533_person.png,168.952,False,0,0.742,768,209,538,871,"Upright, Centered",25,0.443,Looking Down (Notes) > 20%,5,0.361,"Used gestures (e.g., open_palm)",25,0.732,"Engaged (e.g., smile, neutral)",20,0.875,75
+frame_00534_person.png,169.269,False,0,0.743,764,209,541,871,Leaning (Left/Right),15,0.494,Eye Contact (Camera) 50-80%,20,0.553,"Used gestures (e.g., open_palm)",25,0.716,"Engaged (e.g., smile, neutral)",20,0.732,80
+frame_00535_person.png,169.586,False,0,0.742,749,209,558,871,Leaning (Left/Right),15,0.474,Looking Down (Notes) > 20%,5,0.482,"Used gestures (e.g., open_palm)",25,0.784,"Engaged (e.g., smile, neutral)",20,0.85,65
+frame_00536_person.png,169.903,False,0,0.742,746,211,560,869,Leaning (Left/Right),15,0.475,Looking Down (Notes) > 20%,5,0.416,"Used gestures (e.g., open_palm)",25,0.722,"Engaged (e.g., smile, neutral)",20,0.754,65
+frame_00537_person.png,170.22,False,0,0.743,746,212,560,868,Leaning (Left/Right),15,0.48,Looking Down (Notes) > 20%,5,0.437,"Used gestures (e.g., open_palm)",25,0.746,"Engaged (e.g., smile, neutral)",20,0.728,65
+frame_00538_person.png,170.537,False,0,0.743,750,212,558,868,"Upright, Centered",25,0.456,Eye Contact (Camera) 50-80%,20,0.457,"Used gestures (e.g., open_palm)",25,0.696,"Engaged (e.g., smile, neutral)",20,0.88,90
+frame_00539_person.png,170.854,False,0,0.743,743,212,562,868,Leaning (Left/Right),15,0.53,Eye Contact (Camera) 50-80%,20,0.421,"Used gestures (e.g., open_palm)",25,0.704,"Engaged (e.g., smile, neutral)",20,0.796,80
+frame_00540_person.png,171.171,False,0,0.744,728,219,557,861,Leaning (Left/Right),15,0.544,Eye Contact (Camera) 50-80%,20,0.454,"Used gestures (e.g., open_palm)",25,0.817,"Engaged (e.g., smile, neutral)",20,0.77,80
+frame_00541_person.png,171.488,False,0,0.744,727,221,555,859,"Upright, Centered",25,0.501,Eye Contact (Camera) 50-80%,20,0.428,"Used gestures (e.g., open_palm)",25,0.708,"Engaged (e.g., smile, neutral)",20,0.823,90
+frame_00542_person.png,171.805,False,0,0.742,756,214,537,866,Leaning (Left/Right),15,0.536,Eye Contact (Camera) 50-80%,20,0.495,"Used gestures (e.g., open_palm)",25,0.716,"Engaged (e.g., smile, neutral)",20,0.717,80
+frame_00543_person.png,172.122,False,0,0.744,766,218,524,862,Leaning (Left/Right),15,0.691,Eye Contact (Camera) 50-80%,20,0.614,"Used gestures (e.g., open_palm)",25,0.657,"Engaged (e.g., smile, neutral)",20,0.548,80
+frame_00544_person.png,172.439,False,0,0.738,651,230,442,850,Leaning (Left/Right),15,0.8,Eye Contact (Camera) 50-80%,20,0.808,"Used gestures (e.g., open_palm)",25,0.695,"Disengaged (e.g., frown)",5,0.731,65
+frame_00545_person.png,172.756,False,0,0.729,592,229,335,851,Leaning (Left/Right),15,0.539,Eye Contact (Camera) 50-80%,20,0.445,"Used gestures (e.g., open_palm)",25,0.728,"Disengaged (e.g., frown)",5,0.805,65
+frame_00546_person.png,173.073,False,0,0.715,520,228,323,852,Leaning (Left/Right),15,0.583,Eye Contact (Camera) 50-80%,20,0.492,"Used gestures (e.g., open_palm)",25,0.801,"Disengaged (e.g., frown)",5,0.829,65
+frame_00547_person.png,173.39,False,0,0.707,578,205,328,875,Leaning (Left/Right),15,0.619,Eye Contact (Camera) 50-80%,20,0.651,"Used gestures (e.g., open_palm)",25,0.781,"Disengaged (e.g., frown)",5,0.888,65
+frame_00548_person.png,173.707,False,0,0.689,680,793,270,287,Leaning (Left/Right),15,0.947,Eye Contact (Camera) 50-80%,20,0.805,"Used gestures (e.g., open_palm)",25,0.765,"Disengaged (e.g., frown)",5,0.817,65
+frame_00549_person.png,174.024,False,0,0.673,683,803,460,277,Leaning (Left/Right),15,0.926,Eye Contact (Camera) 50-80%,20,0.87,"Used gestures (e.g., open_palm)",25,0.766,"Disengaged (e.g., frown)",5,0.812,65
+frame_00550_person.png,174.341,False,0,0.66,619,845,597,235,Leaning (Left/Right),15,0.955,Eye Contact (Camera) 50-80%,20,0.787,"Used gestures (e.g., open_palm)",25,0.934,"Disengaged (e.g., frown)",5,0.873,65
+frame_00551_person.png,174.658,False,0,0.635,641,820,533,260,Leaning (Left/Right),15,0.968,Eye Contact (Camera) 50-80%,20,0.832,"Used gestures (e.g., open_palm)",25,0.948,"Disengaged (e.g., frown)",5,0.785,65
+frame_00552_person.png,174.975,False,0,0.628,668,816,493,264,Leaning (Left/Right),15,0.963,Eye Contact (Camera) 50-80%,20,0.508,"Used gestures (e.g., open_palm)",25,0.968,"Disengaged (e.g., frown)",5,0.523,65
+frame_00553_person.png,175.292,False,0,0.626,683,840,395,240,Leaning (Left/Right),15,0.97,Eye Contact (Camera) 50-80%,20,0.57,"Used gestures (e.g., open_palm)",25,0.956,"Disengaged (e.g., frown)",5,0.576,65
+frame_00554_person.png,175.609,False,0,0.614,740,839,315,241,Leaning (Left/Right),15,0.946,Eye Contact (Camera) 50-80%,20,0.849,"Used gestures (e.g., open_palm)",25,0.957,"Disengaged (e.g., frown)",5,0.722,65
+frame_00555_person.png,175.926,False,0,0.609,668,829,386,251,Leaning (Left/Right),15,0.961,Eye Contact (Camera) 50-80%,20,0.683,"Used gestures (e.g., open_palm)",25,0.958,"Disengaged (e.g., frown)",5,0.727,65
+frame_00556_person.png,176.243,False,0,0.572,688,837,330,243,Leaning (Left/Right),15,0.984,Eye Contact (Camera) 50-80%,20,0.561,"Used gestures (e.g., open_palm)",25,0.678,"Disengaged (e.g., frown)",5,0.65,65
+frame_00557_person.png,176.56,False,0,0.557,770,852,273,228,Leaning (Left/Right),15,0.957,Eye Contact (Camera) 50-80%,20,0.877,"Used gestures (e.g., open_palm)",25,0.932,"Disengaged (e.g., frown)",5,0.832,65
+frame_00558_person.png,176.877,False,0,0.555,666,842,307,238,Leaning (Left/Right),15,0.956,Eye Contact (Camera) 50-80%,20,0.614,"Used gestures (e.g., open_palm)",25,0.966,"Engaged (e.g., smile, neutral)",20,0.661,80
+frame_00559_person.png,177.194,False,0,0.54,741,851,277,229,Leaning (Left/Right),15,0.966,Eye Contact (Camera) 50-80%,20,0.803,"Used gestures (e.g., open_palm)",25,0.982,"Disengaged (e.g., frown)",5,0.742,65
+frame_00560_person.png,177.511,False,0,0.533,631,764,303,316,Leaning (Left/Right),15,0.656,Eye Contact (Camera) > 80%,30,0.374,"Used gestures (e.g., open_palm)",25,0.57,"Engaged (e.g., smile, neutral)",20,0.523,90
+frame_00561.png,177.828,True,,,,,,,,,,,,,,,,,,,
+frame_00562.png,178.145,True,,,,,,,,,,,,,,,,,,,
+frame_00563.png,178.462,True,,,,,,,,,,,,,,,,,,,
+frame_00564.png,178.779,True,,,,,,,,,,,,,,,,,,,
+frame_00565.png,179.096,True,,,,,,,,,,,,,,,,,,,
+frame_00566.png,179.413,True,,,,,,,,,,,,,,,,,,,
+frame_00567.png,179.73,True,,,,,,,,,,,,,,,,,,,
+frame_00568.png,180.047,True,,,,,,,,,,,,,,,,,,,
+frame_00569.png,180.364,True,,,,,,,,,,,,,,,,,,,
+frame_00570.png,180.68,True,,,,,,,,,,,,,,,,,,,
+frame_00571.png,180.997,True,,,,,,,,,,,,,,,,,,,
