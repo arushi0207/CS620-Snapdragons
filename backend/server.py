@@ -7,6 +7,8 @@ import shutil
 import subprocess
 import json
 
+from context_generator.retriever import ContextRetriever
+
 app = FastAPI()
 
 app.add_middleware(
@@ -20,6 +22,14 @@ app.add_middleware(
 RUNS_DIR = Path("runs")
 RUNS_DIR.mkdir(exist_ok=True)
 
+retriever: ContextRetriever | None = None
+try:
+    retriever = ContextRetriever(top_k=5)
+    print("[INFO] ContextRetriever loaded successfully.")
+except Exception as e:
+    print(f"[WARN] ContextRetriever not available: {e}")
+    retriever = None
+
 
 @app.post("/api/analyze")
 async def analyze_video(file: UploadFile = File(...)) -> Dict[str, Any]:
@@ -27,9 +37,11 @@ async def analyze_video(file: UploadFile = File(...)) -> Dict[str, Any]:
     Endpoint for frontend integration.
     - Saves the uploaded video to runs/<job_id>/
     - Calls scripts.llm_eval_dummy to generate evaluation_llava.json
+    - Uses ContextRetriever to compute scores + neighbors from summary text
     - Returns a response matching the frontend contract.
     """
 
+    # 1) Save uploaded video into a job-specific directory
     job_id = uuid4().hex
     job_dir = RUNS_DIR / job_id
     job_dir.mkdir(parents=True, exist_ok=True)
@@ -38,6 +50,7 @@ async def analyze_video(file: UploadFile = File(...)) -> Dict[str, Any]:
     with video_path.open("wb") as f:
         shutil.copyfileobj(file.file, f)
 
+    # 2) Run dummy evaluator
     output_json_name = "evaluation_llava.json"
     output_json_path = job_dir / output_json_name
 
@@ -73,6 +86,7 @@ async def analyze_video(file: UploadFile = File(...)) -> Dict[str, Any]:
             detail="Dummy evaluator did not produce evaluation_llava.json",
         )
 
+    # 3) Load dummy evaluation JSON
     try:
         with output_json_path.open("r", encoding="utf-8") as f:
             eval_json = json.load(f)
@@ -82,21 +96,38 @@ async def analyze_video(file: UploadFile = File(...)) -> Dict[str, Any]:
             detail="Could not parse evaluation_llava.json",
         )
 
-
     summary_text = eval_json.get("summary", "")
     notes = eval_json.get("notes", [])
+
+    # 4) Use ContextRetriever to compute scores + neighbors from the summary
+    context_scores: Dict[str, Any] | None = None
+    neighbors: list[Dict[str, Any]] = []
+
+    if retriever is not None and summary_text:
+        try:
+            ctx = retriever.build_context_from_text(summary_text)
+            context_scores = ctx.get("scores")
+            neighbors = ctx.get("neighbors", [])
+            print("[CTX] scores from retriever:", context_scores)
+            print("[CTX] num neighbors:", len(neighbors))
+        except Exception as e:
+            print(f"[WARN] Failed to build context: {e}")
+
+    # Fallback scores if context generator isn't available
+    fallback_scores = {
+        "overall": 75,
+        "posture": 0.7,
+        "gaze": 0.85,
+        "gestures": 0.4,
+        "facial_expression": 0.6,
+    }
 
     response: Dict[str, Any] = {
         "status": "ok",
         "job_id": job_id,
         "summary": summary_text,
-        "scores": {
-            "overall": 75,
-            "posture": 0.7,
-            "gaze": 0.85,
-            "gestures": 0.4,
-            "facial_expression": 0.6,
-        },
+        # Use context_scores if we got them; otherwise fallback
+        "scores": context_scores or fallback_scores,
         "strengths": [
             "Maintains strong eye contact with the camera.",
             "Background is clean and not distracting.",
@@ -105,14 +136,15 @@ async def analyze_video(file: UploadFile = File(...)) -> Dict[str, Any]:
             "Posture can appear slightly rigid; adding small shifts can feel more natural.",
             "Increase hand gestures to emphasize key points.",
         ],
-        "neighbors": [],
+        # Use retrieved neighbors
+        "neighbors": neighbors,
         "artifacts": {
             "annotated_video_path": None,
             "features_path": None,
             "context_path": None,
         },
         "raw": {
-            "context": None,
+            "context": context_scores,
             "eval": eval_json,
             "notes": notes,
         },
