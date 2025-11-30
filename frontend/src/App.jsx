@@ -14,10 +14,24 @@ function App() {
   const [result, setResult] = useState(null)
   const [sessionSearch, setSessionSearch] = useState('')
   const [sessionGoalFilter, setSessionGoalFilter] = useState('')
+  const [stats, setStats] = useState(null)
 
   useEffect(() => {
     fetchSessions()
+    fetchStats()
   }, [sessionSearch, sessionGoalFilter])
+
+  const fetchStats = async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/stats`)
+      if (response.ok) {
+        const data = await response.json()
+        setStats(data)
+      }
+    } catch (err) {
+      console.error('Error fetching stats:', err)
+    }
+  }
 
   const fetchSessions = async () => {
     try {
@@ -145,6 +159,64 @@ function App() {
     }
   }
 
+  const deleteSession = async (sessionId) => {
+    if (!window.confirm('Are you sure you want to delete this session?')) {
+      return
+    }
+    try {
+      const response = await fetch(`${API_BASE_URL}/sessions/${sessionId}`, {
+        method: 'DELETE'
+      })
+      if (response.ok) {
+        fetchSessions()
+        if (result && result.session_id === sessionId) {
+          setResult(null)
+          setActiveTab('sessions')
+        }
+      } else {
+        setError('Failed to delete session')
+      }
+    } catch (err) {
+      setError('Failed to delete session')
+    }
+  }
+
+  const copyToClipboard = (text) => {
+    navigator.clipboard.writeText(text).then(() => {
+      alert('Copied to clipboard!')
+    }).catch(() => {
+      setError('Failed to copy to clipboard')
+    })
+  }
+
+  const formatRelativeTime = (dateString) => {
+    const date = new Date(dateString)
+    const now = new Date()
+    const diffMs = now - date
+    const diffMins = Math.floor(diffMs / 60000)
+    const diffHours = Math.floor(diffMs / 3600000)
+    const diffDays = Math.floor(diffMs / 86400000)
+
+    if (diffMins < 1) return 'Just now'
+    if (diffMins < 60) return `${diffMins} minute${diffMins > 1 ? 's' : ''} ago`
+    if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`
+    if (diffDays < 7) return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`
+    return date.toLocaleDateString()
+  }
+
+  const clearForm = (formType) => {
+    if (formType === 'video') {
+      setSessionName('')
+      setError(null)
+      const fileInput = document.querySelector('input[type="file"]')
+      if (fileInput) fileInput.value = ''
+    } else if (formType === 'text') {
+      setTextTranscript('')
+      setSessionName('')
+      setError(null)
+    }
+  }
+
   return (
     <div className="app">
       <header className="app-header">
@@ -170,6 +242,15 @@ function App() {
           onClick={() => setActiveTab('sessions')}
         >
           Sessions ({sessions.length})
+        </button>
+        <button 
+          className={activeTab === 'stats' ? 'active' : ''}
+          onClick={() => {
+            setActiveTab('stats')
+            fetchStats()
+          }}
+        >
+          Stats
         </button>
         {result && (
           <button 
@@ -220,9 +301,20 @@ function App() {
                 <input type="file" accept="video/*" required />
               </div>
 
-              <button type="submit" disabled={loading}>
-                {loading ? 'Analyzing...' : 'Analyze Video'}
-              </button>
+              <div className="form-actions">
+                <button type="submit" disabled={loading}>
+                  {loading ? (
+                    <>
+                      <span className="spinner"></span> Analyzing...
+                    </>
+                  ) : (
+                    'Analyze Video'
+                  )}
+                </button>
+                <button type="button" onClick={() => clearForm('video')} className="clear-btn">
+                  Clear
+                </button>
+              </div>
             </form>
           </div>
         )}
@@ -255,7 +347,12 @@ function App() {
               </div>
 
               <div className="form-group">
-                <label>Transcript:</label>
+                <label>
+                  Transcript: 
+                  <span className="char-count">
+                    {textTranscript.length} characters
+                  </span>
+                </label>
                 <textarea
                   value={textTranscript}
                   onChange={(e) => setTextTranscript(e.target.value)}
@@ -265,9 +362,20 @@ function App() {
                 />
               </div>
 
-              <button type="submit" disabled={loading}>
-                {loading ? 'Processing...' : 'Get Feedback'}
-              </button>
+              <div className="form-actions">
+                <button type="submit" disabled={loading}>
+                  {loading ? (
+                    <>
+                      <span className="spinner"></span> Processing...
+                    </>
+                  ) : (
+                    'Get Feedback'
+                  )}
+                </button>
+                <button type="button" onClick={() => clearForm('text')} className="clear-btn">
+                  Clear
+                </button>
+              </div>
             </form>
           </div>
         )}
@@ -309,13 +417,18 @@ function App() {
                   <div key={session.session_id} className="session-card">
                     <h3>{session.session_name || 'Unnamed Session'}</h3>
                     <p><strong>Goal:</strong> {session.goal.replace('-', ' ')}</p>
-                    <p><strong>Status:</strong> {session.status}</p>
-                    <p><strong>Created:</strong> {new Date(session.created_at).toLocaleString()}</p>
-                    {session.has_results && (
-                      <button onClick={() => loadSession(session.session_id)}>
-                        View Results
+                    <p><strong>Status:</strong> <span className={`status-badge status-${session.status}`}>{session.status}</span></p>
+                    <p><strong>Created:</strong> {formatRelativeTime(session.created_at)}</p>
+                    <div className="session-actions">
+                      {session.has_results && (
+                        <button onClick={() => loadSession(session.session_id)}>
+                          View Results
+                        </button>
+                      )}
+                      <button onClick={() => deleteSession(session.session_id)} className="delete-btn">
+                        Delete
                       </button>
-                    )}
+                    </div>
                   </div>
                 ))}
               </div>
@@ -327,9 +440,14 @@ function App() {
           <div className="tab-content">
             <div className="result-header">
               <h2>Analysis Results</h2>
-              <button onClick={exportResult} className="export-btn">
-                📥 Export JSON
-              </button>
+              <div className="result-actions">
+                <button onClick={() => copyToClipboard(JSON.stringify(result, null, 2))} className="copy-btn">
+                  📋 Copy JSON
+                </button>
+                <button onClick={exportResult} className="export-btn">
+                  📥 Export JSON
+                </button>
+              </div>
             </div>
 
             {result.overall_score !== undefined && (
@@ -378,6 +496,59 @@ function App() {
               <div className="result-section">
                 <h3>Feedback</h3>
                 <pre>{JSON.stringify(result.feedback, null, 2)}</pre>
+              </div>
+            )}
+          </div>
+        )}
+
+        {activeTab === 'stats' && (
+          <div className="tab-content">
+            <h2>Statistics</h2>
+            {stats ? (
+              <div className="stats-grid">
+                <div className="stat-card">
+                  <h3>Total Sessions</h3>
+                  <p className="stat-value">{stats.total_sessions}</p>
+                </div>
+                <div className="stat-card">
+                  <h3>Completed</h3>
+                  <p className="stat-value">{stats.completed_sessions}</p>
+                </div>
+                <div className="stat-card">
+                  <h3>Processing</h3>
+                  <p className="stat-value">{stats.processing_sessions}</p>
+                </div>
+                <div className="stat-card">
+                  <h3>Failed</h3>
+                  <p className="stat-value">{stats.failed_sessions}</p>
+                </div>
+                {stats.average_score !== null && (
+                  <div className="stat-card">
+                    <h3>Average Score</h3>
+                    <p className="stat-value">{stats.average_score}/100</p>
+                  </div>
+                )}
+                {stats.average_processing_time_seconds !== null && (
+                  <div className="stat-card">
+                    <h3>Avg Processing Time</h3>
+                    <p className="stat-value">{stats.average_processing_time_seconds}s</p>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <p>Loading statistics...</p>
+            )}
+            {stats && stats.goal_distribution && (
+              <div className="result-section">
+                <h3>Goal Distribution</h3>
+                <div className="goal-distribution">
+                  {Object.entries(stats.goal_distribution).map(([goal, count]) => (
+                    <div key={goal} className="goal-item">
+                      <span className="goal-name">{goal.replace('-', ' ')}</span>
+                      <span className="goal-count">{count}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
             )}
           </div>
