@@ -117,6 +117,11 @@ def inference(video, prompt, processor, model, max_new_tokens=2048, total_pixels
     else:
         video_metadatas = None
     inputs = processor(text=[text], images=image_inputs, videos=video_inputs, video_metadata=video_metadatas, **video_kwargs, do_resize=False, return_tensors="pt")
+    # print(inputs)
+    # for k, v in inputs.items():
+    #     print(k, type(v), getattr(v, 'shape', 'N/A'))
+    # breakpoint()
+    # Seems like num_frames is not currently supported by Qwen3-VL
     inputs = inputs.to('cuda')
 
     output_ids = model.generate(**inputs, max_new_tokens=max_new_tokens)

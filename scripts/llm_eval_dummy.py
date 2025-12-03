@@ -16,56 +16,6 @@ def main() -> None:
     ap.add_argument("--video", required=True, help="Path to the input video.")
     ap.add_argument("--out", required=True, help="Directory to write outputs.")
     ap.add_argument(
-        "--model",
-        default="dummy-model",
-        help="(unused) model id, kept for compatibility.",
-    )
-    ap.add_argument(
-        "--prompt",
-        default=None,
-        help="(unused) custom English prompt for evaluation.",
-    )
-    ap.add_argument(
-        "--prompt-file",
-        default=None,
-        help="(unused) path to a file containing the prompt.",
-    )
-    ap.add_argument(
-        "--max-new-tokens",
-        type=int,
-        default=512,
-        help="(unused) max new tokens to generate.",
-    )
-    ap.add_argument(
-        "--temperature",
-        type=float,
-        default=0.2,
-        help="(unused) sampling temperature.",
-    )
-    ap.add_argument(
-        "--sample-fps",
-        type=float,
-        default=None,
-        help="(unused) frame sampling FPS.",
-    )
-    ap.add_argument(
-        "--max-frames",
-        type=int,
-        default=64,
-        help="(unused) cap on frames after sampling.",
-    )
-    ap.add_argument(
-        "--num-frames",
-        type=int,
-        default=64,
-        help="(unused) number of frames to sample from the video.",
-    )
-    ap.add_argument(
-        "--use-video-mode",
-        action="store_true",
-        help="(unused) use video input pathway.",
-    )
-    ap.add_argument(
         "--output-json",
         default="evaluation_llava.json",
         help="Output JSON filename inside --out.",

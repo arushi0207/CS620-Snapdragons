@@ -75,16 +75,16 @@ Run a visual-only assessment of a presentation video (no audio analysis). Output
 
 ```shell
 python -m scripts.llm_eval \
-  --video input.mp4 \
+  --video test.mp4 \
   --out outputs/run4 \
-  --model lmms-lab/LLaVA-OneVision-1.5-4B-stage0 \
+  --model lmms-lab/LLaVA-OneVision-1.5-4B-Instruct \
   --max-new-tokens 512 \
   --temperature 0.2 \
   --max-frames 1
 ```
 ### Qwen-3 VL Text Evaluation (Visual-only)
 ```shell
-python -m scripts.llm_eval --video test.mp4 --out outputs/run_qwen --model Qwen/Qwen3-VL-2B-Thinking-FP8 --num-frames 16 --output-json evaluation_qwen.json
+python -m scripts.llm_eval --video test.mp4 --out outputs/run_qwen --model Qwen/Qwen3-VL-2B-Instruct --num-frames 16 --output-json evaluation_qwen.json
 ```
 
 Optional arguments:
@@ -97,6 +97,11 @@ Notes:
 - `--use-video-mode` may produce longer sequences and extra model kwargs; it is provided for experimentation and remains safety-capped.
 - Requires GPU for reasonable performance; `device_map="auto"` and `trust_remote_code=True` are used.
 - This component is separate from the numerical `DummyScoreModel` (kept as-is). The JSON includes the raw LLM response.
+
+### Qwen3-VL ONNX Evaluation
+```shell
+python -m scripts.llm_eval --video test.mp4 --out outputs/run_qwen_onnx --onnx-path /home/nick12138/projects/CS620-Snapdragons/qwen3_vl_onnx/qwen3_vl_2b_instruct.onnx
+```
 
 ### Export Qwen3-VL (vision + decoder) to ONNX
 ```shell

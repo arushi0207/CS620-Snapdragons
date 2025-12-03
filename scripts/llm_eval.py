@@ -22,6 +22,7 @@ def main():
     ap.add_argument("--num-frames", type=int, default=64, help="Number of frames to sample from the video.")
     ap.add_argument("--use-video-mode", action="store_true", help="Use video input pathway (may overflow context).")
     ap.add_argument("--output-json", default="evaluation_llava.json", help="Output JSON filename inside --out.")
+    ap.add_argument("--onnx-path", default=None, help="Path to the ONNX model file for Qwen3-VL.")
     args = ap.parse_args()
 
     os.makedirs(args.out, exist_ok=True)
@@ -37,7 +38,7 @@ def main():
 
     model_id = args.model
 
-    if "qwen" in model_id.lower():
+    if "qwen" in model_id.lower() or args.onnx_path is not None:
         # try:
         #     from featurehub.llm import qwen3_vl_inference
         # except ImportError as exc:
@@ -47,14 +48,27 @@ def main():
         #     ) from exc
         from featurehub.llm import qwen3_vl_inference
 
-        result = qwen3_vl_inference.generate_evaluation(
-            video_path=args.video,
-            prompt=prompt,
-            model_id=model_id,
-            max_new_tokens=args.max_new_tokens,
-            num_frames=args.num_frames,
-        )
-    else:
+        if not args.onnx_path:
+            result = qwen3_vl_inference.generate_evaluation(
+                video_path=args.video,
+                prompt=prompt,
+                model_id=model_id,
+                max_new_tokens=args.max_new_tokens,
+                num_frames=args.num_frames,
+            )
+        else:
+            from featurehub.llm import qwen3_vl_inference_onnx
+            result = qwen3_vl_inference_onnx.generate_evaluation(
+                video_path=args.video,
+                onnx_path=args.onnx_path,
+                num_frames=args.num_frames,
+            )
+            out_path_onnx = os.path.join(args.out, "evaluation_qwen_onnx.json")
+            with open(out_path_onnx, "w", encoding="utf-8") as f:
+                json.dump(result, f, ensure_ascii=False, indent=2)
+            print(f"Wrote ONNX evaluation to {out_path_onnx}")
+
+    elif "llava-onevision" in model_id.lower():
         result = llava_onevision.generate_evaluation(
             video_path=args.video,
             prompt=prompt,

@@ -1,3 +1,6 @@
+qwen3_vl_onnx
+qwen3_vl_onnx2
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
