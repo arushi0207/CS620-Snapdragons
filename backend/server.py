@@ -36,7 +36,7 @@ async def analyze_video(file: UploadFile = File(...)) -> Dict[str, Any]:
     """
     Endpoint for frontend integration.
     - Saves the uploaded video to runs/<job_id>/
-    - Calls scripts.llm_eval_dummy to generate evaluation_llava.json
+    - Calls scripts.llm_eval with the Gemini backend to generate evaluation_llava.json
     - Uses ContextRetriever to compute scores + neighbors from summary text
     - Returns a response matching the frontend contract.
     """
@@ -50,20 +50,25 @@ async def analyze_video(file: UploadFile = File(...)) -> Dict[str, Any]:
     with video_path.open("wb") as f:
         shutil.copyfileobj(file.file, f)
 
-    # 2) Run dummy evaluator
+    # 2) Run Gemini evaluator via scripts.llm_eval
     output_json_name = "evaluation_llava.json"
     output_json_path = job_dir / output_json_name
 
     cmd = [
         "python",
         "-m",
-        "scripts.llm_eval_dummy",
+        "scripts.llm_eval",
         "--video",
         str(video_path),
         "--out",
         str(job_dir),
-        "--output-json",
-        output_json_name,
+        "--model",
+        "gemini-2.5-flash",
+        "--max-new-tokens",
+        "512",
+        "--temperature",
+        "0.2",
+        # scripts.llm_eval with Gemini already writes evaluation_llava.json by default
     ]
 
     try:
@@ -73,20 +78,22 @@ async def analyze_video(file: UploadFile = File(...)) -> Dict[str, Any]:
             capture_output=True,
             text=True,
         )
-
+        # Optional: log stdout/stderr for debugging
+        print("[GEMINI STDOUT]", completed.stdout)
+        print("[GEMINI STDERR]", completed.stderr)
     except subprocess.CalledProcessError as e:
         raise HTTPException(
             status_code=500,
-            detail=f"Dummy evaluator failed: {e.stderr or e.stdout}",
+            detail=f"Gemini evaluator failed: {e.stderr or e.stdout}",
         )
 
     if not output_json_path.exists():
         raise HTTPException(
             status_code=500,
-            detail="Dummy evaluator did not produce evaluation_llava.json",
+            detail="Gemini evaluator did not produce evaluation_llava.json",
         )
 
-    # 3) Load dummy evaluation JSON
+    # 3) Load evaluation JSON
     try:
         with output_json_path.open("r", encoding="utf-8") as f:
             eval_json = json.load(f)
@@ -96,7 +103,14 @@ async def analyze_video(file: UploadFile = File(...)) -> Dict[str, Any]:
             detail="Could not parse evaluation_llava.json",
         )
 
-    summary_text = eval_json.get("summary", "")
+    # Gemini puts the whole formatted eval in "response"
+    summary_text = (
+        eval_json.get("summary")
+        or eval_json.get("response")
+        or ""
+    )
+
+    # Nothing structured for notes yet, so leave as empty list for now
     notes = eval_json.get("notes", [])
 
     # 4) Use ContextRetriever to compute scores + neighbors from the summary
@@ -114,6 +128,43 @@ async def analyze_video(file: UploadFile = File(...)) -> Dict[str, Any]:
             print(f"[WARN] Failed to build context: {e}")
 
     # Fallback scores if context generator isn't available
+    # fallback_scores = {
+    #     "overall": 75,
+    #     "posture": 0.7,
+    #     "gaze": 0.85,
+    #     "gestures": 0.4,
+    #     "facial_expression": 0.6,
+    # }
+
+    # response: Dict[str, Any] = {
+    #     "status": "ok",
+    #     "job_id": job_id,
+    #     "summary": summary_text,
+    #     # Use context_scores if we got them; otherwise fallback
+    #     "scores": context_scores or fallback_scores,
+    #     "strengths": [
+    #         "Maintains strong eye contact with the camera.",
+    #         "Background is clean and not distracting.",
+    #     ],
+    #     "opportunities": [
+    #         "Posture can appear slightly rigid; adding small shifts can feel more natural.",
+    #         "Increase hand gestures to emphasize key points.",
+    #     ],
+    #     # Use retrieved neighbors
+    #     "neighbors": neighbors,
+    #     "artifacts": {
+    #         "annotated_video_path": None,
+    #         "features_path": None,
+    #         "context_path": None,
+    #     },
+    #     "raw": {
+    #         "context": context_scores,
+    #         "eval": eval_json,
+    #         "notes": notes,
+    #     },
+    # }
+
+    # Fallback scores if context generator isn't available
     fallback_scores = {
         "overall": 75,
         "posture": 0.7,
@@ -122,12 +173,19 @@ async def analyze_video(file: UploadFile = File(...)) -> Dict[str, Any]:
         "facial_expression": 0.6,
     }
 
+    if context_scores is not None:
+        merged_scores = fallback_scores.copy()
+        for k, v in context_scores.items():
+            if v is not None:
+                merged_scores[k] = v
+    else:
+        merged_scores = fallback_scores
+
     response: Dict[str, Any] = {
         "status": "ok",
         "job_id": job_id,
         "summary": summary_text,
-        # Use context_scores if we got them; otherwise fallback
-        "scores": context_scores or fallback_scores,
+        "scores": merged_scores,
         "strengths": [
             "Maintains strong eye contact with the camera.",
             "Background is clean and not distracting.",
@@ -136,7 +194,6 @@ async def analyze_video(file: UploadFile = File(...)) -> Dict[str, Any]:
             "Posture can appear slightly rigid; adding small shifts can feel more natural.",
             "Increase hand gestures to emphasize key points.",
         ],
-        # Use retrieved neighbors
         "neighbors": neighbors,
         "artifacts": {
             "annotated_video_path": None,
@@ -144,7 +201,7 @@ async def analyze_video(file: UploadFile = File(...)) -> Dict[str, Any]:
             "context_path": None,
         },
         "raw": {
-            "context": context_scores,
+            "context": merged_scores,
             "eval": eval_json,
             "notes": notes,
         },

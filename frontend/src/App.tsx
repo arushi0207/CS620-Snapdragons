@@ -713,6 +713,27 @@ const ReviewScreen: React.FC<ReviewScreenProps> = ({
     onReorder(newOrder);
   };
 
+  const formatSummary = (text: string) => {
+  if (!text) return "";
+
+  let cleaned = text
+    // remove **bold** markdown
+    .replace(/\*\*(.*?)\*\*/g, "$1")
+    // bullet → •
+    .replace(/^\s*[\*\-]\s+/gm, "• ")
+    .trim();
+
+  // Bold the common section labels if they appear at the start of a line
+  cleaned = cleaned.replace(
+    /^(Overall Summary:|Strengths:|Opportunities for Improvement:|Actionable Suggestions:)/gm,
+    "<strong>$1</strong>"
+  );
+
+  return cleaned;
+  };
+
+
+
   return (
     <div className="max-w-5xl mx-auto p-6">
       <h2
@@ -735,10 +756,18 @@ const ReviewScreen: React.FC<ReviewScreenProps> = ({
           className={`mb-4 text-sm ${
             isDarkMode ? "text-slate-300" : "text-gray-700"
           }`}
+          style={{ whiteSpace: "pre-line" }}  // respect \n\n from Gemini
         >
-          {analysis.summary}
+          <div
+            className={`mb-4 text-sm ${
+              isDarkMode ? "text-slate-300" : "text-gray-700"
+            }`}
+            style={{ whiteSpace: "pre-line" }}
+            dangerouslySetInnerHTML={{ __html: formatSummary(analysis.summary) }}
+          />
         </p>
       )}
+
 
       <div
         className={`mb-6 text-sm p-4 rounded-lg flex items-start gap-2 ${
