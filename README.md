@@ -70,6 +70,12 @@ python -m scripts.extract_from_video --video input.mp4 --out outputs/run3 --extr
 python -m scripts.extract_from_video --video input.mp4 --out outputs/run3 --extractors facemap_3dmm --output-video outputs/run3/annotated.mp4
 ```
 
+### Run Gemini Video Evaluation (Visual + Audio)
+```shell
+export GOOGLE_API_KEY="YOUR_GOOGLE_API_KEY"
+python -m scripts.llm_eval   --video input.mp4   --out outputs/gemini_eval   --model gemini-2.5-flash
+```
+
 ### LLaVA-OneVision Text Evaluation (Visual-only)
 Run a visual-only assessment of a presentation video (no audio analysis). Outputs English JSON at `--out/evaluation_llava.json`.
 

@@ -12,7 +12,7 @@ def main():
     ap = argparse.ArgumentParser(description="Run LLaVA-OneVision text evaluation on a presentation video.")
     ap.add_argument("--video", required=True, help="Path to the input video.")
     ap.add_argument("--out", required=True, help="Directory to write outputs.")
-    ap.add_argument("--model", default=llava_onevision.DEFAULT_MODEL_ID, help="Hugging Face model id.")
+    ap.add_argument("--model", default="Qwen/Qwen3-VL-2B-Instruct", help="Hugging Face model id.")
     ap.add_argument("--prompt", default=None, help="Custom English prompt for evaluation.")
     ap.add_argument("--prompt-file", default=None, help="Path to a file containing the prompt.")
     ap.add_argument("--max-new-tokens", type=int, default=512, help="Max new tokens to generate.")
@@ -38,7 +38,17 @@ def main():
 
     model_id = args.model
 
-    if "qwen" in model_id.lower() or args.onnx_path is not None:
+    # Gemini backend: use google-genai client with video + prompt input
+    if "gemini" in model_id.lower():
+        from featurehub.llm import gemini
+
+        result = gemini.generate_evaluation(
+            video_path=args.video,
+            prompt=prompt,
+            model_id=model_id,
+        )
+
+    elif "qwen" in model_id.lower() or args.onnx_path is not None:
         # try:
         #     from featurehub.llm import qwen3_vl_inference
         # except ImportError as exc:

@@ -10,10 +10,7 @@ import torch
 from PIL import Image
 from transformers import AutoModelForCausalLM, AutoProcessor
 
-
-# Public constant used by scripts/llm_eval.py
-DEFAULT_MODEL_ID = "lmms-lab/LLaVA-OneVision-1.5-4B-stage0"
-
+DEFAULT_MODEL_ID = "lmms-lab/LLaVA-OneVision-1.5-4B-Instruct"
 
 def default_prompt() -> str:
     """Return the default English evaluation prompt.
