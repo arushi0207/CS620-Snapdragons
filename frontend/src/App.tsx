@@ -490,6 +490,7 @@ const UploadScreen: React.FC<UploadScreenProps> = ({ onAnalysisComplete }) => {
   const [progress, setProgress] = useState<number>(0);
   const [error, setError] = useState<string>("");
   const [estimatedTime, setEstimatedTime] = useState<number | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
   const API_BASE =
     (import.meta as any).env?.VITE_API_BASE_URL || "http://localhost:8000";
@@ -497,6 +498,9 @@ const UploadScreen: React.FC<UploadScreenProps> = ({ onAnalysisComplete }) => {
   const onFileSelected: React.ChangeEventHandler<HTMLInputElement> = async (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
+
+    // Create a local preview URL for the selected video
+    setPreviewUrl(URL.createObjectURL(file));
 
     setIsUploading(true);
     setError("");
@@ -521,19 +525,25 @@ const UploadScreen: React.FC<UploadScreenProps> = ({ onAnalysisComplete }) => {
             const percent = Math.round((pe.loaded / pe.total) * 100);
             setProgress(percent);
 
-            const elapsed = (Date.now() - uploadStart) / 1000;
-            const rate = pe.loaded / elapsed;
-            const remainingBytes = pe.total - pe.loaded;
-            const remainingSeconds = Math.ceil(remainingBytes / rate);
-            if (Number.isFinite(remainingSeconds)) {
-              setEstimatedTime(remainingSeconds);
+            // While we're still uploading, show an estimated time
+            if (percent < 100) {
+              const elapsed = (Date.now() - uploadStart) / 1000;
+              const rate = pe.loaded / elapsed;
+              const remainingBytes = pe.total - pe.loaded;
+              const remainingSeconds = Math.ceil(remainingBytes / rate);
+              if (Number.isFinite(remainingSeconds)) {
+                setEstimatedTime(remainingSeconds);
+              }
+            } else {
+              // Once upload is done, stop showing upload ETA
+              setEstimatedTime(null);
             }
           },
         }
       );
 
+      // At this point, backend has finished Qwen2-VL analysis
       setProgress(100);
-      setEstimatedTime(0);
       toast.success("Analysis complete!");
       onAnalysisComplete(resp.data);
     } catch (err: any) {
@@ -545,6 +555,9 @@ const UploadScreen: React.FC<UploadScreenProps> = ({ onAnalysisComplete }) => {
     }
   };
 
+  const isAnalyzing = isUploading && progress >= 100;
+  const isUploadingPhase = isUploading && progress < 100;
+
   return (
     <div className="max-w-2xl mx-auto p-6 text-center">
       <h2 className="text-3xl font-bold text-gray-900 mb-2">
@@ -555,22 +568,47 @@ const UploadScreen: React.FC<UploadScreenProps> = ({ onAnalysisComplete }) => {
         here for AI analysis.
       </p>
 
-      <div
-        className={`border-4 border-dashed rounded-2xl p-12 mb-8 transition duration-300 ${
-          isUploading
-            ? "border-indigo-400 bg-indigo-50"
-            : "border-gray-300 hover:border-indigo-500 hover:bg-gray-50"
-        }`}
-      >
-        <Upload className="w-12 h-12 mx-auto text-indigo-500 mb-3 animate-pulse" />
-        <p className="text-gray-600 font-medium">
-          Drag & drop your video here, or click to select file.
-        </p>
-        <p className="text-sm text-gray-400 mt-1">
-          MP4 or MOV files under 500MB recommended.
-        </p>
+      {/* VIDEO PREVIEW + OVERLAY */}
+      <div className="mb-8">
+        {previewUrl ? (
+          <div className="relative border-4 border-dashed rounded-2xl overflow-hidden">
+            <video
+              src={previewUrl}
+              controls
+              className="w-full h-auto max-h-[360px] bg-black"
+            />
+
+            {isUploading && (
+              <div className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center text-white">
+                <div className="h-8 w-8 border-2 border-white/50 border-t-transparent rounded-full animate-spin" />
+                <p className="mt-3 text-sm font-medium">
+                  {isUploadingPhase
+                    ? `Uploading video… ${progress}%`
+                    : "Analyzing your presentation…"}
+                </p>
+              </div>
+            )}
+          </div>
+        ) : (
+          <div
+            className={`border-4 border-dashed rounded-2xl p-12 transition duration-300 ${
+              isUploading
+                ? "border-indigo-400 bg-indigo-50"
+                : "border-gray-300 hover:border-indigo-500 hover:bg-gray-50"
+            }`}
+          >
+            <Upload className="w-12 h-12 mx-auto text-indigo-500 mb-3 animate-pulse" />
+            <p className="text-gray-600 font-medium">
+              Drag & drop your video here, or click to select file.
+            </p>
+            <p className="text-sm text-gray-400 mt-1">
+              MP4 or MOV files under 500MB recommended.
+            </p>
+          </div>
+        )}
       </div>
 
+      {/* HIDDEN INPUT */}
       <input
         type="file"
         id="video-upload"
@@ -579,6 +617,7 @@ const UploadScreen: React.FC<UploadScreenProps> = ({ onAnalysisComplete }) => {
         onChange={onFileSelected}
       />
 
+      {/* SELECT BUTTON */}
       {!isUploading && (
         <label
           htmlFor="video-upload"
@@ -589,16 +628,16 @@ const UploadScreen: React.FC<UploadScreenProps> = ({ onAnalysisComplete }) => {
         </label>
       )}
 
+      {/* PROGRESS + STATUS TEXT */}
       {isUploading && (
         <div className="mt-8 space-y-2">
           <p className="text-lg font-medium text-gray-700">
-            Uploading & analyzing your video...{" "}
-            <span className="font-semibold">{progress}%</span>
+            {isUploadingPhase ? "Uploading your video…" : "Analyzing your presentation…"}
           </p>
 
-          {estimatedTime !== null && estimatedTime > 0 && (
+          {isUploadingPhase && estimatedTime !== null && estimatedTime > 0 && (
             <p className="text-sm text-gray-500">
-              ⏳ Estimated time remaining: ~{estimatedTime}s
+              ⏳ Estimated upload time remaining: ~{estimatedTime}s
             </p>
           )}
 
@@ -714,25 +753,23 @@ const ReviewScreen: React.FC<ReviewScreenProps> = ({
   };
 
   const formatSummary = (text: string) => {
-  if (!text) return "";
+    if (!text) return "";
 
-  let cleaned = text
-    // remove **bold** markdown
-    .replace(/\*\*(.*?)\*\*/g, "$1")
-    // bullet → •
-    .replace(/^\s*[\*\-]\s+/gm, "• ")
-    .trim();
+    let cleaned = text
+      // remove **bold** markdown
+      .replace(/\*\*(.*?)\*\*/g, "$1")
+      // bullet → •
+      .replace(/^\s*[\*\-]\s+/gm, "• ")
+      .trim();
 
-  // Bold the common section labels if they appear at the start of a line
-  cleaned = cleaned.replace(
-    /^(Overall Summary:|Strengths:|Opportunities for Improvement:|Actionable Suggestions:)/gm,
-    "<strong>$1</strong>"
-  );
+    // Bold the common section labels if they appear at the start of a line
+    cleaned = cleaned.replace(
+      /^(Overall Summary:|Strengths:|Opportunities for Improvement:|Actionable Suggestions:)/gm,
+      "<strong>$1</strong>"
+    );
 
-  return cleaned;
+    return cleaned;
   };
-
-
 
   return (
     <div className="max-w-5xl mx-auto p-6">
@@ -756,7 +793,7 @@ const ReviewScreen: React.FC<ReviewScreenProps> = ({
           className={`mb-4 text-sm ${
             isDarkMode ? "text-slate-300" : "text-gray-700"
           }`}
-          style={{ whiteSpace: "pre-line" }}  // respect \n\n from Gemini
+          style={{ whiteSpace: "pre-line" }} // respect \n\n from model
         >
           <div
             className={`mb-4 text-sm ${
@@ -767,7 +804,6 @@ const ReviewScreen: React.FC<ReviewScreenProps> = ({
           />
         </p>
       )}
-
 
       <div
         className={`mb-6 text-sm p-4 rounded-lg flex items-start gap-2 ${
