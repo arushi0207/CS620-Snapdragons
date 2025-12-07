@@ -66,7 +66,7 @@ async def analyze_video(file: UploadFile = File(...)) -> Dict[str, Any]:
         "--model",
         "qwen2-pt",
         "--num-frames",
-        "10",
+        "5",
         "--max-new-tokens",
         "512",
         "--temperature",
