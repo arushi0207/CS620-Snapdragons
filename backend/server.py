@@ -36,7 +36,7 @@ async def analyze_video(file: UploadFile = File(...)) -> Dict[str, Any]:
     """
     Endpoint for frontend integration.
     - Saves the uploaded video to runs/<job_id>/
-    - Calls scripts.llm_eval with the Gemini backend to generate evaluation_llava.json
+    - Calls scripts.llm_eval with the Qwen2-VL backend to generate evaluation JSON
     - Uses ContextRetriever to compute scores + neighbors from summary text
     - Returns a response matching the frontend contract.
     """
@@ -50,8 +50,9 @@ async def analyze_video(file: UploadFile = File(...)) -> Dict[str, Any]:
     with video_path.open("wb") as f:
         shutil.copyfileobj(file.file, f)
 
-    # 2) Run Gemini evaluator via scripts.llm_eval
-    output_json_name = "evaluation_llava.json"
+    # 2) Run Qwen2-VL evaluator via scripts.llm_eval
+    #    We'll use a Qwen2-specific output JSON name to avoid confusion.
+    output_json_name = "evaluation_qwen2.json"
     output_json_path = job_dir / output_json_name
 
     cmd = [
@@ -63,12 +64,15 @@ async def analyze_video(file: UploadFile = File(...)) -> Dict[str, Any]:
         "--out",
         str(job_dir),
         "--model",
-        "gemini-2.5-flash",
+        "qwen2-pt",
+        "--num-frames",
+        "10",
         "--max-new-tokens",
         "512",
         "--temperature",
-        "0.2",
-        # scripts.llm_eval with Gemini already writes evaluation_llava.json by default
+        "0.0",
+        "--output-json",
+        output_json_name,
     ]
 
     try:
@@ -78,19 +82,17 @@ async def analyze_video(file: UploadFile = File(...)) -> Dict[str, Any]:
             capture_output=True,
             text=True,
         )
-        # Optional: log stdout/stderr for debugging
-        print("[GEMINI STDOUT]", completed.stdout)
-        print("[GEMINI STDERR]", completed.stderr)
+
     except subprocess.CalledProcessError as e:
         raise HTTPException(
             status_code=500,
-            detail=f"Gemini evaluator failed: {e.stderr or e.stdout}",
+            detail=f"Qwen2-VL evaluator failed: {e.stderr or e.stdout}",
         )
 
     if not output_json_path.exists():
         raise HTTPException(
             status_code=500,
-            detail="Gemini evaluator did not produce evaluation_llava.json",
+            detail="Qwen2-VL evaluator did not produce evaluation_qwen2.json",
         )
 
     # 3) Load evaluation JSON
@@ -100,10 +102,10 @@ async def analyze_video(file: UploadFile = File(...)) -> Dict[str, Any]:
     except json.JSONDecodeError:
         raise HTTPException(
             status_code=500,
-            detail="Could not parse evaluation_llava.json",
+            detail="Could not parse evaluation_qwen2.json",
         )
 
-    # Gemini puts the whole formatted eval in "response"
+    # Qwen2-VL puts the whole formatted eval in "response"
     summary_text = (
         eval_json.get("summary")
         or eval_json.get("response")
@@ -128,43 +130,6 @@ async def analyze_video(file: UploadFile = File(...)) -> Dict[str, Any]:
             print(f"[WARN] Failed to build context: {e}")
 
     # Fallback scores if context generator isn't available
-    # fallback_scores = {
-    #     "overall": 75,
-    #     "posture": 0.7,
-    #     "gaze": 0.85,
-    #     "gestures": 0.4,
-    #     "facial_expression": 0.6,
-    # }
-
-    # response: Dict[str, Any] = {
-    #     "status": "ok",
-    #     "job_id": job_id,
-    #     "summary": summary_text,
-    #     # Use context_scores if we got them; otherwise fallback
-    #     "scores": context_scores or fallback_scores,
-    #     "strengths": [
-    #         "Maintains strong eye contact with the camera.",
-    #         "Background is clean and not distracting.",
-    #     ],
-    #     "opportunities": [
-    #         "Posture can appear slightly rigid; adding small shifts can feel more natural.",
-    #         "Increase hand gestures to emphasize key points.",
-    #     ],
-    #     # Use retrieved neighbors
-    #     "neighbors": neighbors,
-    #     "artifacts": {
-    #         "annotated_video_path": None,
-    #         "features_path": None,
-    #         "context_path": None,
-    #     },
-    #     "raw": {
-    #         "context": context_scores,
-    #         "eval": eval_json,
-    #         "notes": notes,
-    #     },
-    # }
-
-        # Fallback scores if context generator isn't available
     fallback_scores = {
         "overall": 75,
         "posture": 0.7,
