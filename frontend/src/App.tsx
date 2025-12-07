@@ -483,24 +483,40 @@ const GoalSettingScreen: React.FC<GoalSettingScreenProps> = ({ onNext }) => {
 
 // ---------- UPLOAD SCREEN (WIRED TO /api/analyze) ----------
 
-type UploadScreenProps = { onAnalysisComplete: (result: ApiAnalysisResult) => void };
+type UploadScreenProps = {
+  onAnalysisComplete: (result: ApiAnalysisResult) => void;
+  videoUrl: string | null;
+  setVideoUrl: (url: string | null) => void;
+  hasCompletedAnalysis: boolean;
+};
 
-const UploadScreen: React.FC<UploadScreenProps> = ({ onAnalysisComplete }) => {
+const UploadScreen: React.FC<UploadScreenProps> = ({
+  onAnalysisComplete,
+  videoUrl,
+  setVideoUrl,
+  hasCompletedAnalysis,
+}) => {
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const [progress, setProgress] = useState<number>(0);
   const [error, setError] = useState<string>("");
   const [estimatedTime, setEstimatedTime] = useState<number | null>(null);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
   const API_BASE =
     (import.meta as any).env?.VITE_API_BASE_URL || "http://localhost:8000";
 
   const onFileSelected: React.ChangeEventHandler<HTMLInputElement> = async (e) => {
+    // Guard: once analysis is complete for this session, ignore further selects
+    if (hasCompletedAnalysis) return;
+
     const file = e.target.files?.[0];
     if (!file) return;
 
-    // Create a local preview URL for the selected video
-    setPreviewUrl(URL.createObjectURL(file));
+    if (videoUrl) {
+      URL.revokeObjectURL(videoUrl);
+    }
+
+    const localUrl = URL.createObjectURL(file);
+    setVideoUrl(localUrl);
 
     setIsUploading(true);
     setError("");
@@ -511,7 +527,6 @@ const UploadScreen: React.FC<UploadScreenProps> = ({ onAnalysisComplete }) => {
 
     try {
       const form = new FormData();
-      // IMPORTANT: field name must match backend param ("file")
       form.append("file", file);
 
       const resp = await axios.post<ApiAnalysisResult>(
@@ -525,7 +540,6 @@ const UploadScreen: React.FC<UploadScreenProps> = ({ onAnalysisComplete }) => {
             const percent = Math.round((pe.loaded / pe.total) * 100);
             setProgress(percent);
 
-            // While we're still uploading, show an estimated time
             if (percent < 100) {
               const elapsed = (Date.now() - uploadStart) / 1000;
               const rate = pe.loaded / elapsed;
@@ -535,14 +549,12 @@ const UploadScreen: React.FC<UploadScreenProps> = ({ onAnalysisComplete }) => {
                 setEstimatedTime(remainingSeconds);
               }
             } else {
-              // Once upload is done, stop showing upload ETA
               setEstimatedTime(null);
             }
           },
         }
       );
 
-      // At this point, backend has finished Qwen2-VL analysis
       setProgress(100);
       toast.success("Analysis complete!");
       onAnalysisComplete(resp.data);
@@ -557,6 +569,7 @@ const UploadScreen: React.FC<UploadScreenProps> = ({ onAnalysisComplete }) => {
 
   const isAnalyzing = isUploading && progress >= 100;
   const isUploadingPhase = isUploading && progress < 100;
+  const canUpload = !hasCompletedAnalysis;
 
   return (
     <div className="max-w-2xl mx-auto p-6 text-center">
@@ -570,10 +583,10 @@ const UploadScreen: React.FC<UploadScreenProps> = ({ onAnalysisComplete }) => {
 
       {/* VIDEO PREVIEW + OVERLAY */}
       <div className="mb-8">
-        {previewUrl ? (
+        {videoUrl ? (
           <div className="relative border-4 border-dashed rounded-2xl overflow-hidden">
             <video
-              src={previewUrl}
+              src={videoUrl}
               controls
               className="w-full h-auto max-h-[360px] bg-black"
             />
@@ -614,11 +627,12 @@ const UploadScreen: React.FC<UploadScreenProps> = ({ onAnalysisComplete }) => {
         id="video-upload"
         accept="video/*"
         className="hidden"
+        disabled={!canUpload || isUploading}
         onChange={onFileSelected}
       />
 
-      {/* SELECT BUTTON */}
-      {!isUploading && (
+      {/* SELECT BUTTON – only if we’re allowed to upload */}
+      {canUpload && !isUploading && (
         <label
           htmlFor="video-upload"
           className="inline-flex items-center space-x-2 px-8 py-3 bg-indigo-600 text-white font-semibold rounded-xl shadow-md cursor-pointer hover:bg-indigo-700 transition duration-300"
@@ -628,14 +642,22 @@ const UploadScreen: React.FC<UploadScreenProps> = ({ onAnalysisComplete }) => {
         </label>
       )}
 
-      {/* PROGRESS + STATUS TEXT */}
-      {isUploading && (
+      {/* Message after analysis is done (and user navigates back) */}
+      {hasCompletedAnalysis && !isUploading && (
+        <p className="mt-6 text-sm text-gray-600 max-w-xl mx-auto">
+          This video has already been analyzed for this session. To try a new
+          video, start a new practice session from your Progress Dashboard.
+        </p>
+      )}
+
+      {/* PROGRESS + STATUS TEXT — ONLY WHILE UPLOADING */}
+      {isUploadingPhase && (
         <div className="mt-8 space-y-2">
           <p className="text-lg font-medium text-gray-700">
-            {isUploadingPhase ? "Uploading your video…" : "Analyzing your presentation…"}
+            Uploading your video…
           </p>
 
-          {isUploadingPhase && estimatedTime !== null && estimatedTime > 0 && (
+          {estimatedTime !== null && estimatedTime > 0 && (
             <p className="text-sm text-gray-500">
               ⏳ Estimated upload time remaining: ~{estimatedTime}s
             </p>
@@ -653,6 +675,15 @@ const UploadScreen: React.FC<UploadScreenProps> = ({ onAnalysisComplete }) => {
             />
           </div>
         </div>
+      )}
+
+      {/* ANALYZING MESSAGE — NO PROGRESS BAR */}
+      {isAnalyzing && (
+        <p className="mt-8 text-sm text-gray-600 max-w-xl mx-auto">
+          We’re processing your video on the AI coach right now. This part can
+          take a little longer than the upload — you can leave this tab open and
+          check back in a bit.
+        </p>
       )}
 
       {!!error && <p className="text-red-600 mt-3 font-semibold">{error}</p>}
@@ -772,7 +803,7 @@ const ReviewScreen: React.FC<ReviewScreenProps> = ({
   };
 
   return (
-    <div className="max-w-5xl mx-auto p-6">
+    <div className="max-w-5xl mx_auto p-6">
       <h2
         className={`text-3xl font-bold mb-2 ${
           isDarkMode ? "text-slate-50" : "text-gray-900"
@@ -928,6 +959,7 @@ const ReviewScreen: React.FC<ReviewScreenProps> = ({
 
 type AnalyticsScreenProps = {
   onNext: (s: Step) => void;
+  onStartNewSession: () => void;
   isDarkMode: boolean;
   order: FeedbackKey[];
   analysis: ApiAnalysisResult | null;
@@ -935,6 +967,7 @@ type AnalyticsScreenProps = {
 
 const AnalyticsScreen: React.FC<AnalyticsScreenProps> = ({
   onNext,
+  onStartNewSession,
   isDarkMode,
   order,
 }) => {
@@ -1433,7 +1466,7 @@ const AnalyticsScreen: React.FC<AnalyticsScreenProps> = ({
           🎯 Ready for your next practice?
         </p>
         <button
-          onClick={() => onNext(2)}
+          onClick={onStartNewSession}
           className="inline-flex items-center gap-2 px-8 py-3 bg-indigo-600 text-white font-semibold rounded-full shadow-lg hover:bg-indigo-700 transition-transform duration-200 hover:scale-105"
         >
           Start New Practice
@@ -1457,11 +1490,23 @@ const App: React.FC = () => {
   ]);
 
   const [analysis, setAnalysis] = useState<ApiAnalysisResult | null>(null);
+  const [videoUrl, setVideoUrl] = useState<string | null>(null);
+  const [hasCompletedAnalysis, setHasCompletedAnalysis] = useState(false);
 
   const navigateTo = (newStep: Step) => {
     if (newStep === 4 && step < 3) return;
     setStep(newStep);
     window.scrollTo(0, 0);
+  };
+
+  const startNewSession = () => {
+    setAnalysis(null);
+    if (videoUrl) {
+      URL.revokeObjectURL(videoUrl);
+    }
+    setVideoUrl(null);
+    setHasCompletedAnalysis(false);
+    navigateTo(2); // back to goal selection
   };
 
   const renderContent = () => {
@@ -1473,8 +1518,12 @@ const App: React.FC = () => {
       case 3:
         return (
           <UploadScreen
+            videoUrl={videoUrl}
+            setVideoUrl={setVideoUrl}
+            hasCompletedAnalysis={hasCompletedAnalysis}
             onAnalysisComplete={(result) => {
               setAnalysis(result);
+              setHasCompletedAnalysis(true);
               navigateTo(4);
             }}
           />
@@ -1493,6 +1542,7 @@ const App: React.FC = () => {
         return (
           <AnalyticsScreen
             onNext={navigateTo}
+            onStartNewSession={startNewSession}
             isDarkMode={isDarkMode}
             order={feedbackOrder}
             analysis={analysis}
