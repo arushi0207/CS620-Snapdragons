@@ -164,7 +164,7 @@ async def analyze_video(file: UploadFile = File(...)) -> Dict[str, Any]:
     #     },
     # }
 
-    # Fallback scores if context generator isn't available
+        # Fallback scores if context generator isn't available
     fallback_scores = {
         "overall": 75,
         "posture": 0.7,
