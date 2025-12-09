@@ -106,7 +106,7 @@ Notes:
 
 ### Qwen3-VL ONNX Evaluation
 ```shell
-python -m scripts.llm_eval --video test.mp4 --out outputs/run_qwen_onnx --onnx-path /home/nick12138/projects/CS620-Snapdragons/qwen3_vl_onnx/qwen3_vl_2b_instruct.onnx
+python -m scripts.llm_eval --video input.mp4 --out outputs/run_qwen_onnx --onnx-path /home/jlin398/snapdragon/exportedonnx/qwen3_vl_2b_instruct.onnx --max-frames 2 --num-frames 2
 ```
 
 ### Export Qwen3-VL (vision + decoder) to ONNX

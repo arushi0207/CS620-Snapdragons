@@ -26,10 +26,10 @@ def build_qwen3vl_inputs(
     device: str = "cuda",
 ):
     """
-    使用你现有的逻辑，把 (video + prompt) 转成 Qwen3-VL 的张量输入。
+    Convert (video + prompt) into Qwen3-VL tensor inputs using your existing logic.
 
-    返回:
-        inputs: 一个 dict，里面都是张量，比如:
+    Returns:
+        inputs: a dict whose values are tensors, such as:
             input_ids, attention_mask, position_ids,
             pixel_values_videos, video_grid_thw, ...
     """
@@ -55,7 +55,7 @@ def build_qwen3vl_inputs(
         add_generation_prompt=True,
     )
 
-    # 3) 用 qwen_vl_utils 处理视觉输入（视频路径 -> patch 序列）
+    # 3) Use qwen_vl_utils to process vision inputs (video path -> patch sequence)
     image_inputs, video_inputs, video_kwargs = process_vision_info(
         [messages],
         return_video_kwargs=True,
@@ -64,7 +64,7 @@ def build_qwen3vl_inputs(
     )
 
     if video_inputs is not None:
-        # video_inputs 里是 (video_tensor, meta) 对，应拆开
+        # video_inputs contains (video_tensor, meta) pairs and should be unpacked
         video_inputs, video_metadatas = zip(*video_inputs)
         video_inputs, video_metadatas = list(video_inputs), list(video_metadatas)
     else:
@@ -131,9 +131,9 @@ def _install_simple_causal_mask():
 
 class Qwen3VLONNXWrapper(nn.Module):
     """
-    给 ONNX 导出用的包装：
-    - 输入：input_ids, attention_mask, position_ids, pixel_values_videos, video_grid_thw
-    - 输出：logits
+    Wrapper used for ONNX export:
+    - Inputs: input_ids, attention_mask, position_ids, pixel_values_videos, video_grid_thw
+    - Output: logits
     """
 
     def __init__(self, model):
@@ -154,9 +154,10 @@ class Qwen3VLONNXWrapper(nn.Module):
             position_ids=position_ids,
             pixel_values_videos=pixel_values_videos,
             video_grid_thw=video_grid_thw,
-            use_cache=False,  # 导出 ONNX 时一般关掉 cache
+            use_cache=False,  # Usually disable cache during ONNX export
         )
-        # 这里只导出 logits，采样/解码逻辑放在 ONNX 外面自己写
+        print("outputs shapes", {k: v.shape for k, v in outputs.items() if hasattr(v, 'shape')})
+        # Only export logits here; sampling/decoding should be implemented outside ONNX
         return outputs.logits
     
 import torch.onnx
@@ -171,15 +172,15 @@ def export_qwen3_vl_onnx(
     opset: int = 17,
 ):
     """
-    用一个真实的视频 + prompt 构造样例输入，然后把 Qwen3-VL-2B-Instruct 导出成 ONNX。
-    导出的模型输入就是你现在看到的 5 个张量。
+    Build a sample input from a real video + prompt, then export Qwen3-VL-2B-Instruct to ONNX.
+    The exported model inputs are exactly the 5 tensors you see here.
     """
 
-    # 1）加载 processor & 模型（导出 ONNX 建议放在 CPU 上）
+    # 1) Load processor and model (for ONNX export, keeping everything on CPU is recommended)
     processor = AutoProcessor.from_pretrained(model_id)
     model = AutoModelForImageTextToText.from_pretrained(
         model_id,
-        torch_dtype="float16",  # 或者 "auto"/float32，看你需要
+        torch_dtype="float16",  # Or "auto"/float32, depending on your needs
         device_map=None,
     )
     _install_simple_causal_mask()
@@ -190,31 +191,28 @@ def export_qwen3_vl_onnx(
     model.to("cpu")
     model.eval()
 
-    # 2）构造一次 CPU 上的输入（注意这里 device="cpu"）
+    # 2) Build one sample input on CPU (note device="cpu" here)
     inputs = build_qwen3vl_inputs(
         video=video_path,
-        prompt=prompt,
+        prompt="hi",
         processor=processor,
         max_frames=num_frames,
         device="cpu",
     )
 
-    # 只取你实际有的四个 key
+    # Only take the four keys you actually need
     input_ids = inputs["input_ids"]              # [1, 5257]
     attention_mask = inputs["attention_mask"]    # [1, 5257]
     pixel_values_videos = inputs["pixel_values_videos"]  # [20160, 1536]
     video_grid_thw = inputs["video_grid_thw"]    # [1, 3]
-    position_ids, _ = model.model.get_rope_index(
-        input_ids,
-        image_grid_thw=None,
-        video_grid_thw=video_grid_thw,
-        attention_mask=attention_mask,
-    )
+    batch_size = input_ids.shape[0]
+    sequence_length = input_ids.shape[1]
+    position_ids = torch.ones(3, batch_size, sequence_length, dtype=torch.int64)
 
-    # 3）包装成我们的 ONNX wrapper
+    # 3) Wrap with our ONNX wrapper
     wrapper = Qwen3VLONNXWrapper(model)
 
-    # 按顺序列出输入名（和 wrapper.forward 的参数顺序一致）
+    # List input names in order (consistent with wrapper.forward parameter order)
     input_names = [
         "input_ids",
         "attention_mask",
@@ -232,22 +230,34 @@ def export_qwen3_vl_onnx(
         video_grid_thw,
     )
 
-    # 4）设置 dynamic_axes —— 哪些维度在推理时是可变的
+    # 4) Configure dynamic_axes — which dimensions are variable at inference time
     dynamic_axes = {
-        # 文本部分：batch 和 seq 长度可变
+        # Text tensors: batch size and sequence length are variable
         "input_ids": {0: "batch", 1: "seq"},
         "attention_mask": {0: "batch", 1: "seq"},
-        "position_ids": {0: "pos_three", 1: "batch", 2: "seq"},
-
-        # 视频 token：第一维是 video_seq，可变；特征维 1536 固定
-        "pixel_values_videos": {0: "video_seq"},
+        "position_ids": {1: "batch", 2: "seq"},
+        # Video tokens: first dimension is video_seq (variable); feature dim 1536 is fixed
+        "pixel_values_videos": {0: "batch", 1: "num_frames"},
 
         "video_grid_thw": {0: "video_count"},
 
         "logits": {0: "batch", 1: "seq"},
     }
+    wrapper.eval()
+    example_args_dict = {
+        "input_ids": input_ids,
+        "attention_mask": attention_mask,
+        "pixel_values_videos": pixel_values_videos,
+        "video_grid_thw": video_grid_thw,
+    }
 
-    # 5）真正导出 ONNX
+    # wrapper(**example_args_dict)  # test
+
+    # make directory if not exists
+    import os
+    os.makedirs(os.path.dirname(onnx_path), exist_ok=True)
+
+    # 5) Actually export to ONNX
     with torch.no_grad():
         torch.onnx.export(
             wrapper,
@@ -258,7 +268,6 @@ def export_qwen3_vl_onnx(
             dynamic_axes=dynamic_axes,
             opset_version=opset,
             do_constant_folding=True,
-            dynamo=False,  # 使用老的 torchscript 导出路径，绕过 torch.export 的限制
         )
 
     print(f"[OK] ONNX model saved to: {onnx_path}")
@@ -272,10 +281,10 @@ def export_qwen3_vl_onnx(
 
 def main():
     export_qwen3_vl_onnx(
-        video_path="test.mp4",
+        video_path="input.mp4",
         prompt=default_prompt,
         model_id="Qwen/Qwen3-VL-2B-Instruct",
-        onnx_path="qwen3_vl_2b_instruct.onnx",
+        onnx_path="exportedonnx/qwen3_vl_2b_instruct.onnx",
         num_frames=2,
     )
 
