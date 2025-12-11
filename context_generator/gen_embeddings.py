@@ -30,10 +30,16 @@ def build_context_text(row):
         f"Total score: {row.get('total_points', '')}."
     )
 
+# Tokenize the texts, pass them through the embedding model,
+#    and return mean-pooled sentence embeddings.
+
 def compute_embeddings(texts):
+    # load tokenizer and model
     tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
     model = AutoModel.from_pretrained(MODEL_NAME)
     model.eval()
+
+    # tokenize all texts into model input format
     encoded = tokenizer(
         texts,
         padding=True,
@@ -41,10 +47,14 @@ def compute_embeddings(texts):
         max_length=256,
         return_tensors="pt"
     )
+    # compute embeddings without tracking gradients
     with torch.no_grad():
         out = model(**encoded)
+
     # mean-pool token embeddings
     embeddings = out.last_hidden_state.mean(dim=1)
+
+    # save as numpy array
     return embeddings.cpu().numpy()
 
 def main():
@@ -57,7 +67,7 @@ def main():
     os.makedirs(OUTPUT_DIR, exist_ok=True)
     np.save(OUTPUT_EMB, embeddings)
     
-    # Save metadata (text + original CSV fields) for retrieval
+    # save metadata (text + original CSV fields) for retrieval
     meta = []
     for i, (_, row) in enumerate(df.iterrows()):
         meta.append({
